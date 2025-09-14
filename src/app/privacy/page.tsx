@@ -1,0 +1,273 @@
+import Link from "next/link";
+import { Shield, ShieldCheck, Cookie, Database, Lock } from "lucide-react";
+
+export default function PrivacyPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-green-600 to-blue-700 text-white">
+        <div className="mx-auto max-w-4xl px-6 py-16">
+          <div className="text-center">
+            <div className="mb-6 flex justify-center">
+              <div className="rounded-full bg-white/20 p-4">
+                <Shield className="h-12 w-12" />
+              </div>
+            </div>
+            <h1 className="mb-6 text-4xl font-bold md:text-5xl">Privacy Policy</h1>
+            <p className="text-xl text-green-100">
+              Your privacy is important; here is how data is protected and handled.
+            </p>
+            <p className="mt-4 text-sm text-green-200">
+              Last updated:{" "}
+              {new Date().toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="mx-auto max-w-4xl px-6 py-16">
+        <div className="space-y-12 rounded-xl bg-white p-8 shadow-sm">
+          {/* Introduction */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold text-gray-900">
+              <ShieldCheck className="text-blue-600" />
+              Our Commitment to Privacy
+            </h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <p className="mb-6 text-lg leading-relaxed">
+                MoreFusion collects the minimum data required to provide services, never
+                sells personal information, and uses industry‑standard security to
+                protect data.
+              </p>
+              <div className="rounded-r-lg border-l-4 border-blue-500 bg-blue-50 p-6">
+                <p className="font-medium text-blue-900">
+                  <strong>Quick Summary:</strong> Minimal data collection, no data sales, and
+                  strong security practices.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Information We Collect */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold text-gray-900">
+              <Database className="text-green-600" />
+              Information We Collect
+            </h2>
+
+            <div className="space-y-6">
+              <div className="rounded-lg bg-gray-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                  Information You Provide
+                </h3>
+                <ul className="list-inside list-disc space-y-2 text-gray-700">
+                  <li>Account details when creating an account</li>
+                  <li>Content created using the tools</li>
+                  <li>Support communications</li>
+                  <li>Feedback and survey responses</li>
+                </ul>
+              </div>
+
+              <div className="rounded-lg bg-gray-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-gray-900">
+                  Information Automatically Collected
+                </h3>
+                <ul className="list-inside list-disc space-y-2 text-gray-700">
+                  <li>Usage data and feature interactions</li>
+                  <li>Device and technical information</li>
+                  <li>Performance and error telemetry</li>
+                  <li>Cookies and similar technologies</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* How We Use Information */}
+          <section>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">How We Use Your Information</h2>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div className="rounded-lg bg-blue-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-blue-900">Service Delivery</h3>
+                <ul className="list-inside list-disc space-y-2 text-blue-800">
+                  <li>Provide and maintain tools</li>
+                  <li>Process and save work</li>
+                  <li>Authenticate accounts</li>
+                  <li>Send service notifications</li>
+                </ul>
+              </div>
+              <div className="rounded-lg bg-green-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-green-900">Improvement & Analytics</h3>
+                <ul className="list-inside list-disc space-y-2 text-green-800">
+                  <li>Analyze usage patterns</li>
+                  <li>Improve performance and fix bugs</li>
+                  <li>Develop new features</li>
+                  <li>Conduct research and analytics</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* Cookies */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold text-gray-900">
+              <Cookie className="text-orange-600" />
+              Cookies & Tracking
+            </h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <p className="mb-6">
+                Cookies are used to enhance experience, analyze usage, and provide
+                personalized content.
+              </p>
+
+              <div className="mb-6 rounded-lg bg-orange-50 p-6">
+                <h3 className="mb-3 text-xl font-semibold text-orange-900">
+                  Types of Cookies:
+                </h3>
+                <div className="space-y-3 text-orange-800">
+                  <div>
+                    <strong>Essential:</strong> Required for core functionality
+                  </div>
+                  <div>
+                    <strong>Analytics:</strong> Understand site usage
+                  </div>
+                  <div>
+                    <strong>Preference:</strong> Remember settings
+                  </div>
+                </div>
+              </div>
+
+              <p>
+                Cookie preferences can be managed in the browser, but disabling some may
+                limit features.
+              </p>
+            </div>
+          </section>
+
+          {/* Data Security */}
+          <section>
+            <h2 className="mb-6 flex items-center gap-3 text-3xl font-bold text-gray-900">
+              <Lock className="text-purple-600" />
+              Data Security
+            </h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <p className="mb-6">
+                Industry‑standard measures are implemented to protect personal
+                information.
+              </p>
+
+              <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="rounded-lg bg-purple-50 p-6 text-center">
+                  <div className="mb-3 text-3xl text-purple-600">🔐</div>
+                  <h3 className="mb-2 font-semibold text-purple-900">Encryption</h3>
+                  <p className="text-sm text-purple-800">
+                    Data in transit is protected with SSL/TLS
+                  </p>
+                </div>
+                <div className="rounded-lg bg-purple-50 p-6 text-center">
+                  <div className="mb-3 text-3xl text-purple-600">🛡️</div>
+                  <h3 className="mb-2 font-semibold text-purple-900">Access Control</h3>
+                  <p className="text-sm text-purple-800">
+                    Strict access controls and authentication
+                  </p>
+                </div>
+                <div className="rounded-lg bg-purple-50 p-6 text-center">
+                  <div className="mb-3 text-3xl text-purple-600">📊</div>
+                  <h3 className="mb-2 font-semibold text-purple-900">Monitoring</h3>
+                  <p className="text-sm text-purple-800">
+                    Continuous monitoring and auditing
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-r-lg border-l-4 border-red-500 bg-red-50 p-6">
+                <p className="text-red-900">
+                  <strong>Important:</strong> No system is 100% secure; use strong passwords and
+                  keep account details confidential.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Rights */}
+          <section>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">Your Privacy Rights</h2>
+            <div className="rounded-lg bg-gray-50 p-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div>
+                  <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                    You Have the Right To:
+                  </h3>
+                  <ul className="list-inside list-disc space-y-2 text-gray-700">
+                    <li>Access personal data</li>
+                    <li>Correct inaccurate information</li>
+                    <li>Delete account and data</li>
+                    <li>Export data</li>
+                    <li>Opt‑out of marketing communications</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                    How to Exercise Rights:
+                  </h3>
+                  <ul className="list-inside list-disc space-y-2 text-gray-700">
+                    <li>Account settings for preferences</li>
+                    <li>Contact support for data requests</li>
+                    <li>Use unsubscribe links in emails</li>
+                    <li>Manage cookies via browser settings</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Contact */}
+          <section>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">
+              Questions About Privacy?
+            </h2>
+            <div className="rounded-lg bg-blue-50 p-6">
+              <p className="mb-4 text-blue-900">
+                For questions about this policy or data practices, contact support:
+              </p>
+              <div className="space-y-2 text-blue-800">
+                <p>
+                  <strong>Email:</strong>
+                </p>
+                <p>
+                  <strong>Contact Form:</strong>{" "}
+                  <Link href="/contact" className="underline hover:text-blue-600">
+                    Contact Us
+                  </Link>
+                </p>
+                <p>
+                  <strong>Response Time:</strong> Typically within 48 hours
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Updates */}
+          <section>
+            <h2 className="mb-6 text-3xl font-bold text-gray-900">Policy Updates</h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <p>Policy changes will update this page and the effective date.</p>
+              <ul className="mt-4 list-inside list-disc space-y-2">
+                <li>Update the “Last updated” date</li>
+                <li>Notify of significant changes via email or site notice</li>
+                <li>Provide a summary of changes on request</li>
+              </ul>
+              <p className="mt-6">
+                Continued use after updates indicates acceptance of the revised policy.
+              </p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+}

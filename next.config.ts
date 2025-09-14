@@ -1,7 +1,39 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Hide editor routes in production
+  async redirects() {
+    if (process.env.NODE_ENV === 'production') {
+      return [
+        { source: '/editor', destination: '/404', permanent: false },
+        { source: '/editor/:path*', destination: '/404', permanent: false }
+      ];
+    }
+    return [];
+  },
+
+  async headers() {
+    return [
+      {
+        source: '/editor/:path*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow, nosnippet, noarchive' },
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' }
+        ]
+      }
+    ];
+  },
+
+  compiler: { removeConsole: process.env.NODE_ENV === 'production' },
+
+  experimental: { optimizePackageImports: ['lucide-react', '@uiw/react-md-editor'] },
+
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }]
+  },
+
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx']
 };
 
 export default nextConfig;
