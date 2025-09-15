@@ -7,20 +7,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Download, 
-  FileText, 
-  Lock, 
-  Shield, 
+import {
+  Download,
+  FileText,
+  Lock,
+  Shield,
   AlertTriangle,
   Home,
   Settings,
   Edit3,
   Save,
-  X
+  X,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
+// Client-only Markdown editor
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface ArticleData {
@@ -33,11 +34,12 @@ interface ArticleData {
 }
 
 const CATEGORIES = [
-  { value: "general", label: "General" },
-  { value: "ai", label: "AI & Technology" },
+  { value: "AI", label: "AI & Technology" },
   { value: "coding", label: "Development" },
-  { value: "productivity", label: "Productivity" },
-  { value: "tech", label: "Tech Reviews" },
+  { value: "drama", label: "Drama" },
+  { value: "film", label: "Film" },
+  { value: "general", label: "General" },
+  { value: "shopping", label: "Shopping" },
 ] as const;
 
 export default function EditorPage() {
@@ -46,7 +48,7 @@ export default function EditorPage() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   // Article form state
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(`# Write your article here...
@@ -63,58 +65,50 @@ You can use all standard markdown syntax:
 - \`Code blocks\`
 - Images
 - Lists
-- And much more!
 
 Happy writing! 🎉`);
-  const [category, setCategory] = useState("general");
+  const [category, setCategory] = useState<string>("general");
   const [excerpt, setExcerpt] = useState("");
   const [author, setAuthor] = useState("MoreFusion Team");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
-  const correctPassword = process.env.NEXT_PUBLIC_LOCAL_EDITOR_PASSWORD || "admin2025";
+  const correctPassword =
+    process.env.NEXT_PUBLIC_LOCAL_EDITOR_PASSWORD || "admin2025";
 
   // Security check on mount
   useEffect(() => {
-    const checkEnvironment = () => {
-      const isProd = process.env.NODE_ENV === 'production';
-      setIsProduction(isProd);
-      
-      if (isProd) {
-        toast.error("Editor not available in production");
-        setTimeout(() => {
-          router.push('/404');
-        }, 2000);
-        return;
-      }
-      
-      setLoading(false);
-    };
-
-    checkEnvironment();
+    const isProd = process.env.NODE_ENV === "production";
+    setIsProduction(isProd);
+    if (isProd) {
+      toast.error("Editor not available in production");
+      setTimeout(() => router.push("/404"), 2000);
+      return;
+    }
+    setLoading(false);
   }, [router]);
 
   const addTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()]);
+    const val = tagInput.trim();
+    if (val && !tags.includes(val)) {
+      setTags((prev) => [...prev, val]);
       setTagInput("");
-      toast.success(`Tag "${tagInput.trim()}" added`);
+      toast.success(`Tag "${val}" added`);
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
+    setTags((prev) => prev.filter((tag) => tag !== tagToRemove));
     toast.success(`Tag "${tagToRemove}" removed`);
   };
 
-  const generateSlug = (title: string): string => {
-    return title
+  const generateSlug = (t: string): string =>
+    t
       .toLowerCase()
-      .replace(/[^a-z0-9 -]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
+      .replace(/[^a-z0-9 -]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
       .trim();
-  };
 
   const validateForm = (): boolean => {
     if (!title.trim()) {
@@ -125,7 +119,7 @@ Happy writing! 🎉`);
       toast.error("Please write some content");
       return false;
     }
-    if (content.length < 100) {
+    if (content.replace(/\s/g, "").length < 100) {
       toast.error("Content must be at least 100 characters");
       return false;
     }
@@ -139,50 +133,56 @@ Happy writing! 🎉`);
       title,
       content,
       category,
-      excerpt: excerpt || content.substring(0, 200).replace(/[#*`]/g, '') + '...',
+      excerpt:
+        excerpt ||
+        content.substring(0, 200).replace(/[#*`]/g, "") + "...",
       author,
-      tags
+      tags,
     };
 
     try {
-      localStorage.setItem('morefusion-draft', JSON.stringify(articleData));
+      localStorage.setItem("morefusion-draft", JSON.stringify(articleData));
       toast.success("Draft saved successfully!");
     } catch (error) {
       toast.error("Failed to save draft");
-      console.error('Draft save error:', error);
+      // eslint-disable-next-line no-console
+      console.error("Draft save error:", error);
     }
   };
 
   const loadDraft = () => {
     try {
-      const draft = localStorage.getItem('morefusion-draft');
+      const draft = localStorage.getItem("morefusion-draft");
       if (draft) {
-        const articleData: ArticleData = JSON.parse(draft);
-        setTitle(articleData.title);
-        setContent(articleData.content);
-        setCategory(articleData.category);
-        setExcerpt(articleData.excerpt);
-        setAuthor(articleData.author);
-        setTags(articleData.tags || []);
+        const data: ArticleData = JSON.parse(draft);
+        setTitle(data.title);
+        setContent(data.content);
+        setCategory(data.category);
+        setExcerpt(data.excerpt);
+        setAuthor(data.author);
+        setTags(data.tags || []);
         toast.success("Draft loaded successfully!");
       } else {
         toast.error("No draft found");
       }
     } catch (error) {
       toast.error("Failed to load draft");
-      console.error('Draft load error:', error);
+      // eslint-disable-next-line no-console
+      console.error("Draft load error:", error);
     }
   };
 
   const clearForm = () => {
     setTitle("");
-    setContent("# Write your article here...\n\nStart writing your amazing content in markdown format.");
+    setContent(
+      "# Write your article here...\n\nStart writing your amazing content in markdown format."
+    );
     setCategory("general");
     setExcerpt("");
     setAuthor("MoreFusion Team");
     setTags([]);
     setTagInput("");
-    localStorage.removeItem('morefusion-draft');
+    localStorage.removeItem("morefusion-draft");
     toast.success("Form cleared!");
   };
 
@@ -190,29 +190,34 @@ Happy writing! 🎉`);
     if (!validateForm()) return;
 
     const slug = generateSlug(title);
-    const currentDate = new Date().toISOString().split('T')[0];
-    const finalExcerpt = excerpt || content.substring(0, 200).replace(/[#*`]/g, '') + '...';
+    const currentDate = new Date().toISOString().split("T");
+    const finalExcerpt =
+      excerpt ||
+      content.substring(0, 200).replace(/[#*`]/g, "") + "...";
+
+    // Escape quotes in YAML strings
+    const esc = (s: string) => s.replace(/"/g, '\\"');
 
     const frontMatter = `---
-title: "${title}"
-excerpt: "${finalExcerpt}"
+title: "${esc(title)}"
+excerpt: "${esc(finalExcerpt)}"
 date: "${currentDate}"
-category: "${category.charAt(0).toUpperCase() + category.slice(1)}"
-author: "${author}"
-tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
+category: "${category}"
+author: "${esc(author)}"
+tags: [${tags.map((t) => `"${esc(t)}"`).join(", ")}]
 ---
 
 `;
 
     const fileContent = frontMatter + content;
-    
+
     try {
-      const blob = new Blob([fileContent], { type: 'text/markdown' });
+      const blob = new Blob([fileContent], { type: "text/markdown" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `${slug}.md`;
-      link.style.display = 'none';
+      link.style.display = "none";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -222,12 +227,12 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
         `Article "${title}" downloaded! Save it to src/content/blog/${category}/`,
         { duration: 8000 }
       );
-      
       // Clear draft after successful download
-      localStorage.removeItem('morefusion-draft');
+      localStorage.removeItem("morefusion-draft");
     } catch (error) {
       toast.error("Failed to download file");
-      console.error('Download error:', error);
+      // eslint-disable-next-line no-console
+      console.error("Download error:", error);
     }
   };
 
@@ -241,7 +246,7 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
     }
   };
 
-  // Production block screen
+  // 🚫 Production Block
   if (isProduction) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100">
@@ -256,7 +261,7 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
             <p className="text-red-700 mb-4">
               The editor is not available in production environment.
             </p>
-            <Button className="btn-secondary" onClick={() => router.push('/')}>
+            <Button className="btn-secondary" onClick={() => router.push("/")}>
               <Home className="w-4 h-4 mr-2" />
               Go Home
             </Button>
@@ -266,7 +271,7 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
     );
   }
 
-  // Loading state
+  // ⏳ Loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -278,7 +283,7 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
     );
   }
 
-  // Authentication screen
+  // 🔐 Password Protection
   if (!authenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center gradient-bg">
@@ -303,10 +308,8 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                   placeholder="Enter editor password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleAuthentication();
-                    }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAuthentication();
                   }}
                   className="w-full"
                 />
@@ -319,10 +322,10 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                 Access Editor
               </Button>
               <div className="text-center">
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="sm"
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push("/")}
                   className="text-slate-500 hover:text-slate-700"
                 >
                   <Home className="w-4 h-4 mr-2" />
@@ -336,41 +339,42 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
     );
   }
 
+  // ✍️ Main Editor
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="container mx-auto p-6 max-w-7xl">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold gradient-text mb-2 flex items-center gap-3">
-                <Edit3 className="w-10 h-10 text-blue-600" />
-                MoreFusion Editor
-              </h1>
-              <p className="text-slate-600">Create amazing articles with markdown</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button onClick={loadDraft} variant="outline" size="sm">
-                Load Draft
-              </Button>
-              <Button onClick={saveAsDraft} variant="outline" size="sm">
-                <Save className="w-4 h-4 mr-2" />
-                Save Draft
-              </Button>
-              <Button onClick={clearForm} variant="outline" size="sm">
-                <X className="w-4 h-4 mr-2" />
-                Clear
-              </Button>
-              <Button onClick={generateMarkdownFile} className="btn-primary">
-                <Download className="w-4 h-4 mr-2" />
-                Download Article
-              </Button>
-            </div>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold gradient-text mb-2 flex items-center gap-3">
+              <Edit3 className="w-10 h-10 text-blue-600" />
+              MoreFusion Editor
+            </h1>
+            <p className="text-slate-600">
+              Create amazing articles with markdown
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Button onClick={loadDraft} variant="outline" size="sm">
+              Load Draft
+            </Button>
+            <Button onClick={saveAsDraft} variant="outline" size="sm">
+              <Save className="w-4 h-4 mr-2" />
+              Save Draft
+            </Button>
+            <Button onClick={clearForm} variant="outline" size="sm">
+              <X className="w-4 h-4 mr-2" />
+              Clear
+            </Button>
+            <Button onClick={generateMarkdownFile} className="btn-primary">
+              <Download className="w-4 h-4 mr-2" />
+              Download Article
+            </Button>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-4 gap-6">
-          {/* Settings Panel */}
+          {/* Settings */}
           <div className="lg:col-span-1">
             <Card className="glass-card sticky top-6">
               <CardHeader>
@@ -434,8 +438,8 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                       placeholder="Add tag..."
                       value={tagInput}
                       onChange={(e) => setTagInput(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
                           e.preventDefault();
                           addTag();
                         }
@@ -448,7 +452,7 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                   </div>
                   {tags.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {tags.map(tag => (
+                      {tags.map((tag) => (
                         <span
                           key={tag}
                           className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
@@ -488,8 +492,9 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                   <ol className="text-sm text-blue-700 space-y-1">
                     <li>1. Fill in article details</li>
                     <li>2. Write content in markdown</li>
-                    <li>3. Click &quot;Download Article&ldquo;</li>
-                    <li>4. Save file to: 
+                    <li>3. Click &quot;Download Article&quot;</li>
+                    <li>
+                      4. Save file to:
                       <code className="bg-blue-100 px-1 rounded ml-1">
                         src/content/blog/{category}/
                       </code>
@@ -507,7 +512,11 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                 <CardTitle className="flex items-center gap-2 text-slate-800">
                   <Edit3 className="w-5 h-5" />
                   Markdown Editor
-                  {title && <span className="text-sm font-normal text-slate-500">- {title}</span>}
+                  {title && (
+                    <span className="text-sm font-normal text-slate-500">
+                      - {title}
+                    </span>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -520,9 +529,12 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
                     data-color-mode="light"
                   />
                 </div>
-                
+
                 <div className="mt-6 flex gap-4">
-                  <Button onClick={generateMarkdownFile} className="btn-primary flex-1">
+                  <Button
+                    onClick={generateMarkdownFile}
+                    className="btn-primary flex-1"
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     Download Article (.md file)
                   </Button>
@@ -534,12 +546,11 @@ tags: [${tags.map(tag => `"${tag}"`).join(', ')}]
 
                 <div className="mt-4 p-4 bg-green-50 rounded-lg">
                   <p className="text-sm text-green-800">
-                    💡 <strong>How it works:</strong> Click &quot;Download Article&quot; to get a .md file, 
-                    then manually save it to{' '}
-                    <code className="bg-green-100 px-1 rounded">
+                    💡 Click &quot;Download Article&quot; to get a .md file, then save it under
+                    <code className="bg-green-100 px-1 mx-1 rounded">
                       src/content/blog/{category}/filename.md
-                    </code>. 
-                    The article will automatically appear on your blog!
+                    </code>
+                    to publish on your blog.
                   </p>
                 </div>
               </CardContent>
