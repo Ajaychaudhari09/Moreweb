@@ -1,24 +1,11 @@
-import createMDX from '@next/mdx';
 import type { NextConfig } from 'next';
 
-const withMDX = createMDX({
-  extension: /\.mdx?$/,
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
-
 const nextConfig: NextConfig = {
-  // ✅ Hide Decap CMS editor (/admin) in production
   async redirects() {
     if (process.env.NODE_ENV === 'production') {
       return [
-        // Redirect /editor routes to 404
         { source: '/editor', destination: '/404', permanent: false },
         { source: '/editor/:path*', destination: '/404', permanent: false },
-
-        // Redirect /admin (Decap CMS) routes to 404
         { source: '/admin', destination: '/404', permanent: false },
         { source: '/admin/:path*', destination: '/404', permanent: false },
       ];
@@ -26,7 +13,6 @@ const nextConfig: NextConfig = {
     return [];
   },
 
-  // ✅ Extra protection: block search engines & caching for /editor & /admin
   async headers() {
     return [
       {
@@ -46,20 +32,21 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // ✅ Strip console logs in production
-  compiler: { removeConsole: process.env.NODE_ENV === 'production' },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 
-  // ✅ Performance optimization
-  experimental: { optimizePackageImports: ['lucide-react', '@uiw/react-md-editor'] },
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@uiw/react-md-editor'],
+  },
 
-  // ✅ Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
 
-  // ✅ Support MDX/MD files
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  // No MDX extension here; leave only standard page extensions
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
 };
 
-export default withMDX(nextConfig);
+export default nextConfig;

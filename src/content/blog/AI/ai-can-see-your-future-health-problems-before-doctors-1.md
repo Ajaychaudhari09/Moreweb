@@ -1,11 +1,14 @@
 ---
-title: "AI Can See Your Future Health Problems Before Doctors"
-excerpt: "New AI systems can predict who will go blind years before doctors notice symptoms—and this is just the beginning of healthcare's crystal ball moment"
-date: "2025-09-14"
-category: "Ai"
-author: "MoreFusion Team"
+title: AI Can See Your Future Health Problems Before Doctors
+excerpt: New AI systems can predict who will go blind years before doctors
+  notice symptoms—and this is just the beginning of healthcare's crystal ball
+  moment
+date: 2025-09-20T11:41:00.000+05:30
+author: MoreFusion Team
+category: AI
 tags: []
 ---
+
 
 "ai-predicts-your-health-before-doctors"
 ---
@@ -14,13 +17,17 @@ tags: []
 
 Picture this: you walk into your doctor's office for a routine eye exam, feeling perfectly fine. But the AI scanning your eyes has already spotted something troubling—you're going to lose your vision in five years if nothing changes.
 
+
+
 This isn't science fiction. It happened this week.
+
 
 ## The breakthrough that's changing everything
 
 Researchers just trained AI on tens of thousands of eye scans, and now it can predict which patients will need urgent treatment for keratoconus (a condition that warps your cornea) and which ones can wait. The crazy part? It spots problems **years** before human doctors can see them.
 
 But here's what really matters: this isn't just about eyes. This same approach is being tested for heart disease, diabetes, even mental health conditions. We're entering an era where AI becomes your personal health fortune teller.
+
 
 ## Why this matters for regular people
 

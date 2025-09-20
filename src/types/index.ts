@@ -41,6 +41,8 @@ export interface ToolCardProps {
   tool: Tool;
 }
 
+/* Calculators and tools */
+
 export interface BMIInput {
   weight: number;
   height: number;

@@ -3,13 +3,13 @@ import { getAllPosts } from '@/lib/blog';
 import type { BlogPost } from '@/types';
 
 /**
- * Generates sitemap entries for static routes and all blog posts.
- * Uses NEXT_PUBLIC_SITE_URL for flexibility across environments.
+ * Generates sitemap entries for static routes and blog posts only.
+ * Uses NEXT_PUBLIC_SITE_URL to support multiple environments.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://morefusion.in';
 
-  // Static routes that actually exist in the app
+  // Public routes only (no /admin or /editor)
   const staticRoutes: Array<{ path: string; priority: number }> = [
     { path: '', priority: 1.0 },
     { path: '/tools', priority: 0.9 },
@@ -31,16 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map(({ path, priority }) => ({
     url: `${siteUrl}${path}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
+    changeFrequency: 'weekly',
     priority,
   }));
 
-  // Blog post routes from markdown files (await the Promise)
   const posts: BlogPost[] = await getAllPosts();
-  const postEntries: MetadataRoute.Sitemap = posts.map((post: BlogPost) => ({
+  const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${siteUrl}/blog/${post.category}/${post.slug}`,
     lastModified: post.date ? new Date(post.date) : new Date(),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: 'monthly',
     priority: 0.6,
   }));
 

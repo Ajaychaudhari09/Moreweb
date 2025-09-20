@@ -18,7 +18,7 @@ export function BlogNavigation({ className = "" }: BlogNavigationProps) {
 
       <Link
         href="/blog"
-        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
+        className="text-white dark:text-gray-900 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium"
       >
         View All Posts
       </Link>

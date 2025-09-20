@@ -1,88 +1,86 @@
-import Link from 'next/link';
-import { BlogPost } from '@/types';
+import Link from "next/link";
+import type { BlogCardProps } from "@/types";
 
-interface BlogCardProps {
-  post: BlogPost;
-}
+const categoryColors: Record<string, string> = {
+  AI: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200",
+  coding: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
+  drama: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-200",
+  film: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200",
+  general: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200",
+  shopping: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200",
+};
 
-const categoryStyles: Record<string, string> = {
-  General: 'category-general',
-  AI: 'category-ai',
-  Coding: 'category-coding',
-  Film: 'category-film',
-  Drama: 'category-drama',
-  Shopping: 'category-shopping'
+const emojiMap: Record<string, string> = {
+  AI: "🤖",
+  coding: "💻",
+  drama: "🎭",
+  film: "🎬",
+  general: "📝",
+  shopping: "🛒",
 };
 
 export default function BlogCard({ post }: BlogCardProps) {
-  const categoryClass = categoryStyles[post.category] || categoryStyles.General;
-  
+  const badge = categoryColors[post.category] ?? "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200";
+  const emoji = emojiMap[post.category] ?? "📝";
+
+  // Initials avatar from author name
+  const initials = (post.author || "M F")
+    .split(" ")
+    .map((s) => s[0]?.toUpperCase())
+    .slice(0, 2)
+    .join("");
+
   return (
-    <article className="vibrant-card rounded-xl p-6 h-full flex flex-col animate-fade-in group">
-      <div className="flex items-center justify-between mb-4">
-        <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${categoryClass} animate-glow`}>
-          {post.category}
+    <article className="group relative h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
+      {/* Accent hover ring */}
+      <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl opacity-0 ring-2 ring-transparent ring-offset-2 ring-offset-white transition group-hover:opacity-100 group-hover:ring-indigo-400 dark:ring-offset-slate-900" />
+
+      {/* Meta */}
+      <div className="mb-3 flex items-center justify-between">
+        <span className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${badge}`}>
+          {emoji} {post.category}
         </span>
-        <time className="text-sm text-gray-500 dark:text-gray-400">
-          {new Date(post.date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric'
-          })}
-        </time>
+        <time className="text-xs text-slate-500">{new Date(post.date).toLocaleDateString()}</time>
       </div>
-      
-      <Link href={`/blog/${post.slug}`} className="flex-1 flex flex-col">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-pink-500 group-hover:to-purple-500 transition-all duration-300">
-          {post.title}
-        </h3>
-        
-        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-1 leading-relaxed">
-          {post.excerpt}
-        </p>
-        
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
-            <div className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              {post.author}
-            </div>
-            <div className="flex items-center">
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {post.readTime}
-            </div>
+
+      {/* Title */}
+      <h3 className="line-clamp-2 text-xl font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
+        <Link href={`/blog/${post.category}/${post.slug}`}>{post.title}</Link>
+      </h3>
+
+      {/* Excerpt */}
+      <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
+        {post.excerpt}
+      </p>
+
+      {/* Author row */}
+      <div className="mt-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-fuchsia-500 text-xs font-bold text-white shadow-sm">
+            {initials}
           </div>
-          
-          <div className="btn-vibrant text-sm px-4 py-2 rounded-lg group-hover:scale-105 transition-transform duration-200">
-            Read More
+          <div className="leading-tight">
+            <div className="text-xs text-slate-500">By</div>
+            <div className="text-sm font-medium text-slate-800 dark:text-slate-200">{post.author}</div>
           </div>
         </div>
-        
-        {post.tags && post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {post.tags.slice(0, 3).map((tag, index) => (
-              <span 
-                key={tag}
-                className="px-2 py-1 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 text-xs rounded-md font-medium animate-shimmer"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                #{tag}
-              </span>
-            ))}
-            {post.tags.length > 3 && (
-              <span className="px-2 py-1 bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 text-purple-700 dark:text-purple-300 text-xs rounded-md font-medium">
-                +{post.tags.length - 3}
-              </span>
-            )}
-          </div>
-        )}
-      </Link>
+        <div className="text-xs text-slate-500">{post.readTime} min read</div>
+      </div>
+
+      {/* CTA */}
+      <div className="mt-6">
+        <Link
+          href={`/blog/${post.category}/${post.slug}`}
+          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-emerald-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          aria-label={`Read ${post.title}`}
+        >
+          Read More
+          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
     </article>
   );
 }
-
-// Named export for backward compatibility
-export { BlogCard };
