@@ -1,0 +1,49 @@
+# public/admin/config.yml
+
+# 1. Backend setup: Use the local Decap proxy for offline editing
+backend:
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
+  branch: main
+
+# 2. Enable local backend to read/write directly to the Git repo
+local_backend: true
+
+# 3. Media storage: Uploaded images go into public/images/uploads
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# 4. Collections definition
+collections:
+  - name: "blog"                  # Unique collection name
+    label: "Blog Posts"           # Human-friendly label in the CMS UI
+    folder: "src/content/blog"    # Directory where posts are saved
+    path: "{{category}}/{{slug}}" # Subfolder by category, filename by slug
+    create: true                  # Allow creating new files
+    delete: false                 # Disable delete to avoid accidental removal
+    format: "frontmatter"         # Use YAML frontmatter
+    extension: "mdx"              # File extension for posts
+    slug: "{{slug}}"              # Filename template
+    preview_path: "/blog/{{category}}/{{slug}}" # Next.js preview URL
+    fields:
+      - { name: "title", label: "Title", widget: "string", required: true }
+      - { name: "excerpt", label: "Excerpt", widget: "text", required: false }
+      - { name: "date", label: "Publish Date", widget: "datetime", required: true }
+      - { name: "author", label: "Author", widget: "string", default: "MoreFusion Team" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        options:
+          - { label: "🤖 AI", value: "AI" }
+          - { label: "💻 Coding", value: "coding" }
+          - { label: "🎭 Drama", value: "drama" }
+          - { label: "🎬 Film", value: "film" }
+          - { label: "📝 General", value: "general" }
+          - { label: "🛒 Shopping", value: "shopping" }
+        default: "general"
+      - { name: "tags", label: "Tags", widget: "list", default: [] }
+      - { name: "image", label: "Featured Image", widget: "image", required: false }
+      - name: "body"
+        label: "Content"
+        widget: "markdown"
+        hint: "Write your post content here using Markdown or MDX."

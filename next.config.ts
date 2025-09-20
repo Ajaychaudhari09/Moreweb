@@ -1,5 +1,13 @@
+import createMDX from '@next/mdx';
 import type { NextConfig } from 'next';
 
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
 const nextConfig: NextConfig = {
   // Hide editor routes in production
   async redirects() {
@@ -36,4 +44,4 @@ const nextConfig: NextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx']
 };
 
-export default nextConfig;
+export default withMDX(nextConfig);

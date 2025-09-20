@@ -1,12 +1,22 @@
-// file: app/robots.ts
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-    },
-    sitemap: 'https://www.morefusion.in/sitemap.xml',
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/editor*',
+          '/admin*',
+          '/api*',
+          '/_next*',
+          '/feed.xml',
+          '/main.py',
+          '/word',
+        ],
+      },
+    ],
+    sitemap: 'https://morefusion.in/sitemap.xml',
   };
 }

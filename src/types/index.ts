@@ -1,27 +1,25 @@
-// Blog Post Interface
 export interface BlogPost {
   id: string;
+  slug: string;
   title: string;
   excerpt: string;
-  content?: string;
-  category: BlogCategory;
-  author: string;
   date: string;
-  readTime: string;
-  slug: string;
-  tags?: string[];
+  author: string;
+  category: 'AI' | 'coding' | 'drama' | 'film' | 'general' | 'shopping';
+  tags: string[];
+  image?: string;
+  content: string;
+  readTime: number;
 }
 
-// Blog Categories
 export type BlogCategory =
-  | "General"
-  | "AI"
-  | "Coding"
-  | "Film"
-  | "Drama"
-  | "Shopping";
+  | 'AI'
+  | 'coding'
+  | 'drama'
+  | 'film'
+  | 'general'
+  | 'shopping';
 
-// Tool Interface
 export interface Tool {
   id: string;
   name: string;
@@ -30,7 +28,6 @@ export interface Tool {
   href: string;
 }
 
-// Component Props Types
 export interface CategoryFilterProps {
   categories: string[];
   currentCategory: string;
@@ -44,24 +41,20 @@ export interface ToolCardProps {
   tool: Tool;
 }
 
-// BMI Calculator Types
+export interface BMIInput {
+  weight: number;
+  height: number;
+  unit: 'metric' | 'imperial';
+}
+
 export interface BMIResult {
   bmi: number;
-  category: BMICategory;
+  category: 'Underweight' | 'Normal Weight' | 'Overweight' | 'Obese';
   categoryColor: string;
   interpretation: string;
   recommendations: string[];
 }
 
-export interface BMIInput {
-  weight: number;
-  height: number;
-  unit: "metric" | "imperial";
-}
-
-export type BMICategory = "Underweight" | "Normal Weight" | "Overweight" | "Obese";
-
-// Exercise Generator Types
 export interface Exercise {
   name: string;
   reps: string;
@@ -82,7 +75,16 @@ export interface WorkoutPreferences {
   equipment: string;
 }
 
-// Calorie Calculator Types
+export interface CalorieInput {
+  age: number;
+  gender: 'male' | 'female';
+  weight: number;
+  height: number;
+  activityLevel: string;
+  goal: string;
+  unit: 'metric' | 'imperial';
+}
+
 export interface CalorieResult {
   bmr: number;
   tdee: number;
@@ -107,17 +109,12 @@ export interface CalorieResult {
   };
 }
 
-export interface CalorieInput {
-  age: number;
-  gender: "male" | "female";
-  weight: number;
-  height: number;
-  activityLevel: string;
-  goal: string;
-  unit: "metric" | "imperial";
+export interface EMIInput {
+  loanAmount: number;
+  interestRate: number;
+  loanTerm: number;
 }
 
-// EMI Calculator Types (unified fields)
 export interface EMIScheduleItem {
   month: number;
   payment: number;
@@ -131,10 +128,4 @@ export interface EMIResult {
   totalAmount: number;
   totalInterest: number;
   schedule: EMIScheduleItem[];
-}
-
-export interface EMIInput {
-  loanAmount: number;
-  interestRate: number;
-  loanTerm: number;
 }
