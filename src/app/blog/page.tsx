@@ -32,6 +32,8 @@ const catPill: Record<string, string> = {
   shopping: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200",
 };
 
+export const dynamic = "force-static";
+
 export default async function BlogPage({
   searchParams,
 }: {

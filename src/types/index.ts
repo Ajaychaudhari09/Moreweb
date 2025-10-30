@@ -26,6 +26,8 @@ export interface Tool {
   description: string;
   icon: string;
   href: string;
+  category?: string;
+  usageCount?: number;
 }
 
 export interface CategoryFilterProps {
