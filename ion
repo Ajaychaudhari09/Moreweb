@@ -1,0 +1,10 @@
+[33m2bbfd8e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Resolve merge conflicts and update blog library with categories
+[33mb9e5133[m[33m ([m[1;31morigin/main[m[33m)[m Merge pull request #2 from Ajaychaudhari09/feat-dynamic-blog-categories
+[33m158781a[m[33m ([m[1;31morigin/feat-dynamic-blog-categories[m[33m)[m feat: Dynamically generate blog categories in navbar
+[33m4905ec7[m Merge pull request #1 from Ajaychaudhari09/feat-update-blog-categories
+[33md8ee67f[m feat: Update blog categories in navbar
+[33mef79d46[m  changed
+[33m45efc26[m Fix MDX dynamic import
+[33mafcbae5[m Fix MDX dynamic
+[33m857153d[m Fix MDX dynamic import issue using next-mdx-remote
+[33mbfb4cf1[m  changed
