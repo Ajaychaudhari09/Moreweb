@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
+import { CATEGORIES } from '@/lib/categories';
 
 const navItems = [
   { label: 'Home', href: '/' },
@@ -19,14 +20,10 @@ const navItems = [
   {
     label: 'Blog',
     href: '/blog',
-    dropdown: [
-      { label: 'General', href: '/blog/general' },
-      { label: 'AI', href: '/blog/ai' },
-      { label: 'Coding', href: '/blog/coding' },
-      { label: 'Film', href: '/blog/film' },
-      { label: 'Drama', href: '/blog/drama' },
-      { label: 'Shopping', href: '/blog/shopping' },
-    ],
+    dropdown: CATEGORIES.map((category) => ({
+      label: category.charAt(0).toUpperCase() + category.slice(1),
+      href: `/blog/${category.toLowerCase()}`,
+    })),
   },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },

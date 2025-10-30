@@ -2,12 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import type { BlogPost, BlogCategory } from '@/types';
+import { CATEGORIES } from './categories';
 
 const BLOG_ROOT = path.join(process.cwd(), 'src/content/blog');
-
-export const CATEGORIES: BlogCategory[] = [
-  'AI', 'coding', 'drama', 'film', 'general', 'shopping',
-];
 
 // Case-insensitive normalization from URL -> canonical folder name
 export function normalizeCategory(input: unknown): BlogCategory | null {
