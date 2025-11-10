@@ -60,10 +60,10 @@ export default async function BlogPage({
       : allPosts.filter((p) => p.category.toLowerCase() === sv.toLowerCase());
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10 opacity-30 blur-3xl [mask-image:radial-gradient(60%_60%_at_50%_30%,black,transparent)] bg-[conic-gradient(at_30%_20%,#60a5fa_0deg,#a78bfa_120deg,#34d399_240deg,#60a5fa_360deg)]" />
+        <div className="absolute inset-0 -z-10 opacity-30 blur-3xl mask-[radial-gradient(60%_60%_at_50%_30%,black,transparent)] bg-[conic-gradient(at_30%_20%,#60a5fa_0deg,#a78bfa_120deg,#34d399_240deg,#60a5fa_360deg)]" />
         <div className="mx-auto max-w-5xl px-6 pt-16 pb-10 text-center">
           <h1 className="gradient-text text-5xl font-extrabold tracking-tight md:text-6xl">
             Our Blog
