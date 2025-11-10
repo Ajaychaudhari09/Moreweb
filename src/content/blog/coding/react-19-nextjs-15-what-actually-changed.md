@@ -33,17 +33,20 @@ Server Components were the "experimental" feature everyone was afraid to use in 
 
 The new `<form>` component in Next.js 15 feels like magic. It prefetches data, handles progressive enhancement, and gracefully degrades when JavaScript is disabled.
 
+```javascript
 // Old way: lots of boilerplate
 const [loading, setLoading] = useState(false);
 const handleSubmit = async (e) => {
-e.preventDefault();
-setLoading(true);
-// ... more code
+  e.preventDefault();
+  setLoading(true);
+  // ... more code
 };
+```
 
 // New way: just works
-
-<form action={submitAction}> <input name="email" /> <button type="submit">Subscribe</button> </form> ```
+```html
+<form action={submitAction}> <input name="email" /> <button type="submit">Subscribe</button> </form>
+```
 Caching changes everything (and breaks some things)
 Next.js 15 completely rewrote how caching works. The old implicit caching that confused everyone? Gone. Now you explicitly control what gets cached and when.
 

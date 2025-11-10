@@ -5,8 +5,8 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const url = request.nextUrl.clone();
 
-  // Block /admin in production (allow in dev for offline Decap usage)
-  if (pathname.startsWith('/admin')) {
+  // Block /admin and /strapi-cms in production (allow in dev for offline Decap usage)
+  if (pathname.startsWith('/admin') || pathname.startsWith('/strapi-cms')) {
     if (process.env.NODE_ENV === 'production') {
       return new NextResponse('Not Found', { status: 404 });
     }
@@ -65,6 +65,7 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admin/:path*',
+    '/strapi-cms/:path*',
     '/((?!_next/static|_next/image|favicon.ico|images|uploads|api|.*\\..*).*)',
   ],
 };

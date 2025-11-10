@@ -1,54 +1,17 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Calendar, Clock, User, ArrowRight, Search } from "lucide-react";
 
-interface BlogPost {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  date: string;
-  tags: string[];
-  category: string;
-  excerpt: string;
-  published: boolean;
-  featured: boolean;
-  readTime: string;
-  layout: string;
-}
+import type { BlogPost } from "@/types";
 
-export function PublicBlogList() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
+export function PublicBlogList({ posts, categories }: { posts: BlogPost[]; categories: string[] }) {
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>(posts);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [categories, setCategories] = useState<string[]>([]);
 
-  useEffect(() => {
-    loadPosts();
-  }, []);
-
-  const loadPosts = () => {
-    try {
-      const saved = localStorage.getItem("turbo-markdown-articles");
-      if (saved) {
-        const allPosts: BlogPost[] = JSON.parse(saved);
-        const publishedPosts = allPosts.filter((post) => post.published);
-        setPosts(publishedPosts);
-
-        const uniqueCategories = [
-          ...new Set(publishedPosts.map((post) => post.category)),
-        ];
-        setCategories(uniqueCategories);
-      }
-    } catch (error) {
-      console.error("Error loading posts:", error);
-    }
-  };
-
-  const filterPosts = useCallback(() => {
+  const handleFilterChange = useCallback(() => {
     let filtered = posts;
 
     if (searchQuery) {
@@ -67,17 +30,15 @@ export function PublicBlogList() {
     }
 
     filtered.sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
     setFilteredPosts(filtered);
   }, [posts, searchQuery, selectedCategory]);
 
-  useEffect(() => {
-    filterPosts();
-  }, [filterPosts]);
+  useState(() => {
+    handleFilterChange();
+  });
 
   const truncateContent = (content: string, maxLength: number) => {
     if (content.length <= maxLength) return content;
@@ -145,11 +106,8 @@ export function PublicBlogList() {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <Link key={post.id} href={`/blog/${post.id}`} className="block">
+            <Link key={post.id} href={`/blog/${post.category}/${post.slug}`} className="block">
               <article className="card transition hover-lift h-full">
-                {post.featured && (
-                  <div className="badge badge-primary mb-3">⭐ Featured</div>
-                )}
 
                 <h2 className="text-xl font-bold mb-3 hover:text-primary transition">
                   {post.title}
@@ -209,9 +167,9 @@ export function PublicBlogList() {
           </div>
           <div>
             <div className="text-2xl font-bold text-warning">
-              {posts.filter((p) => p.featured).length}
+              {posts.length}
             </div>
-            <div className="text-sm text-muted">Featured Posts</div>
+            <div className="text-sm text-muted">Posts</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-primary">

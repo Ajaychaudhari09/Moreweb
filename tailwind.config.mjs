@@ -15,29 +15,34 @@ const config = {
         display: ["Inter", "Poppins", "sans-serif"],
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        vibrant: {
+          pink: "#EC4899",
+          purple: "#8B5CF6",
+          blue: "#3B82F6",
+          teal: "#14B8A6",
+          orange: "#F97316",
         },
       },
       boxShadow: {
-        glow: "0 0 20px rgba(139,92,246,0.4), 0 0 40px rgba(236,72,153,0.2)",
-        glass:
-          "0 4px 30px rgba(0,0,0,0.1), inset 0 1px 1px rgba(255,255,255,0.1)",
+        glow: "0 0 20px rgba(236, 72, 153, 0.4), 0 0 40px rgba(139, 92, 246, 0.2)",
       },
       keyframes: {
         float: {

@@ -18,12 +18,14 @@ const nextConfig: NextConfig = {
         { source: "/editor/:path*", destination: "/404", permanent: false },
         { source: "/admin", destination: "/404", permanent: false },
         { source: "/admin/:path*", destination: "/404", permanent: false },
+        { source: "/strapi-cms", destination: "/404", permanent: false },
+        { source: "/strapi-cms/:path*", destination: "/404", permanent: false },
       ];
     }
     return [];
   },
 
-  // ✅ Security headers for admin/editor routes
+  // ✅ Security headers for admin/editor/strapi routes
   async headers() {
     return [
       {
@@ -35,6 +37,13 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/admin/:path*",
+        headers: [
+          { key: "X-Robots-Tag", value: "noindex, nofollow, nosnippet, noarchive" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+        ],
+      },
+      {
+        source: "/strapi-cms/:path*",
         headers: [
           { key: "X-Robots-Tag", value: "noindex, nofollow, nosnippet, noarchive" },
           { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },

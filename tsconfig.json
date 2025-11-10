@@ -29,5 +29,5 @@
     ".next/types/**/*.ts",
     "types/**/*.d.ts"
 , "src/components/ui/button.tsx"  ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "strapi-cms"]
 }

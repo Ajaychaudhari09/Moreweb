@@ -1,7 +1,7 @@
 ---
 title: "Amazon Great Indian Festival 2025"
 excerpt: "Amazon Great Indian Festival 2025 starts on September 23 with 24-hour early access for Prime members, featuring deep category-wide discounts, SBI 10% bank offers, and expanded delivery for faster drops across India."
-date: "2025-09-15,12:48:43.256Z"
+date: "2025-09-15T12:48:43.256Z"
 category: "shopping"
 author: "MoreFusion Team"
 tags: []

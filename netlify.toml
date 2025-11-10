@@ -19,6 +19,17 @@
   to = "/404"
   status = 404
 
+# Hide strapi-cms in production
+[[redirects]]
+  from = "/strapi-cms"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/strapi-cms/*"
+  to = "/404"
+  status = 404
+
 # Add security headers
 [[headers]]
   for = "/*"
@@ -31,5 +42,11 @@
 # Block crawlers from editor routes
 [[headers]]
   for = "/editor/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, nosnippet, noarchive"
+
+# Block crawlers from strapi-cms routes
+[[headers]]
+  for = "/strapi-cms/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow, nosnippet, noarchive"

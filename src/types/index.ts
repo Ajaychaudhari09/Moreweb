@@ -24,7 +24,7 @@ export interface Tool {
   id: string;
   name: string;
   description: string;
-  icon: string;
+  icon?: string;
   href: string;
   category?: string;
   usageCount?: number;

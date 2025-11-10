@@ -101,7 +101,7 @@ export async function getPostsByCategory(category: BlogCategory): Promise<BlogPo
   return all.filter((p) => p.category === category);
 }
 
-export async function getPostBySlug(category: BlogCategory, slug: string): Promise<BlogPost | null> {
+export function getPostBySlug(category: BlogCategory, slug: string): BlogPost | null {
   const filePath = path.join(BLOG_ROOT, category, `${slug}.md`);
   if (!fs.existsSync(filePath)) return null;
   const fileName = `${slug}.md`;
@@ -109,7 +109,7 @@ export async function getPostBySlug(category: BlogCategory, slug: string): Promi
 }
 
 // Case-insensitive safe lookup
-export async function getPostBySlugSafe(categoryInput: string, slug: string): Promise<BlogPost | null> {
+export function getPostBySlugSafe(categoryInput: string, slug: string): BlogPost | null {
   const cat = normalizeCategory(categoryInput);
   if (!cat) return null;
   return getPostBySlug(cat, slug);

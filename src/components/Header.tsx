@@ -10,7 +10,6 @@ const navItems = [
   { label: 'Tools', href: '/tools' },
   { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
 ];
 
 export default function Header() {
@@ -19,8 +18,8 @@ export default function Header() {
 
   const baseLink =
     'px-4 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500';
-  const active = 'bg-indigo-600 text-white';
-  const inactive = 'text-foreground/80 hover:bg-indigo-50 dark:hover:bg-indigo-900/30';
+  const active = 'bg-blue-500 text-white';
+  const inactive = 'text-foreground/80 hover:bg-blue-50 dark:hover:bg-blue-900/30';
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">

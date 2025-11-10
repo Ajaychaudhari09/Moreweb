@@ -8,6 +8,16 @@ export const metadata: Metadata = {
   title: "Blog | MoreFusion",
   description: "Discover insights on AI, coding, film, drama, shopping and more",
   keywords: ["blog", "articles", "AI", "coding", "technology", "entertainment"],
+  openGraph: {
+    title: "Blog | MoreFusion",
+    description: "Discover insights on AI, coding, film, drama, shopping and more",
+    url: "https://morefusion.in/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | MoreFusion",
+    description: "Discover insights on AI, coding, film, drama, shopping and more",
+  },
 };
 
 const CATS = ["All", "general", "AI", "coding", "film", "drama", "shopping"] as const;
@@ -32,7 +42,7 @@ const catPill: Record<string, string> = {
   shopping: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200",
 };
 
-export const dynamic = "force-static";
+
 
 export default async function BlogPage({
   searchParams,

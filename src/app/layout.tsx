@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://morefusion.in"),
   title: {
     default: "MoreFusion - Productivity Tools & Tech Blog",
     template: "%s | MoreFusion",
@@ -25,11 +26,20 @@ export const metadata: Metadata = {
     title: "MoreFusion - Productivity Tools & Tech Blog",
     description: "Free productivity tools and tech insights to boost your workflow",
     siteName: "MoreFusion",
+    images: [
+      {
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "MoreFusion Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "MoreFusion - Productivity Tools & Tech Blog",
     description: "Free productivity tools and tech insights to boost your workflow",
+    images: ["/android-chrome-512x512.png"],
   },
   robots: {
     index: true,
@@ -42,6 +52,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -51,7 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 animate-fadeUp">{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

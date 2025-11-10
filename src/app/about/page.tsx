@@ -13,7 +13,7 @@ export default function AboutPage() {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Hero Section */}
         <div className="text-center mb-16 animate-fade-in">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
             About MoreFusion
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">

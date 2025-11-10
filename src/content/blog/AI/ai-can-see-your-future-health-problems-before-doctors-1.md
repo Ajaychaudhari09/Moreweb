@@ -10,9 +10,6 @@ tags: []
 ---
 
 
-"ai-predicts-your-health-before-doctors"
----
-
 # AI Can See Your Future Health Problems Before Doctors
 
 Picture this: you walk into your doctor's office for a routine eye exam, feeling perfectly fine. But the AI scanning your eyes has already spotted something troubling—you're going to lose your vision in five years if nothing changes.

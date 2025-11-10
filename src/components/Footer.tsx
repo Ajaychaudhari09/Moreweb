@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Mail, ExternalLink } from 'lucide-react';
+import { Github, X, Facebook, Instagram, Linkedin, ExternalLink, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,23 +16,20 @@ export default function Footer() {
           
           {/* Social Links */}
           <div className="flex items-center gap-3 mt-4">
-            <a
-              href="https://github.com/yourusername/morefusion"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-foreground/70 hover:text-foreground transition-colors"
-              aria-label="GitHub Repository"
-            >
-              <Github className="h-4 w-4" />
-              <span className="hidden sm:inline">GitHub</span>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X">
+              <X className="h-6 w-6 text-gray-500 hover:text-blue-500 transition-colors" />
             </a>
-            <a
-              href="mailto:newsletter@morefusion.in"
-              className="flex items-center gap-1 text-sm text-foreground/70 hover:text-foreground transition-colors"
-              aria-label="Contact Email"
-            >
-              <Mail className="h-4 w-4" />
-              <span className="hidden sm:inline">Contact</span>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <Facebook className="h-6 w-6 text-gray-500 hover:text-blue-700 transition-colors" />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <Instagram className="h-6 w-6 text-gray-500 hover:text-pink-600 transition-colors" />
+            </a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <Github className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <Linkedin className="h-6 w-6 text-gray-500 hover:text-blue-600 transition-colors" />
             </a>
           </div>
         </div>
@@ -130,8 +127,9 @@ export default function Footer() {
             <li>
               <a 
                 href="mailto:newsletter@morefusion.in"
-                className="text-foreground/80 hover:text-foreground transition-colors"
+                className="text-foreground/80 hover:text-foreground transition-colors flex items-center"
               >
+                <Mail className="h-4 w-4 mr-2" />
                 Contact Support
               </a>
             </li>
@@ -150,6 +148,7 @@ export default function Footer() {
               href="mailto:newsletter@morefusion.in?subject=Newsletter Subscription"
               className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
             >
+              <Mail className="h-4 w-4 mr-1" />
               Subscribe to Newsletter
               <ExternalLink className="h-3 w-3" />
             </a>
@@ -162,8 +161,6 @@ export default function Footer() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <p>© 2025 MoreFusion. All rights reserved.</p>
-            <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Built with Next.js & TypeScript</span>
           </div>
           
           <div className="flex items-center gap-4 text-xs">
