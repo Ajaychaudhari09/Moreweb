@@ -1,16 +1,39 @@
 import type { NextConfig } from "next";
 
 /**
- * ✅ Clean Next.js 15.5.3 (Turbopack-Compatible) Configuration
- * - No deprecated keys
- * - Uses modern structure
- * - Works perfectly with npm run dev / build / start
+ * ✅ Production-Ready Next.js 15.5.3 Configuration
+ * Compatible with Turbopack, Netlify Static Export & Cloudflare Pages
+ * - Static export (creates /out folder)
+ * - Optimized for performance & SEO
+ * - Safe redirects & headers
  */
 const nextConfig: NextConfig = {
-  // ✅ New top-level typed routes (moved from experimental)
-  typedRoutes: false,
+  // ✅ Use static export (required for Netlify or Cloudflare Pages)
+  output: "export",
 
-  // ✅ Redirects (block access to restricted routes in production)
+  // ✅ Unoptimized images (for static export mode)
+  images: {
+    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+
+  // ✅ Remove all console logs in production
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+
+  // ✅ Optimize common packages
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@uiw/react-md-editor"],
+  },
+
+  // ✅ Block access to admin/editor routes on production
   async redirects() {
     if (process.env.NODE_ENV === "production") {
       return [
@@ -25,7 +48,11 @@ const nextConfig: NextConfig = {
     return [];
   },
 
+<<<<<<< HEAD
   // ✅ Security headers for admin/editor/strapi routes
+=======
+  // ✅ Secure headers for private routes
+>>>>>>> 1c817986cf01b9d216ea952be41b7b6bab0d21c1
   async headers() {
     return [
       {
@@ -52,30 +79,11 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // ✅ Remove console logs only in production builds
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
-  },
+  // ✅ Typed routes (disabled for simplicity)
+  typedRoutes: false,
 
-  // ✅ Optimize imports for UI-heavy packages
-  experimental: {
-    optimizePackageImports: ["lucide-react", "@uiw/react-md-editor"],
-  },
-
-  // ✅ Image optimization for remote sources
-  images: {
-    formats: ["image/avif", "image/webp"],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-    ],
-  },
-
-  // ✅ Allow these file extensions for pages
+  // ✅ Supported page extensions
   pageExtensions: ["js", "jsx", "ts", "tsx"],
 };
 
-// ✅ Use default ESM export (don’t mix with module.exports)
 export default nextConfig;
