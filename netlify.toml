@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "out"
+
 
 # Redirect all routes to index.html (Next.js handles routing)
 [[redirects]]
