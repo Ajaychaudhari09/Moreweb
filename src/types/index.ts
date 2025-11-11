@@ -1,34 +1,70 @@
+// src/types.ts
+
+/**
+ * -----------------------------------------------------------------------------
+ * BLOG TYPES (MD / MDX + Strapi-compatible)
+ * -----------------------------------------------------------------------------
+ * - Supports both `date` and `published_date` in frontmatter.
+ * - `BlogPost.date` is the single normalized ISO string used everywhere.
+ * - `category` is a strict union; keep folder names consistent.
+ * - `readTime` is a number (render `${readTime} min read` in UI).
+ * - `image` is optional cover image (alias "cover" in frontmatter is also common).
+ * -----------------------------------------------------------------------------
+ */
+
+export type BlogCategory = "AI" | "coding" | "drama" | "film" | "general" | "shopping";
+
+/**
+ * Frontmatter shape accepted from MD/MDX files (and Strapi).
+ * This is not used directly in components; it's a source shape
+ * that your file loader (lib/blog.ts) will normalize into BlogPost.
+ */
+export interface BlogFrontmatter {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  /** Optional; use as fallback if present */
+  date?: string; // ISO
+  /** Strapi-safe name; preferred when present */
+  published_date?: string; // ISO
+  author?: string;
+  category: BlogCategory | string; // string allowed; normalize later
+  tags?: string[];
+  /** Optional cover image (alias commonly used: "cover") */
+  image?: string;
+  cover?: string;
+  /** Optional last updated timestamp (ISO) */
+  updatedAt?: string;
+}
+
+/**
+ * Normalized blog object used across the app.
+ * lib/blog.ts must produce this shape.
+ */
 export interface BlogPost {
+  /** Stable composite ID like `${category}/${slug}` */
   id: string;
   slug: string;
   title: string;
   excerpt: string;
+  /** Final normalized ISO date (from `published_date` -> `date` -> file mtime) */
   date: string;
   author: string;
-  category: 'AI' | 'coding' | 'drama' | 'film' | 'general' | 'shopping';
+  category: BlogCategory;
   tags: string[];
-  image?: string;
-  content: string;
-  readTime: number;
+  image?: string; // cover image url
+  content: string; // raw MD/MDX source (string)
+  readTime: number; // minutes
+  /** Optional fields for future features */
+  updatedAt?: string; // ISO
+  series?: string;
 }
 
-export type BlogCategory =
-  | 'AI'
-  | 'coding'
-  | 'drama'
-  | 'film'
-  | 'general'
-  | 'shopping';
-
-export interface Tool {
-  id: string;
-  name: string;
-  description: string;
-  icon?: string;
-  href: string;
-  category?: string;
-  usageCount?: number;
-}
+/**
+ * -----------------------------------------------------------------------------
+ * UI PROPS
+ * -----------------------------------------------------------------------------
+ */
 
 export interface CategoryFilterProps {
   categories: string[];
@@ -43,22 +79,42 @@ export interface ToolCardProps {
   tool: Tool;
 }
 
-/* Calculators and tools */
+/**
+ * -----------------------------------------------------------------------------
+ * TOOLS / UTILITIES TYPES
+ * -----------------------------------------------------------------------------
+ */
 
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  icon?: string;
+  href: string;
+  category?: string;
+  usageCount?: number;
+}
+
+/**
+ * BMI
+ */
 export interface BMIInput {
   weight: number;
   height: number;
-  unit: 'metric' | 'imperial';
+  unit: "metric" | "imperial";
 }
 
 export interface BMIResult {
   bmi: number;
-  category: 'Underweight' | 'Normal Weight' | 'Overweight' | 'Obese';
+  category: "Underweight" | "Normal Weight" | "Overweight" | "Obese";
   categoryColor: string;
   interpretation: string;
   recommendations: string[];
 }
 
+/**
+ * Workout generator
+ */
 export interface Exercise {
   name: string;
   reps: string;
@@ -79,14 +135,27 @@ export interface WorkoutPreferences {
   equipment: string;
 }
 
+/**
+ * Calories / Nutrition
+ */
+export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "veryActive";
+export type NutritionGoal =
+  | "maintain"
+  | "mildWeightLoss"
+  | "weightLoss"
+  | "extremeWeightLoss"
+  | "mildWeightGain"
+  | "weightGain"
+  | "extremeWeightGain";
+
 export interface CalorieInput {
   age: number;
-  gender: 'male' | 'female';
+  gender: "male" | "female";
   weight: number;
   height: number;
-  activityLevel: string;
-  goal: string;
-  unit: 'metric' | 'imperial';
+  activityLevel: ActivityLevel | string;
+  goal: NutritionGoal | string;
+  unit: "metric" | "imperial";
 }
 
 export interface CalorieResult {
@@ -113,10 +182,13 @@ export interface CalorieResult {
   };
 }
 
+/**
+ * EMI
+ */
 export interface EMIInput {
   loanAmount: number;
   interestRate: number;
-  loanTerm: number;
+  loanTerm: number; // years
 }
 
 export interface EMIScheduleItem {

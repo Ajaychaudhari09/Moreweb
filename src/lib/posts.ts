@@ -1,151 +1,153 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { BlogPost, BlogCategory } from '../types';
+// src/lib/posts.ts
+// ✅ Unified Blog Loader — Supports both .md and .mdx
 
-const postsDirectory = path.join(process.cwd(), 'src/content/blog');
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+import type { BlogPost, BlogFrontmatter, BlogCategory } from "@/types";
 
-function listMarkdownFilesRecursively(dir: string): string[] {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  const files: string[] = [];
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...listMarkdownFilesRecursively(fullPath));
-    } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
-      files.push(fullPath);
+const BLOG_ROOT = path.join(process.cwd(), "src/content/blog");
+
+/* ---------------------------------------------------------
+ ✅ CATEGORY NORMALIZER
+---------------------------------------------------------- */
+export function normalizeCategory(cat: string | undefined): BlogCategory | null {
+  if (!cat) return null;
+  const lc = cat.toLowerCase();
+
+  const MAP: Record<string, BlogCategory> = {
+    ai: "AI",
+    coding: "coding",
+    drama: "drama",
+    film: "film",
+    general: "general",
+    shopping: "shopping",
+  };
+
+  return MAP[lc] ?? null;
+}
+
+/* ---------------------------------------------------------
+ ✅ RECURSIVE .md / .mdx FILE SEARCH
+---------------------------------------------------------- */
+function getMarkdownFiles(dir: string): string[] {
+  const out: string[] = [];
+  const walk = (folder: string) => {
+    const items = fs.readdirSync(folder, { withFileTypes: true });
+    for (const item of items) {
+      const full = path.join(folder, item.name);
+      if (item.isDirectory()) walk(full);
+      else if (/\.(md|mdx)$/i.test(item.name)) out.push(full);
     }
-  }
-  return files;
+  };
+  walk(dir);
+  return out;
 }
 
-export function getSortedPostsData(): BlogPost[] {
-  // Recursively collect all markdown files in postsDirectory
-  const filePaths = listMarkdownFilesRecursively(postsDirectory);
-  const allPostsData = filePaths.map((fullPath) => {
-    // Derive an id relative to postsDirectory, drop extension
-    const rel = path.relative(postsDirectory, fullPath).replace(/\\/g, '/');
-    const id = rel.replace(/\.(md|mdx)$/i, '');
-
-    // Read markdown file as string
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents);
-
-    // Frontmatter fields with sensible fallbacks
-    const fm = matterResult.data as Partial<{
-      date: string;
-      title: string;
-      slug: string;
-      excerpt: string;
-      author: string;
-      category: string;
-      tags: string[];
-      image: string;
-      readTime: number | string;
-      featured: boolean;
-      published: boolean;
-    }>;
-
-    // Normalize to BlogPost shape used in src/types
-    const slug = fm.slug ?? id;
-    const title = fm.title ?? id.split('/').pop() ?? id;
-    const date = fm.date ?? new Date().toISOString();
-    const excerpt = fm.excerpt ?? '';
-    const author = fm.author ?? 'Unknown';
-    const category = (fm.category as BlogCategory) ?? 'general';
-    const tags = Array.isArray(fm.tags) ? fm.tags : [];
-    const image = fm.image;
-    const readTime = typeof fm.readTime === 'number' ? fm.readTime :  Math.ceil((matterResult.content.split(/\s+/).length || 1) / 200);
-
-    return {
-      id,
-      slug,
-      title,
-      excerpt,
-      date,
-      author,
-      category,
-      tags,
-      image,
-      content: matterResult.content,
-      readTime,
-      // Keep extra flags if needed by UI
-      featured: fm.featured ?? false,
-      published: fm.published ?? true,
-    } as BlogPost;
-  });
-  // Sort posts by date
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+/* ---------------------------------------------------------
+ ✅ STRIP MARKDOWN → EXCERPT
+---------------------------------------------------------- */
+function stripMarkdown(md: string): string {
+  return md
+    .replace(/`{1,3}[^`]*`{1,3}/g, "")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/[*_>#-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
-export function getLatestPosts(): BlogPost[] {
-  const allPosts = getSortedPostsData();
-  return allPosts.slice(0, 6);
+function buildExcerpt(content: string, max = 180): string {
+  const text = stripMarkdown(content);
+  return text.length > max ? text.slice(0, max) + "..." : text;
 }
 
-export function getPostsByCategory(category: string): BlogPost[] {
-  const categoryPath = path.join(postsDirectory, category);
-  if (!fs.existsSync(categoryPath)) {
-    return [];
-  }
-  const filePaths = listMarkdownFilesRecursively(categoryPath);
-  const allPostsData = filePaths.map((fullPath) => {
-    const rel = path.relative(postsDirectory, fullPath).replace(/\\/g, '/');
-    const id = rel.replace(/\.(md|mdx)$/i, '');
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
+/* ---------------------------------------------------------
+ ✅ READ SINGLE POST
+---------------------------------------------------------- */
+function readPost(fullPath: string): BlogPost {
+  const rel = path.relative(BLOG_ROOT, fullPath).replace(/\\/g, "/");
+  const raw = fs.readFileSync(fullPath, "utf8");
+  const { data, content } = matter(raw);
 
-    const fm = matterResult.data as Partial<{
-      date: string;
-      title: string;
-      slug: string;
-      excerpt: string;
-      author: string;
-      tags: string[];
-      image: string;
-      readTime: number | string;
-      featured: boolean;
-      published: boolean;
-    }>;
+  const fm = data as BlogFrontmatter;
 
-    const slug = fm.slug ?? id;
-    const title = fm.title ?? id.split('/').pop() ?? id;
-    const date = fm.date ?? new Date().toISOString();
+  const folder = rel.split("/")[0];
+  const category = normalizeCategory(fm.category ?? folder);
+  if (!category) throw new Error(`❌ Invalid category for: ${fullPath}`);
 
-    return {
-      id,
-      slug,
-      title,
-      date,
-      excerpt: fm.excerpt ?? '',
-      author: fm.author ?? 'Unknown',
-      category: category as BlogCategory,
-      tags: Array.isArray(fm.tags) ? fm.tags : [],
-      image: fm.image,
-      content: matterResult.content,
-      readTime: typeof fm.readTime === 'number' ? fm.readTime : Math.ceil((matterResult.content.split(/\s+/).length || 1) / 200),
-      featured: fm.featured ?? false,
-      published: fm.published ?? true,
-    } as BlogPost;
-  });
-  return allPostsData.sort((a, b) => {
-    if (a.date < b.date) {
-      return 1;
-    } else {
-      return -1;
-    }
-  });
+  const fileName = path.basename(fullPath).replace(/\.(md|mdx)$/i, "");
+  const slug = (fm.slug ?? fileName).toLowerCase();
+
+  const date =
+    fm.published_date ??
+    fm.date ??
+    new Date(fs.statSync(fullPath).mtime).toISOString();
+
+  const author = fm.author ?? "MoreFusion Team";
+  const tags = Array.isArray(fm.tags) ? fm.tags : [];
+  const image = fm.image ?? undefined;
+
+  const wordCount = content.trim().split(/\s+/).length;
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
+  return {
+    id: `${category}/${slug}`,
+    slug,
+    title: fm.title ?? slug.replace(/-/g, " "),
+    excerpt: fm.excerpt ?? buildExcerpt(content),
+    date,
+    author,
+    category,
+    tags,
+    image,
+    content,
+    readTime,
+  };
 }
 
-export function getPostBySlug(slug: string): BlogPost | undefined {
-    const allPosts = getSortedPostsData();
-    return allPosts.find(post => post.id === slug);
+/* ---------------------------------------------------------
+ ✅ PUBLIC FUNCTIONS
+---------------------------------------------------------- */
+
+// ✅ ALL POSTS (sorted by date)
+export function getAllPosts(): BlogPost[] {
+  return getMarkdownFiles(BLOG_ROOT)
+    .map((file) => readPost(file))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+// ✅ RECENT POSTS
+export function getLatestPosts(limit = 6): BlogPost[] {
+  return getAllPosts().slice(0, limit);
+}
+
+// ✅ BY CATEGORY
+export function getPostsByCategory(cat: string): BlogPost[] {
+  const category = normalizeCategory(cat);
+  if (!category) return [];
+  return getAllPosts().filter((p) => p.category === category);
+}
+
+// ✅ SAFE LOOKUP
+export function getPostBySlugSafe(cat: string, slug: string): BlogPost | null {
+  const category = normalizeCategory(cat);
+  if (!category) return null;
+
+  return (
+    getAllPosts().find(
+      (p) => p.slug.toLowerCase() === slug.toLowerCase() && p.category === category
+    ) ?? null
+  );
+}
+
+// ✅ PREVIOUS / NEXT (same category)
+export function getPrevNext(category: string, slug: string) {
+  const posts = getPostsByCategory(category);
+  const index = posts.findIndex((p) => p.slug === slug);
+
+  return {
+    prev: index > 0 ? posts[index - 1] : null,
+    next: index < posts.length - 1 ? posts[index + 1] : null,
+  };
 }

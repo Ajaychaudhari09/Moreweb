@@ -235,3 +235,159 @@ html {
     transform: translateY(0);
   }
 }
+
+/* -----------------------------------------------------
+   PREMIUM BLOG TYPOGRAPHY — NO @apply, PURE TAILWIND
+   Fully compatible with your existing globals.css
+------------------------------------------------------ */
+
+/* Wrapper applied in PostPage.tsx → <div class="article-content"> */
+.article-content {
+  line-height: 1.7;
+}
+
+/* ---------------- Headings ---------------- */
+.article-content h1 {
+  font-size: 2.5rem; /* text-4xl/5xl equivalent */
+  font-weight: 800;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+}
+
+.article-content h2 {
+  font-size: 2rem; /* text-3xl */
+  font-weight: 700;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+}
+
+.article-content h3 {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1e40af; /* blue-800 */
+}
+
+/* ---------------- Paragraphs ---------------- */
+.article-content p {
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75;
+  color: var(--color-text-primary);
+}
+
+/* ---------------- Lists ---------------- */
+.article-content ul,
+.article-content ol {
+  margin: 1.5rem 0;
+  padding-left: 1.75rem;
+}
+
+.article-content li {
+  margin-bottom: 0.75rem;
+  line-height: 1.65;
+}
+
+/* ---------------- Blockquote ---------------- */
+.article-content blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-left: 4px solid var(--color-primary);
+  background-color: #eff6ff; /* blue-50 */
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: #475569; /* slate-600 */
+}
+
+/* ---------------- Inline Code ---------------- */
+.article-content code {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.9em;
+}
+
+/* ---------------- Code Blocks ---------------- */
+.article-content pre {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #0f172a; /* slate-900 */
+  color: #e2e8f0;           /* slate-200 */
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.article-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* ---------------- Tables ---------------- */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.article-content th {
+  background-color: #f3f4f6; /* slate-100 */
+  padding: 0.75rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.article-content td {
+  border-top: 1px solid #e5e7eb;
+  padding: 0.75rem;
+}
+
+/* ---------------- Images ---------------- */
+.article-content img {
+  margin: 2rem auto;
+  border-radius: 0.75rem;
+  display: block;
+  cursor: zoom-in;
+  max-width: 100%;
+}
+
+/* ---------------- Horizontal Rule ---------------- */
+.article-content hr {
+  margin: 3rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ---------------- Links ---------------- */
+.article-content a {
+  color: #2563eb; /* blue-600 */
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+/* ---------------- Auto-link heading icons ---------------- */
+.article-content h2 .heading-anchor::after,
+.article-content h3 .heading-anchor::after {
+  content: "🔗";
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.article-content h2:hover .heading-anchor::after,
+.article-content h3:hover .heading-anchor::after {
+  opacity: 1;
+}
+/* Ensure anchored headings don't hide under sticky header */
+.article-content h2,
+.article-content h3,
+.prose h2,
+.prose h3 {
+  scroll-margin-top: 96px; /* adjust if your header height differs */
+}

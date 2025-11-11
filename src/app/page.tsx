@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import ToolCard from "@/components/ToolCard";
 import BlogCard from "@/components/BlogCard";
 import { ArrowRight, Zap, Target, Clock, LineChart } from "lucide-react";
-import { getRecentPosts } from "@/lib/blog";
+import { getLatestPosts } from "@/lib/posts";
 import type { BlogPost } from "@/types";
 
 const featuredTools = [
@@ -58,7 +58,7 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const recentPosts: BlogPost[] = await getRecentPosts(3);
+  const recentPosts: BlogPost[] = await getLatestPosts(3);
 
   const jsonLd = {
     "@context": "https://schema.org",

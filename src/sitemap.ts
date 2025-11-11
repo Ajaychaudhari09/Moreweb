@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getAllPosts } from '@/lib/blog';
+import { getAllPosts } from '@/lib/posts';
 import type { BlogPost } from '@/types';
 
 /**
