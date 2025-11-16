@@ -2,7 +2,7 @@
 title: "10 New AI Image & Video Tools (Late 2025) — Honest Reviews You Can Trust"
 slug: "10-new-ai-image-and-video-tools-late-2025-honest-reviews-you-can-trust"
 excerpt: "Discover the newest AI tools of 2025 that actually make content creation easier. From Google’s Veo to Freepik’s Mystic, here are 10 tools that save time, boost creativity, and fit every creator’s workflow."
-category: "shopping"
+category: "AI"
 published_date: "2025-11-11T19:15:00.000Z"
 tags: ["AI Tools","Image Generation","Video Creation","AI 2025","Content Creators"]
 author: "MoreFusion Team"

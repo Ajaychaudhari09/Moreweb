@@ -15,6 +15,7 @@ import TOC from "@/components/TOC";
 import ZoomProvider from "@/components/ZoomProvider";
 import MDXContent from "@/components/MDXContent";
 import SocialShareButtons from "@/components/SocialShareButtons";
+import AdsterraAd from "@/components/AdsterraAd";
 
 /* -------------------------------------------
    Metadata (Next.js 15 — async params)
@@ -136,6 +137,8 @@ export default async function PostPage({
           <article className="min-w-0">
             <div className="article-content">
               <MDXContent source={post.content} />
+              {/* Adsterra ad injected client-side after the first paragraph */}
+              <AdsterraAd />
             </div>
             {/* ✅ Author Bio Box */}
               <AuthorBox author={post.author} />

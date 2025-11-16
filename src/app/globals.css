@@ -391,3 +391,24 @@ html {
 .prose h3 {
   scroll-margin-top: 96px; /* adjust if your header height differs */
 }
+
+/* ---------------- Adsterra Ad Container ---------------- */
+.adsterra-ad {
+  max-width: 728px; /* standard leaderboard */
+  width: 100%;
+  margin: 1.5rem auto;
+  display: block;
+}
+
+/* Responsive sizes */
+@media (max-width: 640px) {
+  .adsterra-ad { max-width: 320px; }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .adsterra-ad { max-width: 468px; }
+}
+
+/* Consent banner small adjustments */
+.ad-consent-banner button { cursor: pointer; }
+
