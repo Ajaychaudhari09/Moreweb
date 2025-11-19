@@ -92,7 +92,7 @@ export default function ResumeMakerPage() {
     if (typeof window === 'undefined') return;
     
     try {
-      const { jsPDF } = await import('jspdf');
+      const { default: jsPDF } = await import('jspdf');
       const doc = new jsPDF();
       let yPosition = 30;
 
@@ -371,7 +371,7 @@ export default function ResumeMakerPage() {
                       placeholder="Job Description and Achievements"
                       value={exp.description}
                       onChange={(e) => updateExperience(index, 'description', e.target.value)}
-                      className="min-h-[80px]"
+                      className="min-h-20"
                     />
                   </div>
                 ))}
@@ -437,7 +437,7 @@ export default function ResumeMakerPage() {
                   placeholder="List your skills (e.g., JavaScript, React, Node.js, etc.)"
                   value={skills}
                   onChange={(e) => setSkills(e.target.value)}
-                  className="min-h-[80px]"
+                  className="min-h-20"
                 />
               </CardContent>
             </Card>

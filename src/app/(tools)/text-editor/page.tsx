@@ -16,7 +16,7 @@ export default function TextEditorPage() {
     if (typeof window === 'undefined') return;
     
     try {
-      const { jsPDF } = await import('jspdf');
+      const { default:jsPDF } = await import('jspdf');
       const doc = new jsPDF();
       
       // Add title
