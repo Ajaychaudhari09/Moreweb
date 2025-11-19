@@ -1,187 +1,117 @@
-import Link from 'next/link';
-import { Github, X, Facebook, Instagram, Linkedin, ExternalLink, Mail } from 'lucide-react';
+// src/components/Footer.tsx
+import Link from "next/link";
+import {
+  GithubLogoIcon,
+  LinkedinLogoIcon,
+  InstagramLogoIcon,
+  FacebookLogoIcon,
+} from "@phosphor-icons/react";
+import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 
 export default function Footer() {
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 md:grid-cols-4">
-        {/* Brand + tagline */}
-        <div className="md:col-span-1">
+        {/* Brand & Description */}
+        <div>
           <Link href="/" className="text-lg font-bold tracking-tight">
             MoreFusion
           </Link>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Free productivity tools and insightful tech content to boost your workflow and streamline your digital life.
+            Free productivity tools and tech content to simplify your workflow,
+            boost efficiency, and support smarter decisions.
           </p>
-          
-          {/* Social Links */}
-          <div className="flex items-center gap-3 mt-4">
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X">
-              <X className="h-6 w-6 text-gray-500 hover:text-blue-500 transition-colors" />
+
+          {/* Social Icons */}
+          <div className="flex items-center gap-4 mt-4">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
+            >
+              <GitHubLogoIcon  className="text-gray-500 hover:text-gray-900 dark:hover:text-white" />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <Facebook className="h-6 w-6 text-gray-500 hover:text-blue-700 transition-colors" />
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+            >
+              <LinkedInLogoIcon  className="text-gray-500 hover:text-blue-600" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <Instagram className="h-6 w-6 text-gray-500 hover:text-pink-600 transition-colors" />
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+            >
+              <InstagramLogoIcon size={22} className="text-gray-500 hover:text-pink-600" />
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <Github className="h-6 w-6 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <Linkedin className="h-6 w-6 text-gray-500 hover:text-blue-600 transition-colors" />
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+            >
+              <FacebookLogoIcon size={22} className="text-gray-500 hover:text-blue-700" />
             </a>
           </div>
         </div>
 
-        {/* Tools */}
-        <nav aria-label="Tools">
-          <h3 className="text-sm font-semibold mb-3">Popular Tools</h3>
+        {/* Navigation */}
+        <nav aria-label="Main links">
+          <h3 className="text-sm font-semibold mb-3">Navigation</h3>
           <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/bmi-calculator" className="text-foreground/80 hover:text-foreground transition-colors">
-                BMI Calculator
-              </Link>
-            </li>
-            <li>
-              <Link href="/resume-maker" className="text-foreground/80 hover:text-foreground transition-colors">
-                Resume Maker
-              </Link>
-            </li>
-            <li>
-              <Link href="/emi-calculator" className="text-foreground/80 hover:text-foreground transition-colors">
-                EMI Calculator
-              </Link>
-            </li>
-            <li>
-              <Link href="/calorie-calculator" className="text-foreground/80 hover:text-foreground transition-colors">
-                Calorie Calculator
-              </Link>
-            </li>
-            <li>
-              <Link href="/diet-generator" className="text-foreground/80 hover:text-foreground transition-colors">
-                Diet Generator
-              </Link>
-            </li>
-            <li>
-              <Link href="/exercise-generator" className="text-foreground/80 hover:text-foreground transition-colors">
-                Exercise Generator
-              </Link>
-            </li>
+            <li><Link href="/tools" className="hover:text-foreground">Tools</Link></li>
+            <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
+            <li><Link href="/about" className="hover:text-foreground">About</Link></li>
+            <li><Link href="/" className="hover:text-foreground">Home</Link></li>
           </ul>
         </nav>
 
-        {/* Blog Categories */}
-        <nav aria-label="Blog">
-          <h3 className="text-sm font-semibold mb-3">Blog Categories</h3>
+        {/* Popular Tools */}
+        <nav aria-label="Popular tools">
+          <h3 className="text-sm font-semibold mb-3">Popular Tools</h3>
+          <ul className="space-y-2 text-sm">
+            <li><Link href="/bmi-calculator" className="hover:text-foreground">BMI Calculator</Link></li>
+            <li><Link href="/resume-maker" className="hover:text-foreground">Resume Maker</Link></li>
+            <li><Link href="/emi-calculator" className="hover:text-foreground">EMI Calculator</Link></li>
+          </ul>
+        </nav>
+
+        {/* Support */}
+        <nav aria-label="Support">
+          <h3 className="text-sm font-semibold mb-3">Support</h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/blog" className="text-foreground/80 hover:text-foreground transition-colors">
-                All Posts
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/blog?category=AI"
-                className="text-foreground/80 hover:text-foreground transition-colors"
+              <a
+                href="mailto:newsletter@morefusion.in"
+                className="hover:text-foreground"
               >
-                AI &amp; Technology
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/blog?category=coding"
-                className="text-foreground/80 hover:text-foreground transition-colors"
-              >
-                Development &amp; Coding
-              </Link>
+                Contact
+              </a>
             </li>
             <li>
               <Link
                 href="/blog?category=general"
-                className="text-foreground/80 hover:text-foreground transition-colors"
+                className="hover:text-foreground"
               >
-                General &amp; Productivity
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/blog?category=shopping"
-                className="text-foreground/80 hover:text-foreground transition-colors"
-              >
-                Shopping &amp; Lifestyle
+                Help & FAQ
               </Link>
             </li>
           </ul>
-        </nav>
-
-        {/* Company & Legal */}
-        <nav aria-label="Company">
-          <h3 className="text-sm font-semibold mb-3">Company</h3>
-          <ul className="space-y-2 text-sm">
-            <li>
-              <Link href="/about" className="text-foreground/80 hover:text-foreground transition-colors">
-                About MoreFusion
-              </Link>
-            </li>
-            <li>
-              <a 
-                href="mailto:newsletter@morefusion.in"
-                className="text-foreground/80 hover:text-foreground transition-colors flex items-center"
-              >
-                <Mail className="h-4 w-4 mr-2" />
-                Contact Support
-              </a>
-            </li>
-            <li>
-              <Link href="/blog?category=general" className="text-foreground/80 hover:text-foreground transition-colors">
-                Help &amp; FAQ
-              </Link>
-            </li>
-          </ul>
-          
-          <div className="mt-6">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-              Stay Updated
-            </h4>
-            <a
-              href="mailto:newsletter@morefusion.in?subject=Newsletter Subscription"
-              className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
-            >
-              <Mail className="h-4 w-4 mr-1" />
-              Subscribe to Newsletter
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          </div>
         </nav>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom Bar */}
       <div className="border-t border-border/50">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6">
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <p>© 2025 MoreFusion. All rights reserved.</p>
-          </div>
-          
-          <div className="flex items-center gap-4 text-xs">
-            <Link 
-              href="/blog" 
-              className="text-foreground/80 hover:text-foreground transition-colors"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/tools" 
-              className="text-foreground/80 hover:text-foreground transition-colors"
-            >
-              Tools
-            </Link>
-            <Link 
-              href="/" 
-              className="text-foreground/80 hover:text-foreground transition-colors"
-            >
-              Home
-            </Link>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 text-xs text-muted-foreground">
+          <p>© 2025 MoreFusion. All rights reserved.</p>
+          <div className="flex gap-4">
+            <Link href="/" className="hover:text-foreground">Home</Link>
+            <Link href="/tools" className="hover:text-foreground">Tools</Link>
+            <Link href="/blog" className="hover:text-foreground">Blog</Link>
           </div>
         </div>
       </div>

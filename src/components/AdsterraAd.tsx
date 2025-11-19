@@ -1,84 +1,79 @@
+// src/components/AdsterraAd.tsx
 "use client";
+
 import React, { useEffect, useState } from "react";
+import Script from "next/script";
+
+interface AdsterraAdProps {
+  rootSelector?: string;
+  placement?: "inline" | "sidebar" | "footer";
+}
+
+const containerId = "container-08f243939922b6d9aa749c7eb572ab12";
+const scriptSrc =
+  "//pl28064811.effectivegatecpm.com/08f243939922b6d9aa749c7eb572ab12/invoke.js";
 
 function readCookie(name: string) {
-  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
   return match ? decodeURIComponent(match[2]) : null;
 }
 
 function setCookie(name: string, value: string, days = 365) {
   const maxAge = days * 24 * 60 * 60;
-  document.cookie = `${name}=${encodeURIComponent(value)};path=/;max-age=${maxAge}`;
+  document.cookie = `${name}=${encodeURIComponent(
+    value
+  )};path=/;max-age=${maxAge};SameSite=Lax`;
 }
 
-export default function AdsterraAd(): React.ReactElement | null {
+export default function AdsterraAd({
+  rootSelector = ".article-content",
+  placement = "inline",
+}: AdsterraAdProps): React.ReactElement | null {
   const ADS_ENABLED = process.env.NEXT_PUBLIC_ENABLE_ADS === "true";
   const [consent, setConsent] = useState<boolean | null>(null);
   const [injected, setInjected] = useState(false);
 
-  // initialize consent state on mount
+  // 1️⃣ Check GDPR consent
   useEffect(() => {
     if (!ADS_ENABLED) return;
     const c = readCookie("ads_consent");
-    if (c === "true") setConsent(true);
-    else if (c === "false") setConsent(false);
-    else setConsent(null);
+    setConsent(c === "true" ? true : c === "false" ? false : null);
   }, [ADS_ENABLED]);
 
-  // inject ad once consent === true
+  // 2️⃣ Inject ad container (never block rendering)
   useEffect(() => {
-    if (!ADS_ENABLED) return;
-    if (!consent || injected) return;
+    if (!ADS_ENABLED || !consent || injected) return;
 
     try {
-      const containerId = "container-08f243939922b6d9aa749c7eb572ab12";
-      const scriptSrc = "//pl28064811.effectivegatecpm.com/08f243939922b6d9aa749c7eb572ab12/invoke.js";
-
-      const root = document.querySelector(".article-content");
+      const root = document.querySelector(rootSelector);
       if (!root) return;
 
+      // Avoid duplicate injection
       if (document.getElementById(containerId)) {
         setInjected(true);
         return;
       }
 
+      const adSlot = document.createElement("div");
+      adSlot.id = containerId;
+      adSlot.className =
+        "adsterra-ad my-6 w-full flex justify-center min-h-[90px]";
+
+      // Insert after first <p> if available
       const firstP = root.querySelector("p");
-
-      const adContainer = document.createElement("div");
-      adContainer.id = containerId;
-      adContainer.className = "adsterra-ad my-6 flex justify-center";
-
-      if (firstP && firstP.parentNode) {
-        if (firstP.nextSibling) firstP.parentNode.insertBefore(adContainer, firstP.nextSibling);
-        else firstP.parentNode.appendChild(adContainer);
+      if (placement === "inline" && firstP?.parentNode) {
+        firstP.parentNode.insertBefore(adSlot, firstP.nextSibling);
       } else {
-        root.appendChild(adContainer);
+        root.appendChild(adSlot);
       }
-
-      const s = document.createElement("script");
-      s.async = true;
-      s.setAttribute("data-cfasync", "false");
-      s.src = scriptSrc.startsWith("//") ? window.location.protocol + scriptSrc : scriptSrc;
-      s.type = "text/javascript";
-      adContainer.appendChild(s);
 
       setInjected(true);
     } catch (err) {
       console.error("Adsterra injection failed:", err);
     }
-  }, [consent, injected, ADS_ENABLED]);
+  }, [consent, injected, ADS_ENABLED, rootSelector, placement]);
 
-  const accept = () => {
-    setCookie("ads_consent", "true", 365);
-    setConsent(true);
-  };
-
-  const decline = () => {
-    setCookie("ads_consent", "false", 365);
-    setConsent(false);
-  };
-
-  // If ads disabled by env, render nothing
+  // 3️⃣ GDPR Banner
   if (!ADS_ENABLED) return null;
 
   return (
@@ -90,19 +85,36 @@ export default function AdsterraAd(): React.ReactElement | null {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={accept}
+              onClick={() => {
+                setCookie("ads_consent", "true");
+                setConsent(true);
+              }}
               className="px-3 py-1 rounded bg-blue-600 text-white text-sm button-3d"
             >
               Accept
             </button>
             <button
-              onClick={decline}
+              onClick={() => {
+                setCookie("ads_consent", "false");
+                setConsent(false);
+              }}
               className="px-3 py-1 rounded border text-sm bg-white dark:bg-gray-700"
             >
               Decline
             </button>
           </div>
         </div>
+      )}
+
+      {/* 🚀 Load Adsterra JS only AFTER consent & page idle */}
+      {consent === true && (
+        <Script
+          id="adsterra-script"
+          src={scriptSrc}
+          strategy="lazyOnload"
+          data-cfasync="false"
+          onError={() => console.error("Adsterra script failed to load")}
+        />
       )}
     </>
   );

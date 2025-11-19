@@ -1,35 +1,38 @@
 // src/app/blog/[category]/[slug]/page.tsx
+import "@/styles/blog.css";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Script from "next/script";
+
 import AuthorBox from "@/components/AuthorBox";
-
-
 import {
   getPostBySlugSafe,
   getAllPosts,
   getPrevNext,
 } from "@/lib/posts";
-
 import TOC from "@/components/TOC";
 import ZoomProvider from "@/components/ZoomProvider";
+import ReadingProgress from "@/components/ReadingProgress";
 import MDXContent from "@/components/MDXContent";
 import SocialShareButtons from "@/components/SocialShareButtons";
 import AdsterraAd from "@/components/AdsterraAd";
 
-/* -------------------------------------------
-   Metadata (Next.js 15 — async params)
--------------------------------------------- */
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string; slug: string }>;
 }): Promise<Metadata> {
+  // ✅ unwrap Promise-based params
   const { category, slug } = await params;
   const post = getPostBySlugSafe(category, slug);
 
-  if (!post)
-    return { title: "Post Not Found • MoreFusion", description: "Article missing" };
+  if (!post) {
+    return {
+      title: "Post Not Found • MoreFusion",
+      description: "Article missing",
+    };
+  }
 
   const url = `https://morefusion.in/blog/${post.category}/${post.slug}`;
 
@@ -50,7 +53,9 @@ export async function generateMetadata({
       description: post.excerpt,
       images: post.image ? [post.image] : [],
     },
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+    },
   };
 }
 
@@ -67,24 +72,32 @@ export default async function PostPage({
 }: {
   params: Promise<{ category: string; slug: string }>;
 }) {
+  // ✅ unwrap Promise-based params
   const { category, slug } = await params;
 
   const post = getPostBySlugSafe(category, slug);
-  if (!post) notFound();
+  if (!post) {
+    notFound();
+  }
 
   const { prev, next } = getPrevNext(post.category, post.slug);
   const canonicalURL = `https://morefusion.in/blog/${post.category}/${post.slug}`;
 
+  // Article Schema
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": "Article",
     headline: post.title,
     description: post.excerpt,
     image:
       post.image ||
       `https://morefusion.in/api/og?title=${encodeURIComponent(post.title)}`,
     datePublished: post.date,
-    author: { "@type": "Person", name: post.author },
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author,
+    },
     publisher: {
       "@type": "Organization",
       name: "MoreFusion",
@@ -96,80 +109,111 @@ export default async function PostPage({
     mainEntityOfPage: canonicalURL,
   };
 
+  // Breadcrumb Schema
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Blog",
+        item: "https://morefusion.in/blog",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: post.category,
+        item: `https://morefusion.in/blog/${post.category}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.title,
+        item: canonicalURL,
+      },
+    ],
+  };
+
   return (
-    <div className="bg-white dark:bg-gray-950">
-      {/* SEO Schema */}
-      <script
+    <main className="bg-white dark:bg-gray-950">
+      <ReadingProgress />
+      {/* SEO Schemas */}
+      <Script
+        id="article-schema"
         type="application/ld+json"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
 
       <ZoomProvider />
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Header stays full-width */}
-        <header className="mx-auto max-w-4xl mb-10">
-          <Link
-            href={`/blog?category=${post.category}`}
-            className="uppercase text-blue-600 dark:text-blue-400 text-sm font-medium"
-          >
-            {post.category}
-          </Link>
+      <div className="container mx-auto px-4 py-12 max-w-6xl">
+        {/* Post Hero */}
+        <div className={`post-hero mb-8 ${post.category === 'AI' ? 'post-hero-ai' : ''}`}>
+          {post.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={post.image} alt={post.title} className="post-hero-image" />
+          ) : null}
+          <div className="post-hero-overlay" />
+          <div className="post-hero-inner">
+            <Link href={`/blog?category=${post.category}`} className="tag tag--indigo">
+              {post.category}
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-extrabold mt-3 leading-tight">{post.title}</h1>
+            <p className="post-meta mt-3">By {post.author} · {new Date(post.date).toLocaleDateString()} {post.readTime ? `· ${post.readTime} min read` : ''}</p>
+          </div>
+        </div>
 
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mt-3">
-            {post.title}
-          </h1>
-
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
-            By {post.author} •{" "}
-            {new Date(post.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}{" "}
-            • {post.readTime} min read
-          </p>
-        </header>
-
-        {/* 2-column layout: content + TOC (TOC only on lg+) */}
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
-          {/* Main article */}
+        {/* Layout: Content + TOC */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+          {/* Main Article */}
           <article className="min-w-0">
             <div className="article-content">
               <MDXContent source={post.content} />
-              {/* Adsterra ad injected client-side after the first paragraph */}
-              <AdsterraAd />
-            </div>
-            {/* ✅ Author Bio Box */}
-              <AuthorBox author={post.author} />
 
+              {/* Inline Ad */}
+              <div className="mt-8">
+                <AdsterraAd />
+              </div>
+            </div>
+
+            {/* Author Box */}
+            <div className="mt-10">
+              <AuthorBox author={post.author} />
+            </div>
+
+            {/* Prev / Next */}
             {(prev || next) && (
-              <nav className="mt-12 grid md:grid-cols-2 gap-4 border-t pt-6">
-                <div>
-                  {prev && (
-                    <Link
-                      href={`/blog/${prev.category}/${prev.slug}`}
-                      className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-                    >
-                      <div className="text-xs text-gray-500">Previous</div>
-                      <div className="font-semibold">{prev.title}</div>
-                    </Link>
-                  )}
-                </div>
-                <div className="text-right">
-                  {next && (
-                    <Link
-                      href={`/blog/${next.category}/${next.slug}`}
-                      className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-                    >
-                      <div className="text-xs text-gray-500">Next</div>
-                      <div className="font-semibold">{next.title}</div>
-                    </Link>
-                  )}
-                </div>
+              <nav className="mt-12 grid gap-4 border-t pt-6 md:grid-cols-2">
+                {prev && (
+                  <Link
+                    href={`/blog/${prev.category}/${prev.slug}`}
+                    className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <div className="text-xs text-gray-500">Previous</div>
+                    <div className="font-semibold">{prev.title}</div>
+                  </Link>
+                )}
+                {next && (
+                  <Link
+                    href={`/blog/${next.category}/${next.slug}`}
+                    className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 md:text-right"
+                  >
+                    <div className="text-xs text-gray-500">Next</div>
+                    <div className="font-semibold">{next.title}</div>
+                  </Link>
+                )}
               </nav>
             )}
 
+            {/* Share + Back */}
             <footer className="mt-12">
               <SocialShareButtons title={post.title} url={canonicalURL} />
               <div className="text-center mt-10">
@@ -183,7 +227,7 @@ export default async function PostPage({
             </footer>
           </article>
 
-          {/* TOC — right sidebar on lg+, hidden on small screens */}
+          {/* TOC Sidebar */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 max-h-[70vh] overflow-y-auto border-l pl-4">
               <TOC />
@@ -191,6 +235,6 @@ export default async function PostPage({
           </aside>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

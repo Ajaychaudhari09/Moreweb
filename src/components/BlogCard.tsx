@@ -2,98 +2,91 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { BlogCardProps } from "@/types";
 
 const categoryColors: Record<string, string> = {
-  AI: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200",
-  coding: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200",
-  drama: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-200",
-  film: "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-200",
-  general: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200",
-  shopping: "bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-200",
+  AI: "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-300",
+  coding: "text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300",
+  drama: "text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-300",
+  film: "text-purple-600 bg-purple-50 dark:bg-purple-900/30 dark:text-purple-300",
+  general: "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-300",
+  shopping: "text-teal-600 bg-teal-50 dark:bg-teal-900/30 dark:text-teal-300",
 };
 
-const emojiMap: Record<string, string> = {
-  AI: "🤖",
-  coding: "💻",
-  drama: "🎭",
-  film: "🎬",
-  general: "📝",
-  shopping: "🛒",
+const tagClassMap: Record<string, string> = {
+  AI: "tag--indigo",
+  coding: "tag--blue",
+  drama: "tag--pink",
+  film: "tag--purple",
+  general: "tag--emerald",
+  shopping: "tag--pink",
 };
 
 export default function BlogCard({ post }: BlogCardProps) {
-  const badge = categoryColors[post.category] ?? "bg-slate-200 text-slate-700";
-  const emoji = emojiMap[post.category] ?? "📝";
-
-  const initials = (post.author || "MF")
-    .split(" ")
-    .map((c) => c[0])
-    .join("");
+  const href = `/blog/${post.category}/${post.slug}`;
+  const categoryStyle = categoryColors[post.category] ?? "bg-gray-100 text-gray-700";
 
   return (
-    <article className="group relative h-full rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
+    <Link href={href} className="block no-underline" aria-label={`Read ${post.title}`}>
+      <article className="card group flex flex-col overflow-hidden">
 
-      {/* Hover glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10 rounded-2xl opacity-0 transition group-hover:opacity-100 group-hover:ring-2 group-hover:ring-indigo-400" />
-
-      {/* Meta */}
-      <div className="mb-3 flex items-center justify-between">
-        <span className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wide ${badge}`}>
-          {emoji} {post.category}
-        </span>
-
-        <time className="text-xs text-slate-500">
-          {new Date(post.date).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          })}
-        </time>
-      </div>
-
-      {/* Title */}
-      <h3 className="line-clamp-2 text-xl font-bold text-slate-900 transition group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
-        <Link href={`/blog/${post.category}/${post.slug}`}>
-          {post.title}
-        </Link>
-      </h3>
-
-      {/* Excerpt */}
-      <p className="mt-3 line-clamp-3 text-sm text-slate-600 dark:text-slate-300">
-        {post.excerpt}
-      </p>
-
-      {/* Footer Row */}
-      <div className="mt-5 flex items-center justify-between">
-        
-        {/* Author */}
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-tr from-indigo-500 to-fuchsia-500 text-xs font-bold text-white shadow">
-            {initials}
+        {/* Thumbnail (CLS-safe) */}
+        {post.image && (
+          <div className="relative block aspect-video overflow-hidden card-thumb">
+            <Image
+              src={post.image}
+              alt={post.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              priority={false}
+            />
           </div>
-          <div className="text-sm font-medium text-slate-800 dark:text-slate-200">
-            {post.author}
+        )}
+
+        {/* Content Block */}
+        <div className="flex flex-col flex-1 p-5">
+
+          {/* Category Tag & Date */}
+          <div className="flex items-center justify-between text-xs mb-3">
+            <span className={`tag ${tagClassMap[post.category] ?? ''}`}>
+              {post.category}
+            </span>
+            <time className="text-gray-500">
+              {new Date(post.date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </time>
+          </div>
+
+          {/* Blog Title */}
+          <h3 className="card-title brand-link transition-colors line-clamp-2 mb-2 text-lg md:text-xl">
+            {post.title}
+          </h3>
+
+          {/* Blog Excerpt */}
+          <p className="card-desc text-sm leading-relaxed line-clamp-3 grow">
+            {post.excerpt}
+          </p>
+
+          {/* Author + Read Time */}
+          <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+
+            {/* Avatar alternative - initials circle */}
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-gray-800 font-medium">
+                {post.author.split(" ").map((n) => n[0]).join("")}
+              </div>
+              <span>{post.author}</span>
+            </div>
+
+            {post.readTime && <span>{post.readTime} min read</span>}
           </div>
         </div>
-
-        <span className="text-xs text-slate-500">{post.readTime} min read</span>
-      </div>
-
-      {/* CTA Button */}
-      <div className="mt-6">
-        <Link
-          href={`/blog/${post.category}/${post.slug}`}
-          className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-indigo-500 via-fuchsia-500 to-teal-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:brightness-110"
-        >
-          Read More
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2}>
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </Link>
-      </div>
-
-    </article>
+      </article>
+    </Link>
   );
 }

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
 
 interface BMIResult {
   bmi: number;
@@ -15,16 +16,92 @@ interface BMIResult {
 }
 
 const categoryColors: Record<BMIResult['category'], string> = {
-  Underweight: 'text-yellow-600',
-  Normal: 'text-green-600',
-  Overweight: 'text-orange-600',
-  Obese: 'text-red-600',
+  Underweight: 'text-yellow-500',
+  Normal: 'text-emerald-500',
+  Overweight: 'text-orange-500',
+  Obese: 'text-red-500',
 };
 
+type Unit = 'us' | 'metric';
+type Gender = 'male' | 'female';
+
+const parseNumber = (val: string): number => {
+  const num = Number.parseFloat(val);
+  return Number.isNaN(num) ? 0 : num;
+};
+
+function buildHealthInsight(
+  result: BMIResult,
+  ageStr: string,
+  gender: Gender
+) {
+  const age = parseNumber(ageStr);
+  const ageLabel =
+    age > 0 ? (age < 30 ? 'younger adult' : age < 50 ? 'adult' : 'older adult') : 'adult';
+  const genderLabel = gender === 'male' ? 'male' : 'female';
+
+  switch (result.category) {
+    case 'Underweight':
+      return {
+        headline: 'You are currently in the underweight range.',
+        summary:
+          'A lower BMI can sometimes reflect a naturally smaller build, but it may also be associated with low energy availability, nutrient deficiencies, or underlying medical conditions.',
+        bullets: [
+          'Consider a nutrition plan that gradually increases calories with balanced carbohydrates, proteins, and healthy fats.',
+          'Focus on strength-training to build lean muscle, especially as a ' +
+            ageLabel +
+            ' ' +
+            genderLabel +
+            '.',
+          'If you notice fatigue, hair loss, or frequent illness, speak with a healthcare professional.',
+        ],
+      };
+    case 'Normal':
+      return {
+        headline: 'You are in the broadly healthy BMI range.',
+        summary:
+          'Your BMI sits in a range generally associated with lower risk of many chronic conditions, especially when combined with regular activity, good sleep, and balanced nutrition.',
+        bullets: [
+          'Maintain a consistent movement routine: a mix of resistance training and cardio is ideal.',
+          'Prioritise whole foods, lean protein, fibre, and adequate hydration to keep body composition favourable.',
+          'Recheck BMI every few months or after major changes to your training or lifestyle.',
+        ],
+      };
+    case 'Overweight':
+      return {
+        headline: 'Your BMI is in the overweight range.',
+        summary:
+          'In this range, long-term risk of conditions like type 2 diabetes and cardiovascular disease can begin to increase, especially with low activity levels or a family history of metabolic disease.',
+        bullets: [
+          'Aim for slow, steady weight change rather than aggressive dieting (for most adults, 0.25–0.5 kg per week is a realistic target).',
+          'Increase daily movement (steps, light activity) in addition to structured exercise sessions.',
+          'Discuss screening for blood pressure, blood sugar, and cholesterol with your clinician, particularly if you have other risk factors.',
+        ],
+      };
+    case 'Obese':
+      return {
+        headline: 'Your BMI is in the obese range.',
+        summary:
+          'At this level, long-term health risks are significantly higher, but clinically supervised changes in nutrition, activity, and habits can meaningfully reduce risk at almost any stage.',
+        bullets: [
+          'Work with a healthcare professional or registered dietitian to design a sustainable, personalised plan.',
+          'Start with low-impact activities (such as walking or cycling) and build intensity gradually to protect joints.',
+          'Ask your clinician whether additional assessments (blood tests, sleep apnoea screening, blood pressure monitoring) are appropriate.',
+        ],
+      };
+    default:
+      return {
+        headline: '',
+        summary: '',
+        bullets: [],
+      };
+  }
+}
+
 export default function BMICalculator() {
-  const [unit, setUnit] = useState<'us' | 'metric'>('metric');
+  const [unit, setUnit] = useState<Unit>('metric');
   const [age, setAge] = useState<string>('');
-  const [gender, setGender] = useState<'male' | 'female'>('male');
+  const [gender, setGender] = useState<Gender>('male');
 
   // US inputs
   const [feet, setFeet] = useState<string>('');
@@ -38,10 +115,8 @@ export default function BMICalculator() {
   const [result, setResult] = useState<BMIResult | null>(null);
   const [error, setError] = useState<string>('');
 
-  const parseNumber = (val: string): number => {
-    const num = Number.parseFloat(val);
-    return Number.isNaN(num) ? 0 : num;
-  };
+  const [shareMessage, setShareMessage] = useState<string>('');
+  const [pdfMessage, setPdfMessage] = useState<string>('');
 
   const calcMarkerLeft = useMemo(() => {
     if (!result) return 0;
@@ -52,12 +127,18 @@ export default function BMICalculator() {
     return ((v - min) / (max - min)) * 100;
   }, [result]);
 
+  const healthInsight = useMemo(
+    () => (result ? buildHealthInsight(result, age, gender) : null),
+    [result, age, gender]
+  );
+
   const calculateBMI = () => {
     setError('');
 
     const ageNum = parseNumber(age);
     if (ageNum < 2 || ageNum > 120) {
       setError('Please enter an age between 2 and 120.');
+      setResult(null);
       return;
     }
 
@@ -75,10 +156,12 @@ export default function BMICalculator() {
 
     if (heightMeters <= 0) {
       setError('Please enter a valid height.');
+      setResult(null);
       return;
     }
     if (weightKg <= 0) {
       setError('Please enter a valid weight.');
+      setResult(null);
       return;
     }
 
@@ -93,16 +176,19 @@ export default function BMICalculator() {
 
     const healthyRange = '18.5 - 25';
 
-    const idealWeightMin = unit === 'us'
-      ? Math.round(18.5 * heightMeters * heightMeters * 2.20462 * 10) / 10
-      : Math.round(18.5 * heightMeters * heightMeters * 10) / 10;
+    const idealWeightMin =
+      unit === 'us'
+        ? Math.round(18.5 * heightMeters * heightMeters * 2.20462 * 10) / 10
+        : Math.round(18.5 * heightMeters * heightMeters * 10) / 10;
 
-    const idealWeightMax = unit === 'us'
-      ? Math.round(25 * heightMeters * heightMeters * 2.20462 * 10) / 10
-      : Math.round(25 * heightMeters * heightMeters * 10) / 10;
+    const idealWeightMax =
+      unit === 'us'
+        ? Math.round(25 * heightMeters * heightMeters * 2.20462 * 10) / 10
+        : Math.round(25 * heightMeters * heightMeters * 10) / 10;
 
     const bmiPrime = Math.round((bmiRaw / 25) * 100) / 100;
-    const ponderalIndex = Math.round((weightKg / (heightMeters ** 3)) * 10) / 10;
+    const ponderalIndex =
+      Math.round((weightKg / heightMeters ** 3) * 10) / 10;
 
     setResult({
       bmi,
@@ -125,45 +211,253 @@ export default function BMICalculator() {
     setKg('');
     setResult(null);
     setError('');
+    setShareMessage('');
+    setPdfMessage('');
+  };
+
+  const handleDownloadPDF = () => {
+    if (!result) return;
+
+    try {
+      const doc = new jsPDF();
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text('BMI Assessment Report', 14, 20);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(12);
+
+      const heightText =
+        unit === 'metric'
+          ? `${cm || '-'} cm`
+          : `${feet || '-'} ft ${inches || '0'} in`;
+      const weightText =
+        unit === 'metric'
+          ? `${kg || '-'} kg`
+          : `${pounds || '-'} lbs`;
+
+      doc.text(`Age: ${age || '-'}`, 14, 32);
+      doc.text(
+        `Gender: ${gender === 'male' ? 'Male' : 'Female'}`,
+        14,
+        40
+      );
+      doc.text(`Height: ${heightText}`, 14, 48);
+      doc.text(`Weight: ${weightText}`, 14, 56);
+
+      doc.text(
+        `BMI: ${result.bmi.toFixed(1)} (${result.category})`,
+        14,
+        68
+      );
+      doc.text(
+        `Healthy range: ${result.healthyRange} kg/m²`,
+        14,
+        76
+      );
+      doc.text(
+        `Ideal weight: ${result.idealWeightMin} – ${result.idealWeightMax} ${
+          unit === 'us' ? 'lbs' : 'kg'
+        }`,
+        14,
+        84
+      );
+      doc.text(`BMI Prime: ${result.bmiPrime}`, 14, 92);
+      doc.text(`Ponderal Index: ${result.ponderalIndex}`, 14, 100);
+
+      if (healthInsight?.summary) {
+        doc.setFontSize(13);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Brief health insight', 14, 114);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(11);
+
+        const split = doc.splitTextToSize(
+          healthInsight.summary,
+          180
+        );
+        doc.text(split, 14, 122);
+      }
+
+      doc.save('bmi-report.pdf');
+      setPdfMessage('PDF report downloaded.');
+    } catch {
+      setPdfMessage('Unable to generate PDF. Please try again.');
+    } finally {
+      setTimeout(() => setPdfMessage(''), 4000);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (typeof window === 'undefined') return;
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('unit', unit);
+    if (age) url.searchParams.set('age', age);
+    url.searchParams.set('gender', gender);
+    if (unit === 'metric') {
+      if (cm) url.searchParams.set('cm', cm);
+      if (kg) url.searchParams.set('kg', kg);
+    } else {
+      if (feet) url.searchParams.set('feet', feet);
+      if (inches) url.searchParams.set('inches', inches);
+      if (pounds) url.searchParams.set('pounds', pounds);
+    }
+    if (result) {
+      url.searchParams.set('bmi', String(result.bmi));
+      url.searchParams.set('category', result.category);
+    }
+
+    const link = url.toString();
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(link);
+        setShareMessage('Shareable link copied to clipboard.');
+      } else {
+        setShareMessage(link);
+      }
+    } catch {
+      setShareMessage(link);
+    } finally {
+      setTimeout(() => setShareMessage(''), 6000);
+    }
+  };
+
+  const handlePrint = () => {
+    if (!result) return;
+    if (typeof window === 'undefined') return;
+    window.print();
   };
 
   return (
-    <main className="min-h-screen bg-linear-to-b from-white via-blue-50 to-white">
-      <header className="mx-auto max-w-6xl px-4 pt-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-          BMI Calculator
-        </h1>
-        <p className="mt-3 max-w-3xl text-gray-700">
-          Calculate Body Mass Index (BMI) using metric or US units, see the healthy range, ideal weight, and additional indices like BMI Prime and Ponderal Index.
-        </p>
+    <main className="min-h-screen bg-slate-50 text-slate-800">
+      {/* Top banner + hero (Synthesia-style) */}
+      <header className="mx-auto max-w-6xl px-4 pt-10 pb-6">
+        {/* Mini-nav / brand stripe */}
+        <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-center md:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 via-indigo-500 to-purple-500 text-sm font-bold shadow-lg shadow-blue-500/40">
+              BMI
+            </div>
+            <div>
+              <p className="text-sm font-semibold tracking-tight">
+                Health Metrics Studio
+              </p>
+              <p className="text-xs text-slate-500">
+                Instant body composition snapshot. No account. No signup.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
+            <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1">
+              Clinically used BMI thresholds
+            </span>
+            <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1">
+              We do not store your numbers
+            </span>
+          </div>
+        </div>
+
+        {/* Hero copy */}
+        <div className="pt-8 md:flex md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-100">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              Smart BMI calculator • Includes ideal range & insights
+            </div>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+              Calculate your BMI and turn it into a practical health plan.
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm text-slate-600 md:text-base">
+              Switch between metric and US units, get your BMI, see a
+              healthy weight range, and read tailored guidance for your
+              category — all in one place.
+            </p>
+            <div className="mt-5 grid gap-4 text-xs sm:grid-cols-3">
+              <div className="rounded-xl border border-slate-200 bg-white p-3">
+                <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                  Typical time
+                </p>
+                <p className="mt-1 text-sm font-semibold">
+                  Under 30 seconds
+                </p>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-white p-3">
+                <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                  Recommended for
+                </p>
+                <p className="mt-1 text-sm font-semibold">
+                  Adults aged 18–65
+                </p>
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-white p-3">
+                <p className="text-[11px] uppercase tracking-wide text-slate-500">
+                  Outputs
+                </p>
+                <p className="mt-1 text-sm font-semibold">
+                  BMI, range, ideal weight, BMI Prime & Ponderal Index
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </header>
 
       {/* Tool + Results */}
-      <section className="mx-auto max-w-6xl px-4 mt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <section className="mx-auto max-w-6xl px-4 pb-14 pt-4">
+        <div className="grid gap-8 lg:grid-cols-2">
           {/* Left: Tool */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900">Enter details</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Adults only. For children/teens, consult pediatric BMI charts.
+          <div className="relative rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8">
+            <div className="absolute inset-x-12 -top-10 -z-10 h-20 rounded-[40px] bg-blue-500/30 blur-3xl" />
+
+            <h2 className="text-xl font-semibold text-slate-900">
+              Enter your details
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Adults only. For children and teenagers, healthcare providers
+              use age- and sex-specific BMI charts.
             </p>
 
-            <hr className="my-6 border-gray-200" />
+            <hr className="my-6 border-slate-200" />
 
             {/* Unit Toggle */}
-            <div className="flex items-center gap-3">
+            <div className="inline-flex rounded-lg border border-slate-200 bg-slate-100 p-1 text-xs font-medium">
               <button
                 type="button"
-                onClick={() => { setUnit('metric'); setFeet(''); setInches(''); setPounds(''); setResult(null); }}
-                className={`px-4 py-2 rounded-md text-sm font-medium border ${unit === 'metric' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                onClick={() => {
+                  setUnit('metric');
+                  setFeet('');
+                  setInches('');
+                  setPounds('');
+                  setResult(null);
+                  setError('');
+                }}
+                className={`rounded-md px-3 py-1.5 transition ${
+                  unit === 'metric'
+                    ? 'bg-white text-slate-800 shadow-sm'
+                    : 'bg-transparent text-slate-500 hover:bg-white/50'
+                }`}
                 aria-pressed={unit === 'metric'}
               >
                 Metric (cm, kg)
               </button>
               <button
                 type="button"
-                onClick={() => { setUnit('us'); setCm(''); setKg(''); setResult(null); }}
-                className={`px-4 py-2 rounded-md text-sm font-medium border ${unit === 'us' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                onClick={() => {
+                  setUnit('us');
+                  setCm('');
+                  setKg('');
+                  setResult(null);
+                  setError('');
+                }}
+                className={`rounded-md px-3 py-1.5 transition ${
+                  unit === 'us'
+                    ? 'bg-white text-slate-800 shadow-sm'
+                    : 'bg-transparent text-slate-500 hover:bg-white/50'
+                }`}
                 aria-pressed={unit === 'us'}
               >
                 US (ft/in, lbs)
@@ -179,7 +473,10 @@ export default function BMICalculator() {
               }}
             >
               <div>
-                <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="age">
+                <label
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                  htmlFor="age"
+                >
                   Age (2–120)
                 </label>
                 <Input
@@ -191,13 +488,16 @@ export default function BMICalculator() {
                   onChange={(e) => setAge(e.target.value)}
                   placeholder="e.g. 28"
                   required
+                  className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                 />
               </div>
 
-              <fieldset className="border border-gray-200 rounded-lg p-4">
-                <legend className="px-1 text-sm font-medium text-gray-800">Gender</legend>
-                <div className="mt-1 flex items-center gap-6">
-                  <label className="inline-flex items-center gap-2">
+              <fieldset className="rounded-lg border border-slate-200 bg-slate-100/50 p-4">
+                <legend className="px-1 text-sm font-medium text-slate-700">
+                  Gender
+                </legend>
+                <div className="mt-2 flex items-center gap-6">
+                  <label className="inline-flex items-center gap-2 text-sm text-slate-700">
                     <input
                       type="radio"
                       name="gender"
@@ -206,9 +506,9 @@ export default function BMICalculator() {
                       onChange={() => setGender('male')}
                       className="h-4 w-4"
                     />
-                    <span className="text-sm text-gray-800">Male</span>
+                    <span>Male</span>
                   </label>
-                  <label className="inline-flex items-center gap-2">
+                  <label className="inline-flex items-center gap-2 text-sm text-slate-700">
                     <input
                       type="radio"
                       name="gender"
@@ -217,15 +517,18 @@ export default function BMICalculator() {
                       onChange={() => setGender('female')}
                       className="h-4 w-4"
                     />
-                    <span className="text-sm text-gray-800">Female</span>
+                    <span>Female</span>
                   </label>
                 </div>
               </fieldset>
 
               {unit === 'metric' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid gap-6 md:grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="height-cm">
+                    <label
+                      className="mb-1 block text-sm font-medium text-slate-700"
+                      htmlFor="height-cm"
+                    >
                       Height (cm)
                     </label>
                     <Input
@@ -237,10 +540,14 @@ export default function BMICalculator() {
                       onChange={(e) => setCm(e.target.value)}
                       placeholder="e.g. 172"
                       required
+                      className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="weight-kg">
+                    <label
+                      className="mb-1 block text-sm font-medium text-slate-700"
+                      htmlFor="weight-kg"
+                    >
                       Weight (kg)
                     </label>
                     <Input
@@ -252,13 +559,17 @@ export default function BMICalculator() {
                       onChange={(e) => setKg(e.target.value)}
                       placeholder="e.g. 68.5"
                       required
+                      className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                     />
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid gap-6 md:grid-cols-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="height-ft">
+                    <label
+                      className="mb-1 block text-sm font-medium text-slate-700"
+                      htmlFor="height-ft"
+                    >
                       Height (ft)
                     </label>
                     <Input
@@ -270,10 +581,14 @@ export default function BMICalculator() {
                       onChange={(e) => setFeet(e.target.value)}
                       placeholder="e.g. 5"
                       required
+                      className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="height-in">
+                    <label
+                      className="mb-1 block text-sm font-medium text-slate-700"
+                      htmlFor="height-in"
+                    >
                       Height (in)
                     </label>
                     <Input
@@ -286,10 +601,14 @@ export default function BMICalculator() {
                       onChange={(e) => setInches(e.target.value)}
                       placeholder="e.g. 10"
                       required
+                      className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-800 mb-1" htmlFor="weight-lbs">
+                    <label
+                      className="mb-1 block text-sm font-medium text-slate-700"
+                      htmlFor="weight-lbs"
+                    >
                       Weight (lbs)
                     </label>
                     <Input
@@ -301,24 +620,25 @@ export default function BMICalculator() {
                       onChange={(e) => setPounds(e.target.value)}
                       placeholder="e.g. 150"
                       required
+                      className="border-slate-200 bg-white/70 text-slate-800 placeholder:text-slate-400"
                     />
                   </div>
                 </div>
               )}
 
               {error && (
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm font-medium text-red-400">{error}</p>
               )}
 
               <div className="flex flex-wrap items-center gap-3">
-                <Button type="submit" className="px-6">
+                <Button type="submit" className="px-6 text-sm font-semibold">
                   Calculate
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={reset}
-                  className="px-6"
+                  className="border-slate-300 px-6 text-sm text-slate-600 hover:bg-slate-100"
                 >
                   Reset
                 </Button>
@@ -327,15 +647,33 @@ export default function BMICalculator() {
 
             {/* Visual scale */}
             <div className="mt-8">
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">BMI scale (10–40)</h3>
+              <h3 className="mb-2 text-sm font-semibold text-slate-700">
+                BMI scale (10–40)
+              </h3>
               <div className="relative">
-                <div className="flex h-3 w-full overflow-hidden rounded-full ring-1 ring-gray-200">
-                  <div style={{ width: '28.3%' }} className="bg-yellow-400" aria-hidden />
-                  <div style={{ width: '21.7%' }} className="bg-green-500" aria-hidden />
-                  <div style={{ width: '16.7%' }} className="bg-orange-400" aria-hidden />
-                  <div style={{ width: '33.3%' }} className="bg-red-500" aria-hidden />
+                <div className="flex h-3 w-full overflow-hidden rounded-full ring-1 ring-slate-200">
+                  <div
+                    style={{ width: '28.3%' }}
+                    className="bg-yellow-400"
+                    aria-hidden
+                  />
+                  <div
+                    style={{ width: '21.7%' }}
+                    className="bg-emerald-500"
+                    aria-hidden
+                  />
+                  <div
+                    style={{ width: '16.7%' }}
+                    className="bg-orange-400"
+                    aria-hidden
+                  />
+                  <div
+                    style={{ width: '33.3%' }}
+                    className="bg-red-500"
+                    aria-hidden
+                  />
                 </div>
-                <div className="mt-2 flex justify-between text-[11px] text-gray-600">
+                <div className="mt-2 flex justify-between text-[11px] text-slate-500">
                   <span>10</span>
                   <span>18.5</span>
                   <span>25</span>
@@ -349,59 +687,209 @@ export default function BMICalculator() {
                     aria-label={`Your BMI marker at ${result.bmi}`}
                     role="img"
                   >
-                    <div className="h-6 w-0.5 bg-gray-900 mx-auto" />
-                    <div className="mt-1 text-[11px] text-gray-800 text-center font-medium">{result.bmi}</div>
+                    <div className="mx-auto h-6 w-0.5 bg-slate-800" />
+                    <div className="mt-1 text-center text-[11px] font-medium text-slate-800">
+                      {result.bmi}
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="mt-2 flex flex-wrap gap-3 text-xs">
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 bg-yellow-400 rounded-sm" />Underweight</span>
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 bg-green-500 rounded-sm" />Normal</span>
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 bg-orange-400 rounded-sm" />Overweight</span>
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 bg-red-500 rounded-sm" />Obese</span>
+              <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-600">
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-block h-2 w-2 rounded-sm bg-yellow-400" />
+                  Underweight
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-block h-2 w-2 rounded-sm bg-emerald-500" />
+                  Normal
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-block h-2 w-2 rounded-sm bg-orange-400" />
+                  Overweight
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-block h-2 w-2 rounded-sm bg-red-500" />
+                  Obese
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right: Results + Summary */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-900">Results</h2>
-            <p className="text-sm text-gray-600 mt-1">
-              Numbers update after calculation; values are estimates for planning.
+          {/* Right: Results + Summary + Export */}
+          <div className="rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8">
+            <h2 className="text-xl font-semibold text-slate-900">Results</h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Figures update after you run a calculation. Values are
+              estimates, intended for planning and discussion with a
+              professional.
             </p>
 
-            <hr className="my-6 border-gray-200" />
+            <hr className="my-6 border-slate-200" />
 
             {!result ? (
-              <p className="text-gray-700">
-                Enter height and weight, then select Calculate to see BMI, category, ideal weight range, and additional indices.
-              </p>
+              <div className="space-y-4 text-sm text-slate-600">
+                <p>
+                  Enter your height and weight on the left, then select
+                  Calculate. You will see:
+                </p>
+                <ul className="list-disc list-inside space-y-1 text-xs">
+                  <li>Your BMI value and BMI category.</li>
+                  <li>
+                    A healthy BMI range and an estimated ideal weight
+                    interval.
+                  </li>
+                  <li>
+                    BMI Prime and Ponderal Index, which provide additional
+                    context.
+                  </li>
+                  <li>
+                    A written health insight plus options to download or
+                    share your report.
+                  </li>
+                </ul>
+              </div>
             ) : (
-              <div className="space-y-4">
-                <div className="text-5xl font-extrabold text-gray-900">{result.bmi}</div>
-                <div className={`text-2xl font-semibold ${categoryColors[result.category]}`}>
-                  {result.category}
+              <div className="space-y-5">
+                <div>
+                  <div className="text-sm font-medium uppercase tracking-wide text-slate-300">
+                    YOUR BMI
+                  </div>
+                  <div className="mt-1 flex items-baseline gap-4">
+                    <div className="text-5xl font-extrabold text-slate-900">
+                      {result.bmi}
+                    </div>
+                    <div
+                      className={`text-2xl font-semibold ${categoryColors[result.category]}`}
+                    >
+                      {result.category}
+                    </div>
+                  </div>
                 </div>
-                <dl className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="rounded-lg border border-gray-200 p-4">
-                    <dt className="text-sm text-gray-600">Healthy BMI range</dt>
-                    <dd className="text-base font-medium text-gray-900">{result.healthyRange} kg/m²</dd>
-                  </div>
-                  <div className="rounded-lg border border-gray-200 p-4">
-                    <dt className="text-sm text-gray-600">Ideal weight</dt>
-                    <dd className="text-base font-medium text-gray-900">
-                      {result.idealWeightMin} – {result.idealWeightMax} {unit === 'us' ? 'lbs' : 'kg'}
+
+                <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                  <div className="rounded-lg border border-slate-200 bg-slate-100/60 p-4">
+                    <dt className="text-xs text-slate-500">
+                      Healthy BMI range
+                    </dt>
+                    <dd className="mt-1 text-base font-medium text-slate-800">
+                      {result.healthyRange} kg/m²
                     </dd>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Standard adult reference range used in many clinical
+                      guidelines.
+                    </p>
                   </div>
-                  <div className="rounded-lg border border-gray-200 p-4">
-                    <dt className="text-sm text-gray-600">BMI Prime</dt>
-                    <dd className="text-base font-medium text-gray-900">{result.bmiPrime}</dd>
+                  <div className="rounded-lg border border-slate-200 bg-slate-100/60 p-4">
+                    <dt className="text-xs text-slate-500">Ideal weight</dt>
+                    <dd className="mt-1 text-base font-medium text-slate-800">
+                      {result.idealWeightMin} – {result.idealWeightMax}{' '}
+                      {unit === 'us' ? 'lbs' : 'kg'}
+                    </dd>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Approximate weight interval if BMI is kept within the
+                      healthy band.
+                    </p>
                   </div>
-                  <div className="rounded-lg border border-gray-200 p-4">
-                    <dt className="text-sm text-gray-600">Ponderal Index</dt>
-                    <dd className="text-base font-medium text-gray-900">{result.ponderalIndex}</dd>
+                  <div className="rounded-lg border border-slate-200 bg-slate-100/60 p-4">
+                    <dt className="text-xs text-slate-500">BMI Prime</dt>
+                    <dd className="mt-1 text-base font-medium text-slate-800">
+                      {result.bmiPrime}
+                    </dd>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Ratio of your BMI to the upper limit of the healthy
+                      BMI range (25 kg/m²).
+                    </p>
+                  </div>
+                  <div className="rounded-lg border border-slate-200 bg-slate-100/60 p-4">
+                    <dt className="text-xs text-slate-500">
+                      Ponderal Index
+                    </dt>
+                    <dd className="mt-1 text-base font-medium text-slate-800">
+                      {result.ponderalIndex}
+                    </dd>
+                    <p className="mt-1 text-[11px] text-slate-500">
+                      Weight divided by height cubed; can be more useful
+                      than BMI at very tall or short heights.
+                    </p>
                   </div>
                 </dl>
+
+                {/* Health insight */}
+                {healthInsight && (
+                  <div className="mt-4 space-y-3 rounded-xl border border-blue-500/30 bg-blue-500/10 p-4">
+                    <h3 className="text-sm font-semibold text-blue-800">
+                      Health insight for your category
+                    </h3>
+                    <p className="text-sm text-blue-700">
+                      {healthInsight.headline}
+                    </p>
+                    <p className="text-xs text-blue-600">
+                      {healthInsight.summary}
+                    </p>
+                    {healthInsight.bullets.length > 0 && (
+                      <ul className="mt-2 list-disc list-inside space-y-1 text-xs text-blue-700">
+                        {healthInsight.bullets.map((tip) => (
+                          <li key={tip}>{tip}</li>
+                        ))}
+                      </ul>
+                    )}
+                    <p className="mt-2 text-[11px] text-blue-600">
+                      This tool does not give a diagnosis or replace medical
+                      advice. If you have symptoms, existing conditions, or
+                      concerns, please discuss these numbers with a
+                      qualified healthcare professional.
+                    </p>
+                  </div>
+                )}
+
+                {/* Export & share actions */}
+                <div className="mt-4 space-y-3 rounded-xl border border-slate-200 bg-slate-100/70 p-4">
+                  <h3 className="text-sm font-semibold text-slate-700">
+                    Save or share your report
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Export a snapshot of your current inputs and BMI or
+                    share a link to this page with your numbers embedded in
+                    the URL.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-3">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={handleDownloadPDF}
+                      disabled={!result}
+                      className="border-slate-300 text-xs text-slate-600 hover:bg-slate-200"
+                    >
+                      Download PDF report
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={handleCopyLink}
+                      disabled={!result}
+                      className="border-slate-300 text-xs text-slate-600 hover:bg-slate-200"
+                    >
+                      Copy shareable link
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={handlePrint}
+                      disabled={!result}
+                      className="border-slate-300 text-xs text-slate-600 hover:bg-slate-200"
+                    >
+                      Print report
+                    </Button>
+                  </div>
+                  {(shareMessage || pdfMessage) && (
+                    <p className="mt-2 text-[11px] text-slate-600">
+                      {pdfMessage || shareMessage}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -409,43 +897,92 @@ export default function BMICalculator() {
       </section>
 
       {/* Content Sections */}
-      <section className="mx-auto max-w-6xl px-4 mt-14">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <article className="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
-            <h3 className="text-2xl font-bold text-gray-900">What BMI indicates</h3>
-            <p className="mt-3 text-gray-700">
-              BMI compares weight to height to estimate whether body mass is in a range broadly associated with lower health risk. It does not directly measure body fat or account for muscle mass, bone density, or fat distribution.
+      <section className="mx-auto max-w-6xl px-4 pb-16">
+        <div className="grid gap-8 lg:grid-cols-3">
+          <article className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white/70 p-6 md:p-8">
+            <h3 className="text-2xl font-bold text-slate-900">
+              What BMI indicates
+            </h3>
+            <p className="mt-3 text-sm text-slate-600">
+              BMI compares weight to height to estimate whether body mass is
+              in a range broadly associated with lower health risk. It does
+              not directly measure body fat or account for muscle mass, bone
+              density, or fat distribution.
             </p>
-            <h4 className="mt-6 text-xl font-semibold text-gray-900">Categories</h4>
-            <ul className="mt-2 list-disc list-inside text-gray-700 space-y-2">
-              <li><span className="font-medium">Underweight:</span> potential nutrient deficiency or other concerns.</li>
-              <li><span className="font-medium">Normal:</span> generally associated with lower chronic disease risk.</li>
-              <li><span className="font-medium">Overweight:</span> higher risk of metabolic and cardiovascular conditions.</li>
-              <li><span className="font-medium">Obese:</span> substantially increased risk; medical guidance recommended.</li>
+            <h4 className="mt-6 text-xl font-semibold text-slate-900">
+              Categories
+            </h4>
+            <ul className="mt-2 space-y-2 text-sm text-slate-600">
+              <li>
+                <span className="font-medium text-yellow-600">
+                  Underweight:
+                </span>{' '}
+                potential nutrient deficiency or other concerns.
+              </li>
+              <li>
+                <span className="font-medium text-emerald-600">
+                  Normal:
+                </span>{' '}
+                generally associated with lower chronic disease risk.
+              </li>
+              <li>
+                <span className="font-medium text-orange-600">
+                  Overweight:
+                </span>{' '}
+                higher risk of metabolic and cardiovascular conditions.
+              </li>
+              <li>
+                <span className="font-medium text-red-600">Obese:</span>{' '}
+                substantially increased risk; medical guidance recommended.
+              </li>
             </ul>
-            <h4 className="mt-6 text-xl font-semibold text-gray-900">Beyond BMI</h4>
-            <p className="mt-2 text-gray-700">
-              Use BMI alongside waist circumference, activity levels, and clinical measures. BMI Prime contextualizes BMI relative to the upper healthy threshold, while the Ponderal Index considers height cubed to better reflect proportionality in taller or shorter individuals.
+            <h4 className="mt-6 text-xl font-semibold text-slate-900">
+              Beyond BMI
+            </h4>
+            <p className="mt-2 text-sm text-slate-600">
+              Use BMI alongside waist circumference, physical activity,
+              family history, and clinical measures. BMI Prime
+              contextualises BMI relative to the upper healthy threshold,
+              while the Ponderal Index considers height cubed to better
+              reflect proportionality in taller or shorter individuals.
             </p>
           </article>
 
-          <aside className="rounded-2xl border border-gray-200 bg-white p-6 md:p-8 shadow-sm">
-            <h3 className="text-xl font-bold text-gray-900">Tips</h3>
-            <ul className="mt-3 list-disc list-inside text-gray-700 space-y-2">
-              <li>Measure height and weight carefully; small input errors shift BMI meaningfully.</li>
-              <li>Recalculate after major changes in weight or training programs.</li>
-              <li>Discuss results with a healthcare professional for personalized context.</li>
+          <aside className="rounded-2xl border border-slate-200 bg-white/70 p-6 md:p-8">
+            <h3 className="text-xl font-bold text-slate-900">
+              How to use this tool
+            </h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-600">
+              <li>
+                Measure height and weight carefully; small input errors can
+                shift BMI meaningfully.
+              </li>
+              <li>
+                Recalculate after major changes in weight, training, or
+                health status.
+              </li>
+              <li>
+                Use the PDF or printout to support discussions with your
+                doctor, dietitian, or coach.
+              </li>
             </ul>
-            <h3 className="mt-8 text-xl font-bold text-gray-900">FAQ</h3>
-            <p className="mt-2 text-sm text-gray-700">
-              BMI is for adults. For athletes or those with high muscle mass, body fat measures and professional assessment provide better insight.
+            <h3 className="mt-8 text-xl font-bold text-slate-900">FAQ</h3>
+            <p className="mt-2 text-xs text-slate-600">
+              BMI is designed for adults. For athletes or people with high
+              muscle mass, body fat measurements and professional
+              assessment provide better insight. Always interpret BMI in
+              the context of your overall health profile.
             </p>
           </aside>
         </div>
       </section>
 
-      <footer className="mx-auto max-w-6xl px-4 my-14">
-        <hr className="border-gray-200" />
+      <footer className="mx-auto max-w-6xl px-4 pb-10">
+        <hr className="border-slate-200" />
+        <p className="mt-4 text-xs text-slate-500">
+          This calculator is for educational use and does not replace
+          personalised medical advice, diagnosis, or treatment.
+        </p>
       </footer>
     </main>
   );

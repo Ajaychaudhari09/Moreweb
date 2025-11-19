@@ -35,37 +35,37 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <Link href={tool.href} className="block h-full">
-      <div className="tool-card group cursor-pointer h-full flex flex-col">
-        <div className="flex-1 flex flex-col">
-          <div className={`flex h-20 w-20 mx-auto mb-6 items-center justify-center rounded-2xl bg-linear-to-br ${gradient} group-hover:scale-110 transition-all duration-300 shadow-lg group-hover:shadow-xl`}>
-            <Icon className="h-10 w-10 text-white" />
+      <article className="card group cursor-pointer h-full flex flex-col">
+        <div className="flex-1 flex flex-col items-center text-center">
+                <div className={`card-icon mb-6 bg-linear-to-br ${gradient} group-hover:scale-105 transition-transform duration-300`}>
+                  <Icon className="h-8 w-8 text-white" />
           </div>
 
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 text-center group-hover:gradient-text transition-all duration-300 leading-tight">
+          <h3 className="card-title mb-2 group-hover:gradient-text transition-colors duration-200">
             {tool.name}
           </h3>
 
-          <p className="text-gray-600 dark:text-gray-400 text-center leading-relaxed mb-6 flex-1">
+          <p className="card-desc text-sm mb-4 px-2">
             {tool.description}
           </p>
         </div>
 
-        <div className="mt-auto">
-          <div className="text-center mb-4">
-            <div className="btn-vibrant inline-flex items-center gap-2 px-8 py-3 rounded-full group-hover:scale-105 transition-all duration-300 shadow-lg group-hover:shadow-xl">
-              <Sparkles className="h-4 w-4" />
-              <span className="font-semibold">Try Now</span>
+        <div className="mt-auto flex flex-col items-center">
+            <div className="card-cta">
+              <button className="btn-primary focus-ring">
+                <Sparkles className="h-4 w-4" />
+                <span className="font-semibold">Try Now</span>
+              </button>
             </div>
-          </div>
 
-          <div className="text-center">
-            <span className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <div className="mt-4">
+            <span className="tag tag--indigo">
+              <span className="w-2 h-2 rounded-full bg-green-400 mr-2 inline-block"></span>
               Free Tool
             </span>
           </div>
         </div>
-      </div>
+      </article>
     </Link>
   );
 }

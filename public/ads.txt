@@ -1,0 +1,6 @@
+# MoreFusion ads.txt
+# This file lists the companies authorized to sell digital advertising on this website.
+
+# Adsterra
+adsterra.com, 5412362, DIRECT
+effectivegatecpm.com, 28064811, DIRECT

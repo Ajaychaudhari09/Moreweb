@@ -1,110 +1,108 @@
-'use client';
+// src/components/Header.tsx
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { HamburgerMenuIcon, Cross2Icon } from "@radix-ui/react-icons";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+} from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Tools', href: '/tools' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
+  { label: "Home", href: "/" },
+  { label: "Tools", href: "/tools" },
+  { label: "Blog", href: "/blog" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Header() {
   const pathname = usePathname();
-  const [open, setOpen] = useState<boolean>(false);
-
-  const baseLink =
-    'px-4 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500';
-  const active = 'bg-blue-500 text-white';
-  const inactive = 'text-foreground/80 hover:bg-blue-50 dark:hover:bg-blue-900/30';
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:inset-x-0 focus:top-2 focus:z-50 mx-auto w-max rounded bg-indigo-600 px-3 py-2 text-white"
-      >
-        Skip to content
-      </a>
-
-      <nav
-        aria-label="Main"
-        className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4"
-      >
-        {/* Brand */}
-        <div className="flex items-center gap-2">
-          <Link href="/" className="text-lg font-bold tracking-tight">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur border-b border-border">
+      <nav className="container-max flex items-center justify-between h-16">
+        {/* Logo */}
+        <div className="flex items-center gap-6">
+          <Link href="/" className="site-logo text-lg md:text-2xl gradient-text">
             MoreFusion
           </Link>
         </div>
 
-        {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 md:flex">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-4">
           {navItems.map((item) => {
-            const isActive =
-              item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+            const active = pathname === item.href || pathname?.startsWith(item.href + "/");
             return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive ? 'page' : undefined}
-                  className={`${baseLink} ${isActive ? active : inactive}`}
-                >
-                  {item.label}
-                </Link>
-              </li>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`nav-link px-3 py-2 rounded-md text-sm font-medium transition ${
+                  active ? "bg-primary text-white" : "hover:bg-background/60"
+                }`}
+              >
+                {item.label}
+              </Link>
             );
           })}
-        </ul>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          aria-label="Toggle menu"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-indigo-50 dark:hover:bg-indigo-900/30 md:hidden"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </nav>
+          {/* CTA */}
+          <Link href="/tools" className="ml-2 btn-primary">
+            Get started
+          </Link>
+        </div>
 
-      {/* Mobile sheet */}
-      <div
-        id="mobile-nav"
-        role="dialog"
-        aria-modal="true"
-        className={`md:hidden ${open ? 'block' : 'hidden'}`}
-      >
-        <div className="border-t border-border/50 bg-background px-4 pb-4 pt-2">
-          <ul className="flex flex-col gap-1">
-            {navItems.map((item) => {
-              const isActive =
-                item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={isActive ? 'page' : undefined}
-                    onClick={() => setOpen(false)}
-                    className={`block ${
-                      isActive
-                        ? 'bg-indigo-600 text-white'
-                        : 'text-foreground/90 hover:bg-indigo-50 dark:hover:bg-indigo-900/30'
-                    } rounded-lg px-4 py-2 text-sm font-medium`}
-                  >
-                    {item.label}
+        {/* Mobile Menu */}
+        <div className="md:hidden">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="ghost" aria-label="Toggle navigation menu">
+                {open ? <Cross2Icon /> : <HamburgerMenuIcon />}
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent side="right" className="p-6">
+              <div className="flex items-center justify-between">
+                <Link href="/" className="site-logo text-lg font-bold">
+                  MoreFusion
+                </Link>
+                <Button size="icon" variant="ghost" onClick={() => setOpen(false)} aria-label="Close menu">
+                  <Cross2Icon />
+                </Button>
+              </div>
+
+              <ul className="flex flex-col space-y-3 mt-6">
+                {navItems.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={`block rounded-md p-3 font-medium ${
+                        pathname === item.href || pathname?.startsWith(item.href + "/")
+                          ? "bg-primary text-white"
+                          : "text-text-secondary hover:text-text-primary"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+
+                <li>
+                  <Link href="/tools" className="btn-primary block text-center">
+                    Get started
                   </Link>
                 </li>
-              );
-            })}
-          </ul>
+              </ul>
+            </SheetContent>
+          </Sheet>
         </div>
-      </div>
+      </nav>
     </header>
   );
 }
