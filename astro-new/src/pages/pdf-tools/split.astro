@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SplitPDF from "../../components/pdf-tools/SplitPDF";
+
+const title = "Split PDF Files Online - Extract Pages Free";
+const description = "Separate one page or a whole set for easy conversion into independent PDF files. Free online PDF splitter.";
+---
+
+<Layout title={title} description={description}>
+  <SplitPDF client:load />
+</Layout>

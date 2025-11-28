@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ResumeMaker from "../components/ResumeMaker";
+
+const title = "Resume Maker | Free ATS-Friendly Resume Builder";
+const description = "Create a professional, ATS-optimized resume in minutes with our free online Resume Maker. Choose from modern, classic, and minimal templates.";
+---
+
+<Layout title={title} description={description}>
+  <ResumeMaker client:load />
+</Layout>

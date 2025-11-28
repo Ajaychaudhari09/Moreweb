@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "../components/ui/button";
+import { HelpCircle, Mail, MessageSquare } from "lucide-react";
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is MoreFusion free to use?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes! The vast majority of our tools, including the Resume Maker, Calculators, and Text Editor, are completely free to use. We believe in making productivity accessible to everyone.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do I need to create an account?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No, you can use most of our tools without an account. However, creating a free account allows you to save your work (like resumes or documents) and access it from any device.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is my data private and secure?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Absolutely. We prioritize your privacy. Most of our tools process data locally in your browser, meaning your files often never leave your device. For features that require server processing, we use industry-standard encryption and do not sell your personal data.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I suggest a new tool?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We love hearing from our community! If you have an idea for a tool that would make your life easier, please send us a message via our contact form. We regularly build new tools based on user feedback.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How accurate are the calculators?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Our calculators (BMI, EMI, etc.) use standard, verified formulas. However, they are intended for informational purposes only. For financial or health decisions, we always recommend consulting with a professional.",
+      },
+    },
+  ],
+};
+---
+
+<Layout title="Help & FAQ - MoreFusion" description="Frequently asked questions and support for MoreFusion tools.">
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+  <main class="min-h-screen bg-gray-50 dark:bg-gray-950 py-12">
+    <div class="container mx-auto px-4 max-w-4xl">
+      {/* Hero Section */}
+      <div class="text-center mb-16 animate-fade-in">
+        <div class="inline-flex items-center justify-center p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-6">
+          <HelpCircle className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
+          How can we help you?
+        </h1>
+        <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Find answers to common questions and let us help you with our tools, account management, and more.
+        </p>
+      </div>
+
+      {/* FAQ Section */}
+      <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 mb-12 animate-slide-up">
+        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+
+        <div class="space-y-4">
+          <details class="group rounded-lg border border-slate-200 dark:border-slate-800 bg-gray-50 dark:bg-gray-950/50 p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between text-lg font-medium text-slate-900 dark:text-white">
+              Is MoreFusion free to use?
+              <span class="ml-4 text-xl leading-none text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes! The vast majority of our tools, including the Resume Maker, Calculators, and Text Editor, are completely free to use. We believe in making productivity accessible to everyone.
+            </p>
+          </details>
+
+          <details class="group rounded-lg border border-slate-200 dark:border-slate-800 bg-gray-50 dark:bg-gray-950/50 p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between text-lg font-medium text-slate-900 dark:text-white">
+              Do I need to create an account?
+              <span class="ml-4 text-xl leading-none text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+              No, you can use most of our tools without an account. However, creating a free account allows you to save your work (like resumes or documents) and access it from any device.
+            </p>
+          </details>
+
+          <details class="group rounded-lg border border-slate-200 dark:border-slate-800 bg-gray-50 dark:bg-gray-950/50 p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between text-lg font-medium text-slate-900 dark:text-white">
+              Is my data private and secure?
+              <span class="ml-4 text-xl leading-none text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+              Absolutely. We prioritize your privacy. Most of our tools process data locally in your browser, meaning your files often never leave your device. For features that require server processing, we use industry-standard encryption and do not sell your personal data. Check our <a href="/privacy" class="text-blue-600 hover:underline">Privacy Policy</a> for more details.
+            </p>
+          </details>
+
+          <details class="group rounded-lg border border-slate-200 dark:border-slate-800 bg-gray-50 dark:bg-gray-950/50 p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between text-lg font-medium text-slate-900 dark:text-white">
+              Can I suggest a new tool?
+              <span class="ml-4 text-xl leading-none text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+              We love hearing from our community! If you have an idea for a tool that would make your life easier, please send us a message via our contact form. We regularly build new tools based on user feedback.
+            </p>
+          </details>
+
+          <details class="group rounded-lg border border-slate-200 dark:border-slate-800 bg-gray-50 dark:bg-gray-950/50 p-4">
+            <summary class="flex cursor-pointer list-none items-center justify-between text-lg font-medium text-slate-900 dark:text-white">
+              How accurate are the calculators?
+              <span class="ml-4 text-xl leading-none text-slate-500 group-open:rotate-90 transition-transform">›</span>
+            </summary>
+            <p class="mt-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+              Our calculators (BMI, EMI, etc.) use standard, verified formulas. However, they are intended for informational purposes only. For financial or health decisions, we always recommend consulting with a professional.
+            </p>
+          </details>
+        </div>
+      </div>
+
+      {/* Contact Options */}
+      <div class="grid md:grid-cols-2 gap-6 animate-slide-up" style="animation-delay: 0.1s">
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+              <Mail className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Email Support</h3>
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 mb-6">
+            Have a specific question or issue? Drop us an email and we'll get back to you within 24-48 hours.
+          </p>
+          <a href="mailto:newsletter@morefusion.in" class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700">
+            Contact Support
+          </a>
+        </div>
+
+        <div class="bg-white dark:bg-gray-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
+              <MessageSquare className="h-6 w-6 text-green-600 dark:text-green-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white">Community</h3>
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 mb-6">
+            Join our community to discuss tools, share tips, and connect with other productivity enthusiasts.
+          </p>
+          <a href="/contact" class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-slate-700">
+            Get Involved
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

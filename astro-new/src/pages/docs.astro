@@ -1,0 +1,219 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Book, Rocket, Wrench, Code2, Users, HelpCircle } from "lucide-react";
+
+const documentationSections = [
+  {
+    icon: Rocket,
+    title: "Getting Started",
+    description: "Learn the basics and get up and running quickly",
+    links: [
+      { name: "Quick Start Guide", href: "#quick-start" },
+      { name: "Installation", href: "#installation" },
+      { name: "First Steps", href: "#first-steps" },
+    ],
+  },
+  {
+    icon: Wrench,
+    title: "Tools & Features",
+    description: "Comprehensive guide to all our productivity tools",
+    links: [
+      { name: "Resume Maker", href: "/resume-maker" },
+      { name: "Text Editor", href: "/text-editor" },
+      { name: "Calculators", href: "/tools" },
+    ],
+  },
+  {
+    icon: Code2,
+    title: "API Reference",
+    description: "Technical documentation for developers",
+    links: [
+      { name: "REST API", href: "#api" },
+      { name: "Authentication", href: "#auth" },
+      { name: "Rate Limits", href: "#limits" },
+    ],
+  },
+  {
+    icon: Users,
+    title: "Community",
+    description: "Connect with other users and get support",
+    links: [
+      { name: "Community Guidelines", href: "#community" },
+      { name: "Contribution Guide", href: "#contribute" },
+      { name: "Support Forum", href: "#support" },
+    ],
+  },
+];
+---
+
+<Layout title="Documentation - MoreFusion" description="Everything needed to use MoreFusion tools and features effectively">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950">
+    {/* Hero Section */}
+    <div class="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
+      <div class="mx-auto max-w-7xl px-6 py-16">
+        <div class="text-center">
+          <div class="mb-6 flex justify-center">
+            <div class="rounded-full bg-white/20 p-4">
+              <Book className="h-12 w-12" />
+            </div>
+          </div>
+          <h1 class="mb-6 text-4xl font-bold md:text-5xl">Documentation</h1>
+          <p class="mx-auto max-w-3xl text-xl text-blue-100 md:text-2xl">
+            Everything needed to use MoreFusion tools and features effectively
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Main Content */}
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      {/* Quick Navigation */}
+      <div class="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        {documentationSections.map((section) => (
+          <div class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm transition-shadow hover:shadow-lg">
+            <div class="mb-4 flex items-center">
+              <div class="mr-4 rounded-lg bg-blue-100 dark:bg-blue-900/30 p-3 text-blue-600 dark:text-blue-400">
+                <section.icon className="h-6 w-6" />
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">{section.title}</h3>
+            </div>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">{section.description}</p>
+            <ul class="space-y-2">
+              {section.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+                  >
+                    {link.name} →
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Detailed Sections */}
+      <div class="space-y-16">
+        {/* Quick Start */}
+        <section id="quick-start" class="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-200 dark:border-gray-800">
+          <h2 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">🚀 Quick Start Guide</h2>
+          <div class="prose prose-lg dark:prose-invert max-w-none">
+            <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
+              Get started with MoreFusion in just a few steps:
+            </p>
+            <ol class="list-inside list-decimal space-y-4 text-gray-700 dark:text-gray-300">
+              <li>
+                <strong>Browse our tools:</strong> Visit the{" "}
+                <a href="/tools" class="text-blue-600 dark:text-blue-400 hover:underline">
+                  Tools section
+                </a>{" "}
+                to see all available productivity tools
+              </li>
+              <li>
+                <strong>Start using:</strong> Most tools work immediately without registration
+              </li>
+              <li>
+                <strong>Save your work:</strong> Create an account to save projects and access
+                premium features
+              </li>
+              <li>
+                <strong>Get support:</strong> Check documentation or contact for help
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        {/* Installation */}
+        <section id="installation" class="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-200 dark:border-gray-800">
+          <h2 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">📦 Installation & Setup</h2>
+          <div class="prose prose-lg dark:prose-invert max-w-none">
+            <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
+              MoreFusion is web-based—no installation required:
+            </p>
+            <div class="mb-6 rounded-lg bg-gray-50 dark:bg-gray-800 p-6">
+              <h3 class="mb-4 text-xl font-semibold text-gray-900 dark:text-white">Browser Requirements:</h3>
+              <ul class="list-inside list-disc space-y-2 text-gray-700 dark:text-gray-300">
+                <li>Chrome 80+ (recommended)</li>
+                <li>Firefox 75+</li>
+                <li>Safari 13+</li>
+                <li>Edge 80+</li>
+              </ul>
+            </div>
+            <p class="text-gray-700 dark:text-gray-300">
+              Use the latest browser version for the best experience.
+            </p>
+          </div>
+        </section>
+
+        {/* API */}
+        <section id="api" class="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-200 dark:border-gray-800">
+          <h2 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">🔌 API Reference</h2>
+          <div class="prose prose-lg dark:prose-invert max-w-none">
+            <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
+              The public API is in development; here’s what to expect:
+            </p>
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div class="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-6">
+                <h3 class="mb-3 text-xl font-semibold text-blue-900 dark:text-blue-300">Coming Soon:</h3>
+                <ul class="list-inside list-disc space-y-2 text-blue-800 dark:text-blue-200">
+                  <li>REST API endpoints</li>
+                  <li>Webhook integrations</li>
+                  <li>SDK libraries</li>
+                  <li>Rate limiting details</li>
+                </ul>
+              </div>
+              <div class="rounded-lg bg-green-50 dark:bg-green-900/20 p-6">
+                <h3 class="mb-3 text-xl font-semibold text-green-900 dark:text-green-300">Current Features:</h3>
+                <ul class="list-inside list-disc space-y-2 text-green-800 dark:text-green-200">
+                  <li>Web-based tools</li>
+                  <li>File export/import</li>
+                  <li>Local storage</li>
+                  <li>Responsive design</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Support */}
+        <section id="support" class="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-200 dark:border-gray-800">
+          <h2 class="mb-6 text-3xl font-bold text-gray-900 dark:text-white">❓ Getting Help</h2>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+            <div class="text-center">
+              <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                <HelpCircle className="h-8 w-8" />
+              </div>
+              <h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">FAQ</h3>
+              <p class="mb-4 text-gray-600 dark:text-gray-400">Common questions and answers</p>
+              <a href="/faq" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                View FAQ →
+              </a>
+            </div>
+            <div class="text-center">
+              <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                <Users className="h-8 w-8" />
+              </div>
+              <h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">Community</h3>
+              <p class="mb-4 text-gray-600 dark:text-gray-400">Connect with other users</p>
+              <a href="/contact" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                Join Community →
+              </a>
+            </div>
+            <div class="text-center">
+              <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">
+                <Code2 className="h-8 w-8" />
+              </div>
+              <h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">Support</h3>
+              <p class="mb-4 text-gray-600 dark:text-gray-400">Direct technical support</p>
+              <a href="/contact" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                Contact Support →
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>

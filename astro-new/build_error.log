@@ -1,0 +1,24 @@
+
+> astro-new@0.0.1 build
+> astro build
+
+[2m22:12:58[22m [34m[content][39m Syncing content
+[2m22:12:58[22m [34m[content][39m Synced content
+[2m22:12:58[22m [34m[types][39m Generated [2m712ms[22m
+[2m22:12:58[22m [34m[build][39m output: [34m"static"[39m
+[2m22:12:58[22m [34m[build][39m mode: [34m"static"[39m
+[2m22:12:58[22m [34m[build][39m directory: [34mC:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\astro-new\dist\[39m
+[2m22:12:58[22m [34m[build][39m Collecting build info...
+[2m22:12:58[22m [34m[build][39m [32mΓ£ô Completed in 773ms.[39m
+[2m22:12:58[22m [34m[build][39m Building static entrypoints...
+22:13:00 [ERROR] [vite] Γ£ù Build failed in 1.81s
+[vite]: Rollup failed to resolve import "pdf-lib" from "C:/Users/AJAY CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/src/components/pdf-tools/CompressPDF.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+  Stack trace:
+    at viteLog (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:46374:15)
+    at onwarn (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/node_modules/@vitejs/plugin-react/dist/index.js:90:7)
+    at onRollupLog (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:46422:5)
+    at file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/node_modules/rollup/dist/es/shared/node-entry.js:20961:32
+    at ModuleLoader.handleInvalidResolvedId (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/morefusion/astro-new/node_modules/rollup/dist/es/shared/node-entry.js:21592:26)

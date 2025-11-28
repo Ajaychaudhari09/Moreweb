@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-
-# Block editor routes completely
-Disallow: /editor
-Disallow: /editor/*
-
-# Sitemap (make sure sitemap.xml exists or generate it)
-Sitemap: https://morefusion.in/sitemap.xml

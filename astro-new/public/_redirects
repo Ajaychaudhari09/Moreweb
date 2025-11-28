@@ -1,0 +1,11 @@
+# Netlify Redirects
+# Syntax: /old-path /new-path [status]
+
+# Block access to admin/editor routes
+/editor/*  /404  404
+/admin/*   /404  404
+/strapi-cms/* /404 404
+
+# Handle Next.js static export routing for dynamic routes if needed
+# (Netlify usually handles this automatically for Next.js, but explicit 404 is good)
+/*  /404.html  404

@@ -1,0 +1,51 @@
+---
+import "@/styles/global.css";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+}
+
+const { 
+  title, 
+  description = "MoreFusion - Free Online Productivity Tools & Resources",
+  image = "/android-chrome-192x192.png"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ClientRouter />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+  </head>
+  <body class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
+    <Header client:load pathname={Astro.url.pathname} />
+    <main class="flex-1 w-full animate-fade-in">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

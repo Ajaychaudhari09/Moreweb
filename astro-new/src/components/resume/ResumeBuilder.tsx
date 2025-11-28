@@ -1,0 +1,148 @@
+import React, { useState, useRef } from 'react';
+import { ResumeEditor } from './ResumeEditor';
+import { ResumePreview } from './ResumePreview';
+import type { ResumeData, Theme } from './types';
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Download, Printer, RotateCcw, FileDown, FileText, AlertTriangle } from 'lucide-react';
+import { jsPDF } from "jspdf";
+
+const initialData: ResumeData = {
+    personalInfo: {
+        name: "",
+        email: "",
+        phone: "",
+        location: "",
+        summary: "",
+        linkedin: "",
+        website: ""
+    },
+    experiences: [],
+    education: [],
+    projects: [],
+    certifications: [],
+    skills: ""
+};
+
+export default function ResumeBuilder() {
+    const [data, setData] = useState<ResumeData>(initialData);
+    const [theme, setTheme] = useState<Theme>("modern");
+    const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
+    const printRef = useRef<HTMLDivElement>(null);
+
+    const clearForm = () => {
+        setIsClearDialogOpen(true);
+    };
+
+    const confirmClear = () => {
+        setData(initialData);
+        setIsClearDialogOpen(false);
+    };
+
+    const handlePrint = () => {
+        window.print();
+    };
+
+    const generatePDF = () => {
+        const element = document.getElementById('resume-preview');
+        if (!element) return;
+
+        const doc = new jsPDF({
+            format: 'a4',
+            unit: 'pt',
+            orientation: 'portrait'
+        });
+
+        doc.html(element, {
+            callback: function (pdf) {
+                pdf.save("resume.pdf");
+            },
+            x: 0,
+            y: 0,
+            width: 595.28, // A4 width in points
+            windowWidth: element.scrollWidth, // Ensure content fits
+            autoPaging: 'text',
+            margin: [0, 0, 0, 0]
+        });
+    };
+
+    return (
+        <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950">
+            {/* Toolbar */}
+            <div className="flex flex-col sm:flex-row justify-between items-center px-6 py-4 border-b bg-white dark:bg-slate-900 shadow-sm z-10 gap-4">
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                    <div className="flex items-center gap-2 mr-4">
+                        <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                            <FileText className="h-5 w-5" />
+                        </div>
+                        <span className="font-bold text-lg hidden md:inline-block">Resume Builder</span>
+                    </div>
+                    <Select value={theme} onValueChange={(v: Theme) => setTheme(v)}>
+                        <SelectTrigger className="w-[180px] border-slate-200 dark:border-slate-800 focus:ring-blue-500">
+                            <SelectValue placeholder="Select Theme" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="modern">Modern Professional</SelectItem>
+                            <SelectItem value="classic">Classic Elegant</SelectItem>
+                            <SelectItem value="minimal">Minimal Clean</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <Button variant="ghost" size="sm" onClick={clearForm} className="text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors">
+                        <RotateCcw className="h-4 w-4 mr-2" /> Clear
+                    </Button>
+                    <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-2 hidden sm:block"></div>
+                    <Button variant="outline" size="sm" onClick={handlePrint} className="border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800">
+                        <Printer className="h-4 w-4 mr-2" /> Print
+                    </Button>
+                    <Button size="sm" onClick={generatePDF} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5">
+                        <FileDown className="h-4 w-4 mr-2" /> Download PDF
+                    </Button>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+                {/* Editor Panel */}
+                <div className="w-full lg:w-[45%] border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden flex flex-col z-0">
+                    <div className="flex-1 overflow-hidden relative">
+                        <ResumeEditor data={data} setData={setData} />
+                    </div>
+                </div>
+
+                {/* Preview Panel */}
+                <div className="w-full lg:w-[55%] bg-slate-100/50 dark:bg-slate-950 overflow-y-auto p-4 lg:p-8 flex justify-center relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] bg-size-[16px_16px] opacity-50 pointer-events-none"></div>
+                    <div className="w-full max-w-[210mm] min-h-[297mm] bg-white shadow-2xl shadow-slate-200/50 dark:shadow-black/50 print:shadow-none print:w-full print:absolute print:top-0 print:left-0 print:m-0 transform transition-transform duration-300 origin-top scale-[0.85] sm:scale-100 lg:scale-[0.9] xl:scale-100 z-10">
+                        <ResumePreview data={data} theme={theme} />
+                    </div>
+                </div>
+            </div>
+
+            <Dialog open={isClearDialogOpen} onOpenChange={setIsClearDialogOpen}>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 mb-4">
+                            <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
+                        </div>
+                        <DialogTitle className="text-center">Clear all data?</DialogTitle>
+                        <DialogDescription className="text-center">
+                            This action cannot be undone. All your entered details will be permanently removed.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-center gap-2 mt-4">
+                        <Button variant="outline" onClick={() => setIsClearDialogOpen(false)} className="w-full sm:w-auto">
+                            Cancel
+                        </Button>
+                        <Button variant="destructive" onClick={confirmClear} className="w-full sm:w-auto bg-red-600 hover:bg-red-700">
+                            Yes, Clear All Data
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+}

@@ -1,0 +1,22 @@
+# Netlify Headers
+# Syntax: /path
+#   Header-Name: Header-Value
+
+# Security headers for admin/editor routes
+/editor/*
+  X-Robots-Tag: noindex, nofollow, nosnippet, noarchive
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin/*
+  X-Robots-Tag: noindex, nofollow, nosnippet, noarchive
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/strapi-cms/*
+  X-Robots-Tag: noindex, nofollow, nosnippet, noarchive
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# General security headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block

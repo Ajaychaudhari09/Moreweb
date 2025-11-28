@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import EMICalculator from "../components/EMICalculator";
+
+const title = "EMI Calculator | Home, Car, Personal Loan EMI";
+const description = "Calculate your loan EMI instantly with our free online EMI Calculator. View amortization schedule, payment breakdown, and download reports.";
+---
+
+<Layout title={title} description={description}>
+  <EMICalculator client:load />
+</Layout>

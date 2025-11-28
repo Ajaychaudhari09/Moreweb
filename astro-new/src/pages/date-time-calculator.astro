@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DateTimeCalculator from "../components/DateTimeCalculator";
+
+const title = "Date & Time Calculator | Duration, Add Days, Age";
+const description = "Calculate duration between dates, add or subtract days, find your exact age, and count business days with our free online Date & Time Calculator.";
+---
+
+<Layout title={title} description={description}>
+  <DateTimeCalculator client:load />
+</Layout>

@@ -1,39 +1,28 @@
 [build]
+  base = "astro-new"
+  publish = "dist"
   command = "npm run build"
-  # Updated to a supported build image (older ubuntu-22.04 reaches end-of-support Jan 2026)
-  # See Netlify build images: https://docs.netlify.com/configure-builds/manage-dependencies/#build-image
   image = "ubuntu-24.04"
 
-
-# Redirect all routes to index.html (Next.js handles routing)
+# Handle 404s
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Hide editor in production
-[[redirects]]
-  from = "/editor"
-  to = "/404"
+  to = "/404.html"
   status = 404
 
-[[redirects]]
-  from = "/editor/*"
-  to = "/404"
-  status = 404
-
-# Hide strapi-cms in production
-[[redirects]]
-  from = "/strapi-cms"
-  to = "/404"
-  status = 404
-
+# Hide Strapi CMS (if somehow exposed)
 [[redirects]]
   from = "/strapi-cms/*"
-  to = "/404"
+  to = "/404.html"
   status = 404
 
-# Add security headers
+# Cache Astro assets
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security Headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -41,37 +30,13 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    X-Powered-By = ""
+    X-Powered-By = "MoreFusion"
 
-# Cache static build assets aggressively (immutable)
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/_next/static/media/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/images/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/android-chrome-*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Block crawlers from editor routes
-[[headers]]
-  for = "/editor/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow, nosnippet, noarchive"
-
-# Block crawlers from strapi-cms routes
-[[headers]]
-  for = "/strapi-cms/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow, nosnippet, noarchive"
+# ------------------------------------------------------------------------------
+# OLD LINK REDIRECTS (Add your old Next.js links here)
+# ------------------------------------------------------------------------------
+# Example:
+# [[redirects]]
+#   from = "/old-blog-post"
+#   to = "/blog/new-category/new-slug"
+#   status = 301

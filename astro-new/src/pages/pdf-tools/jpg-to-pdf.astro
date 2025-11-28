@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import JpgToPdf from "../../components/pdf-tools/JpgToPdf";
+
+const title = "JPG to PDF Converter - Free Online Image to PDF";
+const description = "Convert JPG images to PDF in seconds. Easily adjust orientation and margins. Free online image to PDF converter.";
+---
+
+<Layout title={title} description={description}>
+  <JpgToPdf client:load />
+</Layout>

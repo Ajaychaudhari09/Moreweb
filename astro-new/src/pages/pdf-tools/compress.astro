@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CompressPDF from "../../components/pdf-tools/CompressPDF";
+
+const title = "Compress PDF Online - Reduce File Size Free";
+const description = "Reduce file size while optimizing for maximal PDF quality. Free online PDF compressor.";
+---
+
+<Layout title={title} description={description}>
+  <CompressPDF client:load />
+</Layout>

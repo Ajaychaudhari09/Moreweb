@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ContactPage from "../components/ContactPage";
+
+const title = "Contact Us";
+const description = "Get in touch with MoreFusion. We'd love to hear from you about our tools, feedback, or general inquiries.";
+---
+
+<Layout title={title} description={description}>
+  <ContactPage client:load />
+</Layout>

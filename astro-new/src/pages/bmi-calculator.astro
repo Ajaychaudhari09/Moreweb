@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BMICalculator from "../components/BMICalculator";
+
+const title = "BMI Calculator | Free Body Mass Index & Ideal Weight Tool";
+const description = "Free online BMI Calculator to check your Body Mass Index using metric or US units. Includes BMI Prime, Ponderal Index, ideal weight range, FAQ, and downloadable PDF report.";
+---
+
+<Layout title={title} description={description}>
+  <BMICalculator client:load />
+</Layout>

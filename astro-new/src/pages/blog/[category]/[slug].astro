@@ -1,0 +1,165 @@
+---
+import { render } from 'astro:content';
+import Layout from "../../../layouts/Layout.astro";
+import "@/styles/blog.css";
+import AuthorBox from "../../../components/AuthorBox";
+import TOC from "../../../components/TOC";
+import ZoomProvider from "../../../components/ZoomProvider";
+import ReadingProgress from "../../../components/ReadingProgress";
+import SocialShareButtons from "../../../components/SocialShareButtons";
+import AdsterraAd from "../../../components/AdsterraAd";
+import { getAllPosts, getPrevNext } from "../../../lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    params: { category: post.category, slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post._astroEntry);
+const { prev, next } = await getPrevNext(post.category, post.slug);
+
+const canonicalURL = `https://morefusion.in/blog/${post.category}/${post.slug}`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: post.title,
+  description: post.excerpt,
+  image: post.image || `https://morefusion.in/api/og?title=${encodeURIComponent(post.title)}`,
+  datePublished: post.date,
+  dateModified: post.date,
+  author: {
+    "@type": "Person",
+    name: post.author,
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "MoreFusion",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://morefusion.in/android-chrome-192x192.png",
+    },
+  },
+  mainEntityOfPage: canonicalURL,
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Blog",
+      item: "https://morefusion.in/blog",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: post.category,
+      item: `https://morefusion.in/blog/${post.category}`,
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: post.title,
+      item: canonicalURL,
+    },
+  ],
+};
+---
+
+<Layout title={`${post.title} | MoreFusion`} description={post.excerpt} image={post.image}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+
+  <main class="bg-white dark:bg-gray-950">
+    <ReadingProgress client:load />
+    <ZoomProvider client:load />
+
+    <div class="container mx-auto px-4 py-12 max-w-6xl">
+      {/* Post Hero */}
+      <div class={`post-hero mb-8 ${post.category === 'AI' ? 'post-hero-ai' : ''}`}>
+        {post.image && (
+          <img src={post.image} alt={post.title} class="post-hero-image" />
+        )}
+        <div class="post-hero-overlay" />
+        <div class="post-hero-inner">
+          <a href={`/blog?category=${post.category}`} class="tag tag--indigo">
+            {post.category}
+          </a>
+          <h1 class="text-4xl md:text-5xl font-extrabold mt-3 leading-tight">{post.title}</h1>
+          <p class="post-meta mt-3">By {post.author} · {new Date(post.date).toLocaleDateString()} {post.readTime ? `· ${post.readTime} min read` : ''}</p>
+        </div>
+      </div>
+
+      {/* Layout: Content + TOC */}
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+        {/* Main Article */}
+        <article class="min-w-0">
+          <div class="article-content prose prose-lg dark:prose-invert max-w-none">
+            <Content />
+
+            {/* Inline Ad */}
+            <div class="mt-8">
+              <AdsterraAd client:visible />
+            </div>
+          </div>
+
+          {/* Author Box */}
+          <div class="mt-10">
+            <AuthorBox author={post.author} client:visible />
+          </div>
+
+          {/* Prev / Next */}
+          {(prev || next) && (
+            <nav class="mt-12 grid gap-4 border-t pt-6 md:grid-cols-2">
+              {prev && (
+                <a
+                  href={`/blog/${prev.category}/${prev.slug}`}
+                  class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  <div class="text-xs text-gray-500">Previous</div>
+                  <div class="font-semibold">{prev.title}</div>
+                </a>
+              )}
+              {next && (
+                <a
+                  href={`/blog/${next.category}/${next.slug}`}
+                  class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 md:text-right"
+                >
+                  <div class="text-xs text-gray-500">Next</div>
+                  <div class="font-semibold">{next.title}</div>
+                </a>
+              )}
+            </nav>
+          )}
+
+          {/* Share + Back */}
+          <footer class="mt-12">
+            <SocialShareButtons title={post.title} url={canonicalURL} client:visible />
+            <div class="text-center mt-10">
+              <a
+                href="/blog"
+                class="text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                ← Back to Blog
+              </a>
+            </div>
+          </footer>
+        </article>
+
+        {/* TOC Sidebar */}
+        <aside class="hidden lg:block">
+          <div class="sticky top-24 max-h-[70vh] overflow-y-auto border-l pl-4">
+            <TOC client:load />
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</Layout>

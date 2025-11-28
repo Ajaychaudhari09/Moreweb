@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import DietGenerator from "../components/DietGenerator";
+
+const title = "Free Diet Plan Generator | Personalized Meal Plans";
+const description = "Generate a free, personalized diet plan based on your goals, diet type, and calorie needs. Supports Keto, Vegan, Vegetarian, and more.";
+---
+
+<Layout title={title} description={description}>
+  <DietGenerator client:load />
+</Layout>

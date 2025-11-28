@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import BlogClient from "../../components/BlogClient";
+import { getAllPosts } from "../../lib/posts";
+
+const allPosts = await getAllPosts();
+
+const title = "Blog | MoreFusion";
+const description = "Expert insights on AI, coding, productivity, film, drama, lifestyle, and technology. High-quality content for students, professionals, and creators.";
+---
+
+<Layout title={title} description={description}>
+  <BlogClient client:load initialPosts={allPosts} categories={["AI", "coding", "drama", "film", "general", "shopping"]} />
+</Layout>

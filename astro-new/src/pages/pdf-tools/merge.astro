@@ -1,0 +1,11 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import MergePDF from "../../components/pdf-tools/MergePDF";
+
+const title = "Merge PDF Files Online - Free PDF Combiner";
+const description = "Combine multiple PDFs into one unified document. Drag and drop files to reorder them. 100% free and secure client-side merging.";
+---
+
+<Layout title={title} description={description}>
+  <MergePDF client:load />
+</Layout>

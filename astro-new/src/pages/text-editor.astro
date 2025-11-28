@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TextEditor from "../components/TextEditor";
+
+const title = "Online Text Editor | Write, Edit & Export to PDF";
+const description = "Free online text editor. Write, format, and export documents to PDF or TXT. Simple, distraction-free writing environment.";
+---
+
+<Layout title={title} description={description}>
+  <TextEditor client:load />
+</Layout>

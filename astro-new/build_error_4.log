@@ -1,0 +1,155 @@
+
+> astro-new@0.0.1 build
+> astro build
+
+[2m22:15:20[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m22:15:20[22m [34m[content][39m Syncing content
+[2m22:15:20[22m [34m[content][39m Synced content
+[2m22:15:21[22m [34m[types][39m Generated [2m930ms[22m
+[2m22:15:21[22m [34m[build][39m output: [34m"static"[39m
+[2m22:15:21[22m [34m[build][39m mode: [34m"static"[39m
+[2m22:15:21[22m [34m[build][39m directory: [34mC:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\astro-new\dist\[39m
+[2m22:15:21[22m [34m[build][39m Collecting build info...
+[2m22:15:21[22m [34m[build][39m [32mΓ£ô Completed in 1.03s.[39m
+[2m22:15:21[22m [34m[build][39m Building static entrypoints...
+[33m[1m22:15:23[22m [WARN] [vite][39m [33m"matchHostname", "matchPathname", "matchPort" and "matchProtocol" are imported from external module "@astrojs/internal-helpers/remote" but never used in "node_modules/astro/dist/assets/utils/remotePattern.js".[39m
+[2m22:15:23[22m [34m[vite][39m [32mΓ£ô built in 2.84s[39m
+[2m22:15:23[22m [34m[build][39m [32mΓ£ô Completed in 2.92s.[39m
+
+[42m[30m building client (vite) [39m[49m
+[2m22:15:23[22m [34m[vite][39m transforming...
+[2m22:15:33[22m [34m[vite][39m [32mΓ£ô[39m 2321 modules transformed.
+[2m22:15:34[22m [34m[vite][39m rendering chunks...
+[2m22:15:34[22m [34m[vite][39m computing gzip size...
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/AdsterraAd.9ntbyaJe.js                                         [39m[1m[2m  0.28 kB[22m[1m[22m[2m Γöé gzip:   0.23 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/x.eCTe1H-X.js                                                  [39m[1m[2m  0.34 kB[22m[1m[22m[2m Γöé gzip:   0.26 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/search.DAQOP_5b.js                                             [39m[1m[2m  0.35 kB[22m[1m[22m[2m Γöé gzip:   0.28 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/textarea.DtNWYiHn.js                                           [39m[1m[2m  0.55 kB[22m[1m[22m[2m Γöé gzip:   0.35 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/file-text.YREODEgx.js                                          [39m[1m[2m  0.57 kB[22m[1m[22m[2m Γöé gzip:   0.36 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/input.BXKYSrdU.js                                              [39m[1m[2m  0.62 kB[22m[1m[22m[2m Γöé gzip:   0.38 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ReadingProgress.BQTqjGDf.js                                    [39m[1m[2m  0.64 kB[22m[1m[22m[2m Γöé gzip:   0.39 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/jsx-runtime.D_zvdyIk.js                                        [39m[1m[2m  0.73 kB[22m[1m[22m[2m Γöé gzip:   0.46 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/SocialShareButtons.qvwpDa_O.js                                 [39m[1m[2m  0.75 kB[22m[1m[22m[2m Γöé gzip:   0.38 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/TOC.DOYEBn5a.js                                                [39m[1m[2m  0.75 kB[22m[1m[22m[2m Γöé gzip:   0.48 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.CnmfCD20.js                                              [39m[1m[2m  0.79 kB[22m[1m[22m[2m Γöé gzip:   0.44 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/NewsletterForm.DETkdr3u.js                                     [39m[1m[2m  0.82 kB[22m[1m[22m[2m Γöé gzip:   0.52 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/AuthorBox.N0oOzBrV.js                                          [39m[1m[2m  1.01 kB[22m[1m[22m[2m Γöé gzip:   0.51 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/card.B6fgjrHd.js                                               [39m[1m[2m  1.07 kB[22m[1m[22m[2m Γöé gzip:   0.42 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/preload-helper.BlTxHScW.js                                     [39m[1m[2m  1.11 kB[22m[1m[22m[2m Γöé gzip:   0.65 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/createLucideIcon.CkFO_yVp.js                                   [39m[1m[2m  1.86 kB[22m[1m[22m[2m Γöé gzip:   0.80 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/BlogCard.DH5XiPMU.js                                           [39m[1m[2m  1.92 kB[22m[1m[22m[2m Γöé gzip:   0.90 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.DeQxj7Pb.js                                              [39m[1m[2m  2.26 kB[22m[1m[22m[2m Γöé gzip:   1.02 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/CompressPDF.CB2enQ9I.js                                        [39m[1m[2m  2.27 kB[22m[1m[22m[2m Γöé gzip:   1.10 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/JpgToPdf.Bf21D5xY.js                                           [39m[1m[2m  2.35 kB[22m[1m[22m[2m Γöé gzip:   1.19 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.CFFiaw7u.js                                              [39m[1m[2m  2.74 kB[22m[1m[22m[2m Γöé gzip:   1.23 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/BlogClient.Dl0-WuU2.js                                         [39m[1m[2m  3.61 kB[22m[1m[22m[2m Γöé gzip:   1.49 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.QuRZJN5W.js                                              [39m[1m[2m  3.89 kB[22m[1m[22m[2m Γöé gzip:   1.52 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.CIaefWuU.js                                              [39m[1m[2m  4.39 kB[22m[1m[22m[2m Γöé gzip:   1.97 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/TextEditor.BkP6bcOk.js                                         [39m[1m[2m  4.79 kB[22m[1m[22m[2m Γöé gzip:   1.86 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/MergePDF.Bv2sVztp.js                                           [39m[1m[2m  4.79 kB[22m[1m[22m[2m Γöé gzip:   1.79 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ContactPage.UfEdA08H.js                                        [39m[1m[2m  4.93 kB[22m[1m[22m[2m Γöé gzip:   1.72 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/button.0Gl3pGn8.js                                             [39m[1m[2m  5.23 kB[22m[1m[22m[2m Γöé gzip:   2.34 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/SplitPDF.Bec-wJ7f.js                                           [39m[1m[2m  5.39 kB[22m[1m[22m[2m Γöé gzip:   2.37 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/Header.DtYgkoJo.js                                             [39m[1m[2m  5.63 kB[22m[1m[22m[2m Γöé gzip:   2.10 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/accordion.xbMFh4eF.js                                          [39m[1m[2m  7.24 kB[22m[1m[22m[2m Γöé gzip:   2.75 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.CMt9tOoS.js                                              [39m[1m[2m  8.49 kB[22m[1m[22m[2m Γöé gzip:   3.33 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ExerciseGenerator.CXspTwbK.js                                  [39m[1m[2m  8.67 kB[22m[1m[22m[2m Γöé gzip:   2.95 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ZoomProvider.Dq5MpqsF.js                                       [39m[1m[2m  9.66 kB[22m[1m[22m[2m Γöé gzip:   3.19 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/DietGenerator.D75CZIKH.js                                      [39m[1m[2m  9.88 kB[22m[1m[22m[2m Γöé gzip:   3.27 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ToolsPageClient.D4qAHsnm.js                                    [39m[1m[2m 10.12 kB[22m[1m[22m[2m Γöé gzip:   3.36 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/DateTimeCalculator.Lmk9DCGs.js                                 [39m[1m[2m 11.29 kB[22m[1m[22m[2m Γöé gzip:   2.85 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/CalorieCalculator.BZYfGjY4.js                                  [39m[1m[2m 13.32 kB[22m[1m[22m[2m Γöé gzip:   3.38 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ClientRouter.astro_astro_type_script_index_0_lang.QW52Ox2j.js  [39m[1m[2m 15.33 kB[22m[1m[22m[2m Γöé gzip:   5.27 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/EMICalculator.D-QFibgY.js                                      [39m[1m[2m 21.30 kB[22m[1m[22m[2m Γöé gzip:   7.28 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/purify.es.B6FQ9oRL.js                                          [39m[1m[2m 22.57 kB[22m[1m[22m[2m Γöé gzip:   8.74 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/BMICalculator.KTAYivIZ.js                                      [39m[1m[2m 24.16 kB[22m[1m[22m[2m Γöé gzip:   6.92 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.DQN0B1N2.js                                              [39m[1m[2m 26.95 kB[22m[1m[22m[2m Γöé gzip:   9.47 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/ResumeMaker.Dt-OXj_8.js                                        [39m[1m[2m 77.06 kB[22m[1m[22m[2m Γöé gzip:  23.78 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/index.es.2mN6Xzq3.js                                           [39m[1m[2m159.43 kB[22m[1m[22m[2m Γöé gzip:  53.45 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/client.DiIOncUX.js                                             [39m[1m[2m182.74 kB[22m[1m[22m[2m Γöé gzip:  57.61 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/html2canvas.esm.B0tyYwQk.js                                    [39m[1m[2m202.36 kB[22m[1m[22m[2m Γöé gzip:  48.04 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/jspdf.es.min.Cj9PJD8w.js                                       [39m[1m[2m387.77 kB[22m[1m[22m[2m Γöé gzip: 127.27 kB[22m
+[2m22:15:34[22m [34m[vite][39m [2mdist/[22m[36m_astro/PDFButton.Zqd27zzy.js                                          [39m[1m[33m527.39 kB[39m[22m[2m Γöé gzip: 210.28 kB[22m
+[33m[1m22:15:34[22m [WARN] [vite][39m [33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[2m22:15:34[22m [34m[vite][39m [32mΓ£ô built in 10.82s[39m
+
+[42m[30m generating static routes [39m[49m
+[2m22:15:35[22m [32mΓû╢[39m src/pages/404.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/404.html[22m [2m(+56ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/about.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/about/index.html[22m [2m(+20ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/blog/[category]/[slug].astro
+Strapi connection failed or no data found. Using local content only.
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/AI/10-new-ai-image-and-video-tools-late-2025-honest-reviews-you-can-trust/index.html[22m [2m(+21ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/AI/20-powerful-ai-tools-you-should-be-using-right-now/index.html[22m [2m(+9ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/AI/ai-can-see-your-future-health-problems-before-doctors-1/index.html[22m [2m(+18ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/shopping/amazon-great-indian-festival-2025/index.html[22m [2m(+19ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/general/7-game-changing-strategies-that-actually-work-in-2025/index.html[22m [2m(+15ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/blog/AI/react-19-nextjs-15-what-actually-changed/index.html[22m [2m(+13ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/blog/[category]/index.astro
+Strapi connection failed or no data found. Using local content only.
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/AI/index.html[22m [2m(+36ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓö£ΓöÇ[39m [2m/blog/shopping/index.html[22m [2m(+13ms)[22m 
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/blog/general/index.html[22m [2m(+12ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/blog/index.astro
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/blog/index.html[22m [2m(+34ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/bmi-calculator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/bmi-calculator/index.html[22m [2m(+15ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/calorie-calculator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/calorie-calculator/index.html[22m [2m(+8ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/contact.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/contact/index.html[22m [2m(+6ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/date-time-calculator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/date-time-calculator/index.html[22m [2m(+7ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/diet-generator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/diet-generator/index.html[22m [2m(+7ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/docs.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/docs/index.html[22m [2m(+6ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/emi-calculator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/emi-calculator/index.html[22m [2m(+14ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/exercise-generator.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/exercise-generator/index.html[22m [2m(+9ms)[22m 
+[2m22:15:35[22m [32mΓû╢[39m src/pages/faq.astro
+[2m22:15:35[22m   [34mΓööΓöÇ[39m [2m/faq/index.html[22m [2m(+7ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/pdf-tools/compress.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/pdf-tools/compress/index.html[22m [2m(+10ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/pdf-tools/jpg-to-pdf.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/pdf-tools/jpg-to-pdf/index.html[22m [2m(+9ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/pdf-tools/merge.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/pdf-tools/merge/index.html[22m [2m(+10ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/pdf-tools/split.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/pdf-tools/split/index.html[22m [2m(+8ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/pdf-tools/index.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/pdf-tools/index.html[22m [2m(+23ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/privacy.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/privacy/index.html[22m [2m(+8ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/resume-maker.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/resume-maker/index.html[22m [2m(+12ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/terms.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/terms/index.html[22m [2m(+8ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/text-editor.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/text-editor/index.html[22m [2m(+7ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/tools/index.astro
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/tools/index.html[22m [2m(+8ms)[22m 
+[2m22:15:36[22m [32mΓû╢[39m src/pages/index.astro
+Strapi connection failed or no data found. Using local content only.
+[2m22:15:36[22m   [34mΓööΓöÇ[39m [2m/index.html[22m [2m(+18ms)[22m 
+[2m22:15:36[22m [32mΓ£ô Completed in 1.77s.
+[39m
+[2m22:15:36[22m [34m[@astrojs/sitemap][39m `sitemap-index.xml` created at `dist`
+[2m22:15:36[22m [34m[build][39m 32 page(s) built in [1m16.65s[22m
+[2m22:15:36[22m [34m[build][39m [1mComplete![22m

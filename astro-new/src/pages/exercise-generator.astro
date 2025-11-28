@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ExerciseGenerator from "../components/ExerciseGenerator";
+
+const title = "Free Workout Generator | Custom Exercise Plans";
+const description = "Generate a free, personalized workout plan based on your fitness level, equipment, and time. ACSM-aligned exercises for home or gym.";
+---
+
+<Layout title={title} description={description}>
+  <ExerciseGenerator client:load />
+</Layout>
