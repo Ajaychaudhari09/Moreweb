@@ -511,10 +511,8 @@ export default async function HomePage() {
                   ›
                 </span>
               </summary>
-              <p className="mt-3 text-sm text-muted-foreground">
-                You can calculate BMI and EMI, build resumes, plan your day, and understand new AI
-                tools with clear explainers. Our goal is to give you “ready-to-use” utilities and
-                mental models, not just news.
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                MoreFusion is your all-in-one productivity hub. You can calculate your Body Mass Index (BMI) to track health goals, plan your finances with our EMI calculator, and create professional, ATS-friendly resumes in minutes. Beyond tools, we provide clear, jargon-free explainers on the latest AI tools and coding concepts, helping you stay ahead in the tech world without getting overwhelmed.
               </p>
             </details>
 
@@ -525,9 +523,8 @@ export default async function HomePage() {
                   ›
                 </span>
               </summary>
-              <p className="mt-3 text-sm text-muted-foreground">
-                No. You can use tools and read articles without creating an account. If we add
-                premium features in the future, they will be clearly marked as optional.
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                No, absolutely not. We believe in removing barriers to productivity. You can use all our calculators, the resume builder, and read every article without creating an account or paying a cent. We are committed to keeping our core utilities free and accessible to everyone, from students to professionals.
               </p>
             </details>
 
@@ -538,9 +535,20 @@ export default async function HomePage() {
                   ›
                 </span>
               </summary>
-              <p className="mt-3 text-sm text-muted-foreground">
-                New posts and tools are added based on what users actually need — AI tools worth
-                using, buying guides, and practical “how to get this done” content.
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                We update MoreFusion weekly. Our team constantly researches the latest AI tools, software updates, and productivity techniques to bring you fresh, relevant content. Whether it's a review of a new AI image generator or a guide on optimizing your coding workflow, you can expect regular updates that provide real value.
+              </p>
+            </details>
+
+            <details className="group rounded-lg border border-border bg-card p-4">
+              <summary className="flex cursor-pointer list-none items-center justify-between text-sm font-medium text-foreground">
+                Can I suggest a tool or topic?
+                <span className="ml-4 text-xl leading-none text-muted-foreground group-open:rotate-90 transition-transform">
+                  ›
+                </span>
+              </summary>
+              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                Yes! We build for our community. If there is a specific calculator you need, an AI tool you want reviewed, or a tech concept you find confusing, let us know via our contact page. We prioritize building tools and writing guides that solve actual problems for our users.
               </p>
             </details>
           </div>

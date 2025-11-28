@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | MoreFusion",
   },
   description:
-    "Discover free AI tools, calculators, and in-depth tech guides to boost your workflow. Automate tasks, build resumes, and make smarter decisions with MoreFusion.",
+    "Discover free AI tools, calculators, and in-depth tech guides to boost your workflow. Automate tasks, build resumes, and make smarter decisions with MoreFusion today.",
   keywords: [
     "productivity tools",
     "BMI calculator",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://morefusion.in",
     title: "MoreFusion — Free AI Tools, Calculators & Tech Blog",
-    description: "Free productivity tools and tech insights to boost your workflow. Automate tasks and learn modern tech.",
+    description: "Discover free AI tools, calculators, and in-depth tech guides to boost your workflow. Automate tasks, build resumes, and make smarter decisions with MoreFusion today.",
     siteName: "MoreFusion",
     images: [
       {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "MoreFusion — Free AI Tools, Calculators & Tech Blog",
-    description: "Free productivity tools and tech insights to boost your workflow. Automate tasks and learn modern tech.",
+    description: "Discover free AI tools, calculators, and in-depth tech guides to boost your workflow. Automate tasks, build resumes, and make smarter decisions with MoreFusion today.",
     images: ["/android-chrome-512x512.png"],
   },
   icons: {
