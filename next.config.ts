@@ -54,7 +54,12 @@ const nextConfig: NextConfig = {
 
   // ✅ Performance optimizations for Turbopack
   experimental: {
-    optimizePackageImports: ["lucide-react", "@uiw/react-md-editor"],
+    optimizePackageImports: [
+      "lucide-react",
+      "@uiw/react-md-editor",
+      "@phosphor-icons/react",
+      "@radix-ui/react-icons",
+    ],
   },
 
   // ✅ Safe image config

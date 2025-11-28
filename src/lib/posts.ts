@@ -110,12 +110,14 @@ function readPost(fullPath: string): BlogPost {
  ✅ PUBLIC FUNCTIONS
 ---------------------------------------------------------- */
 
+import { cache } from 'react';
+
 // ✅ ALL POSTS (sorted by date)
-export function getAllPosts(): BlogPost[] {
+export const getAllPosts = cache(() => {
   return getMarkdownFiles(BLOG_ROOT)
     .map((file) => readPost(file))
     .sort((a, b) => (a.date < b.date ? 1 : -1));
-}
+});
 
 // ✅ RECENT POSTS
 export function getLatestPosts(limit = 6): BlogPost[] {

@@ -1,0 +1,18 @@
+# MoreFusion
+
+> Free AI tools, calculators, and tech guides to boost your workflow.
+
+## Tools
+- [BMI Calculator](/bmi-calculator): Calculate Body Mass Index.
+- [Resume Maker](/resume-maker): Build ATS-friendly resumes.
+- [EMI Calculator](/emi-calculator): Calculate loan EMIs.
+- [PDF Tools](/tools/pdf-tools): Merge, split, compress, and convert PDFs.
+- [Image Tools](/tools/image-tools): Convert and optimize images.
+
+## Blog
+- Tech guides, AI tool reviews, and productivity tips.
+- [Latest Posts](/blog)
+
+## Contact
+- Email: newsletter@morefusion.in
+- [Contact Page](/contact)

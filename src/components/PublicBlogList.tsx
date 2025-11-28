@@ -63,8 +63,7 @@ export function PublicBlogList({ posts, categories }: { posts: BlogPost[]; categ
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <div
-              className="flex items-center gap-2 input"
-              style={{ padding: 0 }}
+              className="flex items-center gap-2 input p-0"
             >
               <Search className="w-4 h-4 text-muted ml-3" />
               <input
@@ -106,48 +105,48 @@ export function PublicBlogList({ posts, categories }: { posts: BlogPost[]; categ
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <Link key={post.id} href={`/blog/${post.category}/${post.slug}`} className="block">
-              <article className="card transition hover-lift h-full">
-
-                <h2 className="text-xl font-bold mb-3 hover:text-primary transition">
+            <article key={post.id} className="card transition hover-lift h-full relative group">
+              <h2 className="text-xl font-bold mb-3 hover:text-primary transition">
+                <Link href={`/blog/${post.category}/${post.slug}`} className="after:absolute after:inset-0 focus:outline-none">
+                  <span className="absolute inset-0" aria-hidden="true" />
                   {post.title}
-                </h2>
+                </Link>
+              </h2>
 
-                <p className="text-muted mb-4 text-sm line-clamp-3">
-                  {post.excerpt ||
-                    truncateContent(post.content.replace(/[#*`]/g, ""), 120)}
-                </p>
+              <p className="text-muted mb-4 text-sm line-clamp-3">
+                {post.excerpt ||
+                  truncateContent(post.content.replace(/[#*`]/g, ""), 120)}
+              </p>
 
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className="badge">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2 mb-4 relative z-10">
+                {post.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="badge">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
 
-                <div className="flex items-center justify-between text-xs text-muted mt-auto pt-4 border-t">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1">
-                      <User className="w-3 h-3" />
-                      {post.author}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {post.readTime}
-                    </span>
-                  </div>
+              <div className="flex items-center justify-between text-xs text-muted mt-auto pt-4 border-t">
+                <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    {new Date(post.date).toLocaleDateString()}
+                    <User className="w-3 h-3" />
+                    {post.author}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {post.readTime}
                   </span>
                 </div>
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {new Date(post.date).toLocaleDateString()}
+                </span>
+              </div>
 
-                <div className="flex items-center gap-2 text-primary font-medium mt-3 text-sm">
-                  Read Article <ArrowRight className="w-3 h-3" />
-                </div>
-              </article>
-            </Link>
+              <div className="flex items-center gap-2 text-primary font-medium mt-3 text-sm">
+                Read Article <ArrowRight className="w-3 h-3" />
+              </div>
+            </article>
           ))}
         </div>
       )}
