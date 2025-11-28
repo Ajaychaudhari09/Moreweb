@@ -65,6 +65,9 @@ const nextConfig: NextConfig = {
 
   // ✅ Standard extensions
   pageExtensions: ["js", "jsx", "ts", "tsx"],
+
+  // ✅ Security: Disable X-Powered-By header
+  poweredByHeader: false,
 };
 
 export default nextConfig;

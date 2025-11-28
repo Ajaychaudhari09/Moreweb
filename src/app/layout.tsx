@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | MoreFusion",
   },
   description:
-    "Free AI tools, calculators, resume builder, and practical tech guides to boost your workflow. MoreFusion helps you automate tasks, learn modern tech, and create polished resumes quickly.",
+    "Free AI tools, calculators, and tech guides to boost your workflow. Automate tasks and learn modern tech.",
   keywords: [
     "productivity tools",
     "BMI calculator",

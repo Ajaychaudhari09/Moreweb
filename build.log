@@ -1,0 +1,41 @@
+
+> morefusion@0.1.0 build
+> next build --turbopack
+
+   Γû▓ Next.js 16.0.3 (Turbopack)
+   - Experiments (use with caution):
+     ┬╖ optimizePackageImports
+
+   Creating an optimized production build ...
+Error: Cannot apply unknown utility class `border-border`
+    [at onInvalidCandidate (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:21:1511)]
+    [at Te (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:16:36337)]
+    [at C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:21:355]
+    [at Tr (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:3:1718)]
+    [at _ (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:3:1377)]
+    [at Se (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:21:172)]
+    [at ln (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:38:294)]
+    [at async sn (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\tailwindcss\dist\lib.js:38:631)]
+    [at async Zr (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\@tailwindcss\node\dist\index.js:10:3385)]
+    [at async I (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\@tailwindcss\postcss\dist\index.js:10:3978)]
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/globals.css
+Error evaluating Node.js code
+CssSyntaxError: tailwindcss: C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\src\app\globals.css:1:1: Cannot apply unknown utility class `border-border`
+    at Input.error (node_modules/postcss/lib/input.js:135:16) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\node_modules_fe693df6._.js:4651:22]
+    at Root.error (node_modules/postcss/lib/node.js:146:32) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\node_modules_fe693df6._.js:928:38]
+    [at Object.Once (C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\node_modules\@tailwindcss\postcss\dist\index.js:10:6912)]
+    at async LazyResult.runAsync (node_modules/postcss/lib/lazy-result.js:293:11) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\node_modules_fe693df6._.js:6206:21]
+    at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\[root-of-the-server]__6d51cb5d._.js:172:36]
+    at async run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:23) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\[root-of-the-server]__44695d76._.js:443:31]
+
+Import trace:
+  Client Component Browser:
+    ./src/app/globals.css [Client Component Browser]
+    ./src/app/layout.tsx [Server Component]
+
+
+    at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\[root-of-the-server]__6d51cb5d._.js:172:36])
+    at async run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:23) [C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\morefusion\.next\build\chunks\[root-of-the-server]__44695d76._.js:443:31])

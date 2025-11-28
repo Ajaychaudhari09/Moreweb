@@ -83,10 +83,9 @@ export default function ToolsPageClient({ allTools }: { allTools: any[] }) {
               setCurrentPage(1);
             }}
             className={`px-4 py-2 text-sm rounded-full transition border
-              ${
-                cat === selectedCategory
-                  ? "bg-indigo-600 text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+              ${cat === selectedCategory
+                ? "bg-indigo-600 text-white shadow-md"
+                : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
               }`}
           >
             {cat}
@@ -95,7 +94,7 @@ export default function ToolsPageClient({ allTools }: { allTools: any[] }) {
       </nav>
 
       {/* TOOLS GRID */}
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 mb-12">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mb-12">
         {paginatedTools.length ? (
           paginatedTools.map((tool) => <ToolCard key={tool.id} tool={tool} />)
         ) : (

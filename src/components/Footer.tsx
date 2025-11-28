@@ -30,7 +30,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="GitHub"
             >
-              <GitHubLogoIcon  className="text-gray-500 hover:text-gray-900 dark:hover:text-white" />
+              <GitHubLogoIcon className="text-gray-500 hover:text-gray-900 dark:hover:text-white" />
             </a>
             <a
               href="https://linkedin.com"
@@ -38,7 +38,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               aria-label="LinkedIn"
             >
-              <LinkedInLogoIcon  className="text-gray-500 hover:text-blue-600" />
+              <LinkedInLogoIcon className="text-gray-500 hover:text-blue-600" />
             </a>
             <a
               href="https://instagram.com"
@@ -59,24 +59,27 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav aria-label="Main links">
-          <h3 className="text-sm font-semibold mb-3">Navigation</h3>
+        {/* Product */}
+        <nav aria-label="Product">
+          <h3 className="text-sm font-semibold mb-3">Product</h3>
           <ul className="space-y-2 text-sm">
-            <li><Link href="/tools" className="hover:text-foreground">Tools</Link></li>
-            <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
-            <li><Link href="/about" className="hover:text-foreground">About</Link></li>
-            <li><Link href="/" className="hover:text-foreground">Home</Link></li>
+            <li><Link href="/tools" className="hover:text-foreground">All Tools</Link></li>
+            <li><Link href="/docs" className="hover:text-foreground">Documentation</Link></li>
+            <li><Link href="/resume-maker" className="hover:text-foreground">Resume Maker</Link></li>
           </ul>
         </nav>
 
-        {/* Popular Tools */}
-        <nav aria-label="Popular tools">
-          <h3 className="text-sm font-semibold mb-3">Popular Tools</h3>
+        {/* Company */}
+        <nav aria-label="Company">
+          <h3 className="text-sm font-semibold mb-3">Company</h3>
           <ul className="space-y-2 text-sm">
-            <li><Link href="/bmi-calculator" className="hover:text-foreground">BMI Calculator</Link></li>
-            <li><Link href="/resume-maker" className="hover:text-foreground">Resume Maker</Link></li>
-            <li><Link href="/emi-calculator" className="hover:text-foreground">EMI Calculator</Link></li>
+            <li><Link href="/about" className="hover:text-foreground">About Us</Link></li>
+            <li><Link href="/blog" className="hover:text-foreground">Blog</Link></li>
+            <li>
+              <Link href="/contact" className="hover:text-foreground">
+                Contact
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -84,22 +87,9 @@ export default function Footer() {
         <nav aria-label="Support">
           <h3 className="text-sm font-semibold mb-3">Support</h3>
           <ul className="space-y-2 text-sm">
-            <li>
-              <a
-                href="mailto:newsletter@morefusion.in"
-                className="hover:text-foreground"
-              >
-                Contact
-              </a>
-            </li>
-            <li>
-              <Link
-                href="/blog?category=general"
-                className="hover:text-foreground"
-              >
-                Help & FAQ
-              </Link>
-            </li>
+            <li><Link href="/faq" className="hover:text-foreground">Help & FAQ</Link></li>
+            <li><Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link></li>
+            <li><Link href="/terms" className="hover:text-foreground">Terms of Service</Link></li>
           </ul>
         </nav>
       </div>

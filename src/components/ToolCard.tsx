@@ -1,6 +1,9 @@
 import Link from 'next/link';
-import { Scale, Calculator, Dumbbell, CreditCard, FileText, Edit, Calendar, Utensils, Sparkles } from 'lucide-react';
+import { Scale, Calculator, Dumbbell, CreditCard, FileText, Edit, Calendar, Utensils, Sparkles, ArrowRight } from 'lucide-react';
 import type { Tool } from '@/types';
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface ToolCardProps {
   tool: Tool;
@@ -34,38 +37,32 @@ export default function ToolCard({ tool }: ToolCardProps) {
   const gradient = toolGradients[tool.id as keyof typeof toolGradients] || 'from-pink-500 to-purple-600';
 
   return (
-    <Link href={tool.href} className="block h-full">
-      <article className="card group cursor-pointer h-full flex flex-col">
-        <div className="flex-1 flex flex-col items-center text-center">
-                <div className={`card-icon mb-6 bg-linear-to-br ${gradient} group-hover:scale-105 transition-transform duration-300`}>
-                  <Icon className="h-8 w-8 text-white" />
+    <Link href={tool.href} className="block h-full group">
+      <Card className="h-full flex flex-col border-border hover:shadow-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+        <CardHeader className="flex flex-col items-center pt-8 pb-2">
+          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br ${gradient} shadow-md group-hover:scale-105 transition-transform duration-300 mb-4`}>
+            <Icon className="h-8 w-8 text-white" />
           </div>
-
-          <h3 className="card-title mb-2 group-hover:gradient-text transition-colors duration-200">
+          <h3 className="text-xl font-bold text-center group-hover:text-primary transition-colors">
             {tool.name}
           </h3>
-
-          <p className="card-desc text-sm mb-4 px-2">
+        </CardHeader>
+        <CardContent className="flex-1 text-center px-6">
+          <p className="text-muted-foreground text-sm leading-relaxed">
             {tool.description}
           </p>
-        </div>
-
-        <div className="mt-auto flex flex-col items-center">
-            <div className="card-cta">
-              <button className="btn-primary focus-ring">
-                <Sparkles className="h-4 w-4" />
-                <span className="font-semibold">Try Now</span>
-              </button>
-            </div>
-
-          <div className="mt-4">
-            <span className="tag tag--indigo">
-              <span className="w-2 h-2 rounded-full bg-green-400 mr-2 inline-block"></span>
-              Free Tool
-            </span>
-          </div>
-        </div>
-      </article>
+        </CardContent>
+        <CardFooter className="flex flex-col items-center pb-6 gap-4">
+          <Button className="w-full max-w-[140px] gap-2 group-hover:bg-primary/90 text-white">
+            <Sparkles className="h-4 w-4" />
+            Try Now
+          </Button>
+          <Badge variant="secondary" className="bg-green-50 text-green-700 hover:bg-green-100 border-green-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-2 inline-block animate-pulse"></span>
+            Free Tool
+          </Badge>
+        </CardFooter>
+      </Card>
     </Link>
   );
 }

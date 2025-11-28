@@ -24,13 +24,26 @@ export const metadata: Metadata = {
 };
 
 const allTools = [
+  // Health
   { id: "bmi-calculator", name: "BMI Calculator", description: "Calculate BMI with detailed health insights.", icon: "⚖️", href: "/bmi-calculator", category: "Health" },
   { id: "calorie-calculator", name: "Calorie Calculator", description: "Daily calorie needs based on your activity and goal.", icon: "🔥", href: "/calorie-calculator", category: "Health" },
-  { id: "emi-calculator", name: "EMI Calculator", description: "Easy loan EMI breakdown with amortization.", icon: "🏦", href: "/emi-calculator", category: "Finance" },
-  { id: "resume-maker", name: "Resume Maker", description: "Create ATS-friendly professional resumes in minutes.", icon: "📄", href: "/resume-maker", category: "Career" },
-  { id: "text-editor", name: "Text Editor", description: "Smart writing editor with export options.", icon: "✍️", href: "/text-editor", category: "Productivity" },
   { id: "diet-generator", name: "Diet Generator", description: "Personalized meal plans for nutrition goals.", icon: "🥗", href: "/diet-generator", category: "Health" },
   { id: "exercise-generator", name: "Exercise Generator", description: "Create tailored workout routines.", icon: "💪", href: "/exercise-generator", category: "Health" },
+
+  // Finance
+  { id: "emi-calculator", name: "EMI Calculator", description: "Easy loan EMI breakdown with amortization.", icon: "🏦", href: "/emi-calculator", category: "Finance" },
+
+  // Career
+  { id: "resume-maker", name: "Resume Maker", description: "Create ATS-friendly professional resumes in minutes.", icon: "📄", href: "/resume-maker", category: "Career" },
+
+  // Productivity
+  { id: "text-editor", name: "Text Editor", description: "Smart writing editor with export options.", icon: "✍️", href: "/text-editor", category: "Productivity" },
+
+  // PDF Tools (Separated)
+  { id: "merge-pdf", name: "Merge PDF", description: "Combine multiple PDFs into one document.", icon: "📑", href: "/pdf-tools/merge", category: "PDF Tools" },
+  { id: "split-pdf", name: "Split PDF", description: "Extract specific pages from a PDF.", icon: "✂️", href: "/pdf-tools/split", category: "PDF Tools" },
+  { id: "compress-pdf", name: "Compress PDF", description: "Reduce PDF file size without losing quality.", icon: "🗜️", href: "/pdf-tools/compress", category: "PDF Tools" },
+  { id: "jpg-to-pdf", name: "JPG to PDF", description: "Convert images to PDF format instantly.", icon: "🖼️", href: "/pdf-tools/jpg-to-pdf", category: "PDF Tools" },
 ];
 
 export default function ToolsPage() {
@@ -55,7 +68,7 @@ export default function ToolsPage() {
   };
 
   return (
-    <main className="min-h-screen py-12 bg-linear-to-b from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <main className="min-h-screen py-20 bg-background transition-colors duration-300">
 
       {/* JSON-LD Structured Data */}
       <Script
@@ -72,14 +85,16 @@ export default function ToolsPage() {
       />
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-center mb-4">
-          Smart Productivity Tools
-        </h1>
-        <p className="text-center text-slate-700 dark:text-slate-300 mb-10 max-w-2xl mx-auto">
-          Access free tools for health, finance, career, and productivity. 
-          Optimized for speed, accuracy, and mobile use.
-        </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 text-foreground">
+            <span className="text-gradient">Smart Productivity Tools</span>
+          </h1>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            Access free, professional-grade tools for health, finance, career, and PDF management.
+            No sign-up required.
+          </p>
+        </div>
 
         {/* Client Component List Rendering */}
         <ToolsPageClient allTools={allTools} />
