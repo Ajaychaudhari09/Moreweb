@@ -209,22 +209,6 @@
     background: transparent;
     border: 1px solid rgba(79, 70, 229, 0.12);
     color: var(--color-primary);
-    padding: 0.5rem 0.9rem;
-    border-radius: 0.5rem;
-}
-
-/* ---------------- Global layout helpers ---------------- */
-.container-max {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-/* Responsive hero (Figma-like) */
-.site-hero {
-    background: linear-gradient(180deg, rgba(79, 70, 229, 0.06) 0%, rgba(236, 72, 153, 0.03) 100%);
     padding: 4rem 0;
     display: grid;
     grid-template-columns: 1fr;
@@ -692,29 +676,6 @@ html {
 .prose h2,
 .prose h3 {
     scroll-margin-top: 96px;
-    /* adjust if your header height differs */
-}
-
-/* ---------------- Adsterra Ad Container ---------------- */
-.adsterra-ad {
-    max-width: 728px;
-    /* standard leaderboard */
-    width: 100%;
-    margin: 1.5rem auto;
-    display: block;
-}
-
-/* Responsive sizes */
-@media (max-width: 640px) {
-    .adsterra-ad {
-        max-width: 320px;
-    }
-}
-
-@media (min-width: 641px) and (max-width: 1024px) {
-    .adsterra-ad {
-        max-width: 468px;
-    }
 }
 
 /* Consent banner small adjustments */

@@ -8,4 +8,79 @@ const description = "Calculate duration between dates, add or subtract days, fin
 
 <Layout title={title} description={description}>
   <DateTimeCalculator client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>What Can You Do with a Date & Time Calculator?</h2>
+      <p>
+        Time is complex. Our <strong>Date & Time Calculator</strong> simplifies it by handling the math for you. Whether you're planning a project, calculating your exact age, or figuring out how many days are left until a deadline, this tool provides instant accuracy.
+      </p>
+
+      <h2>Common Use Cases</h2>
+      <div class="grid sm:grid-cols-2 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Project Planning</h3>
+          <p class="text-sm text-gray-600">Calculate the exact end date of a project by adding business days to a start date, excluding weekends.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Age Calculation</h3>
+          <p class="text-sm text-gray-600">Find out exactly how many years, months, and days you've been alive—down to the second.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Event Countdowns</h3>
+          <p class="text-sm text-gray-600">Know exactly how many days are left until a wedding, vacation, or retirement.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Time Difference</h3>
+          <p class="text-sm text-gray-600">Calculate the duration between two specific dates to track tenure, subscriptions, or historical events.</p>
+        </div>
+      </div>
+
+      <h2>Understanding Time Concepts</h2>
+      <ul>
+        <li><strong>Leap Years:</strong> Every 4 years (mostly), an extra day (Feb 29) is added to keep our calendar in sync with the Earth's orbit.</li>
+        <li><strong>Business Days:</strong> Typically Monday through Friday, excluding public holidays. Essential for shipping and corporate deadlines.</li>
+        <li><strong>Time Zones:</strong> The world is divided into 24 time zones. Calculating duration across zones requires converting to UTC first.</li>
+      </ul>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Does this calculator account for leap years?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes, our calculator automatically detects leap years and adjusts the day count for February accordingly.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>How are months calculated?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Since months vary in length (28-31 days), we calculate the difference based on calendar months. For example, Jan 15 to Feb 15 is exactly 1 month.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Can I calculate working days only?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes, use the "Business Days" mode to exclude weekends from your calculation. This is perfect for project management.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

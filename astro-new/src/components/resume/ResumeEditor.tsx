@@ -2,16 +2,18 @@ import type { ResumeData, PersonalInfo, Experience, Education, Project, Certific
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Plus, Trash2, User, Briefcase, GraduationCap, FolderGit2, Award, Wrench } from "lucide-react";
+
+export type EditorSection = 'personal' | 'experience' | 'education' | 'projects' | 'certifications' | 'skills';
 
 interface ResumeEditorProps {
     data: ResumeData;
     setData: (data: ResumeData) => void;
+    activeSection: EditorSection;
 }
 
-export function ResumeEditor({ data, setData }: ResumeEditorProps) {
+export function ResumeEditor({ data, setData, activeSection }: ResumeEditorProps) {
 
     const updatePersonalInfo = (field: keyof PersonalInfo, value: string) => {
         setData({ ...data, personalInfo: { ...data.personalInfo, [field]: value } });
@@ -107,168 +109,270 @@ export function ResumeEditor({ data, setData }: ResumeEditorProps) {
     };
 
     return (
-        <div className="space-y-6 h-full overflow-y-auto pr-2 no-scrollbar pb-32 p-6">
+        <div className="h-full overflow-y-auto pr-2 no-scrollbar pb-32 p-4 sm:p-6">
             {/* Personal Info */}
-            <Card className="border-none shadow-sm bg-slate-50/50 dark:bg-slate-900/50">
-                <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-xl text-slate-800 dark:text-slate-100">
-                        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
-                            <User className="h-5 w-5" />
-                        </div>
-                        Personal Information
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Full Name" value={data.personalInfo.name} onChange={(e) => updatePersonalInfo('name', e.target.value)} />
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Email" value={data.personalInfo.email} onChange={(e) => updatePersonalInfo('email', e.target.value)} />
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Phone" value={data.personalInfo.phone} onChange={(e) => updatePersonalInfo('phone', e.target.value)} />
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Location" value={data.personalInfo.location} onChange={(e) => updatePersonalInfo('location', e.target.value)} />
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="LinkedIn (Optional)" value={data.personalInfo.linkedin} onChange={(e) => updatePersonalInfo('linkedin', e.target.value)} />
-                        <Input className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Website (Optional)" value={data.personalInfo.website} onChange={(e) => updatePersonalInfo('website', e.target.value)} />
+            {activeSection === 'personal' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <User className="h-6 w-6 text-blue-600" />
+                            Personal Details
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">Start with the basics. How can employers contact you?</p>
                     </div>
-                    <Textarea className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500 min-h-[100px]" placeholder="Professional Summary" value={data.personalInfo.summary} onChange={(e) => updatePersonalInfo('summary', e.target.value)} />
-                </CardContent>
-            </Card>
 
-            <Accordion type="single" collapsible className="w-full space-y-4">
-                {/* Experience */}
-                <AccordionItem value="experience" className="border-none rounded-xl bg-white dark:bg-slate-900 shadow-sm px-2">
-                    <AccordionTrigger className="hover:no-underline px-4 py-4">
-                        <span className="flex items-center gap-3 text-lg font-semibold text-slate-800 dark:text-slate-100">
-                            <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-orange-600 dark:text-orange-400">
-                                <Briefcase className="h-5 w-5" />
+                    <div className="grid grid-cols-1 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</label>
+                            <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="e.g. John Doe" value={data.personalInfo.name} onChange={(e) => updatePersonalInfo('name', e.target.value)} />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Email</label>
+                                <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="e.g. john@example.com" value={data.personalInfo.email} onChange={(e) => updatePersonalInfo('email', e.target.value)} />
                             </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Phone</label>
+                                <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="e.g. +1 234 567 890" value={data.personalInfo.phone} onChange={(e) => updatePersonalInfo('phone', e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Location</label>
+                            <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="e.g. New York, USA" value={data.personalInfo.location} onChange={(e) => updatePersonalInfo('location', e.target.value)} />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">LinkedIn</label>
+                                <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="linkedin.com/in/johndoe" value={data.personalInfo.linkedin} onChange={(e) => updatePersonalInfo('linkedin', e.target.value)} />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Website</label>
+                                <Input className="h-12 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="johndoe.com" value={data.personalInfo.website} onChange={(e) => updatePersonalInfo('website', e.target.value)} />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Professional Summary</label>
+                            <Textarea className="min-h-[120px] bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500" placeholder="Briefly describe your professional background and key achievements..." value={data.personalInfo.summary} onChange={(e) => updatePersonalInfo('summary', e.target.value)} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Experience */}
+            {activeSection === 'experience' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <Briefcase className="h-6 w-6 text-orange-600" />
                             Experience
-                        </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4 space-y-6">
-                        {data.experiences.map((exp) => (
-                            <div key={exp.id} className="space-y-4 p-5 border border-slate-100 dark:border-slate-800 rounded-xl relative bg-slate-50/50 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-colors">
-                                <Button variant="ghost" size="icon" className="absolute top-3 right-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeExperience(exp.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-8">
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Company" value={exp.company} onChange={(e) => updateExperience(exp.id, 'company', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Position" value={exp.position} onChange={(e) => updateExperience(exp.id, 'position', e.target.value)} />
-                                </div>
-                                <Input className="bg-white dark:bg-slate-900" placeholder="Duration (e.g., Jan 2020 - Present)" value={exp.duration} onChange={(e) => updateExperience(exp.id, 'duration', e.target.value)} />
-                                <Textarea className="bg-white dark:bg-slate-900 min-h-[100px]" placeholder="Description (Achievements, responsibilities...)" value={exp.description} onChange={(e) => updateExperience(exp.id, 'description', e.target.value)} />
-                            </div>
-                        ))}
-                        <Button onClick={addExperience} variant="outline" className="w-full border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-12 rounded-xl">
-                            <Plus className="h-4 w-4" /> Add Experience
-                        </Button>
-                    </AccordionContent>
-                </AccordionItem>
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">Add your relevant work experience, starting with the most recent.</p>
+                    </div>
 
-                {/* Education */}
-                <AccordionItem value="education" className="border-none rounded-xl bg-white dark:bg-slate-900 shadow-sm px-2">
-                    <AccordionTrigger className="hover:no-underline px-4 py-4">
-                        <span className="flex items-center gap-3 text-lg font-semibold text-slate-800 dark:text-slate-100">
-                            <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
-                                <GraduationCap className="h-5 w-5" />
-                            </div>
+                    <div className="space-y-4">
+                        {data.experiences.map((exp, index) => (
+                            <Card key={exp.id} className="border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                <CardHeader className="bg-slate-50 dark:bg-slate-900/50 py-3 px-4 flex flex-row items-center justify-between space-y-0">
+                                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">Position #{index + 1}</CardTitle>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeExperience(exp.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </CardHeader>
+                                <CardContent className="p-4 space-y-4 bg-white dark:bg-slate-950">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Company</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Google" value={exp.company} onChange={(e) => updateExperience(exp.id, 'company', e.target.value)} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Position</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Senior Developer" value={exp.position} onChange={(e) => updateExperience(exp.id, 'position', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-500 uppercase">Duration</label>
+                                        <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Jan 2020 - Present" value={exp.duration} onChange={(e) => updateExperience(exp.id, 'duration', e.target.value)} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-500 uppercase">Description</label>
+                                        <Textarea className="min-h-[100px] bg-white dark:bg-slate-900" placeholder="Describe your key responsibilities and achievements..." value={exp.description} onChange={(e) => updateExperience(exp.id, 'description', e.target.value)} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+
+                        <Button onClick={addExperience} variant="outline" className="w-full border-dashed border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-14 rounded-xl text-slate-500">
+                            <Plus className="h-5 w-5" /> Add Another Position
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Education */}
+            {activeSection === 'education' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <GraduationCap className="h-6 w-6 text-green-600" />
                             Education
-                        </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4 space-y-6">
-                        {data.education.map((edu) => (
-                            <div key={edu.id} className="space-y-4 p-5 border border-slate-100 dark:border-slate-800 rounded-xl relative bg-slate-50/50 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-colors">
-                                <Button variant="ghost" size="icon" className="absolute top-3 right-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeEducation(edu.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pr-8">
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="School/University" value={edu.school} onChange={(e) => updateEducation(edu.id, 'school', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Degree" value={edu.degree} onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Year" value={edu.year} onChange={(e) => updateEducation(edu.id, 'year', e.target.value)} />
-                                </div>
-                            </div>
-                        ))}
-                        <Button onClick={addEducation} variant="outline" className="w-full border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-12 rounded-xl">
-                            <Plus className="h-4 w-4" /> Add Education
-                        </Button>
-                    </AccordionContent>
-                </AccordionItem>
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">List your educational background.</p>
+                    </div>
 
-                {/* Projects */}
-                <AccordionItem value="projects" className="border-none rounded-xl bg-white dark:bg-slate-900 shadow-sm px-2">
-                    <AccordionTrigger className="hover:no-underline px-4 py-4">
-                        <span className="flex items-center gap-3 text-lg font-semibold text-slate-800 dark:text-slate-100">
-                            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-purple-600 dark:text-purple-400">
-                                <FolderGit2 className="h-5 w-5" />
-                            </div>
+                    <div className="space-y-4">
+                        {data.education.map((edu, index) => (
+                            <Card key={edu.id} className="border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                <CardHeader className="bg-slate-50 dark:bg-slate-900/50 py-3 px-4 flex flex-row items-center justify-between space-y-0">
+                                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">School #{index + 1}</CardTitle>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeEducation(edu.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </CardHeader>
+                                <CardContent className="p-4 space-y-4 bg-white dark:bg-slate-950">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-500 uppercase">School / University</label>
+                                        <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Harvard University" value={edu.school} onChange={(e) => updateEducation(edu.id, 'school', e.target.value)} />
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Degree</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Bachelor of Science" value={edu.degree} onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Year</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. 2018 - 2022" value={edu.year} onChange={(e) => updateEducation(edu.id, 'year', e.target.value)} />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+
+                        <Button onClick={addEducation} variant="outline" className="w-full border-dashed border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-14 rounded-xl text-slate-500">
+                            <Plus className="h-5 w-5" /> Add Education
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Projects */}
+            {activeSection === 'projects' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <FolderGit2 className="h-6 w-6 text-purple-600" />
                             Projects
-                        </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4 space-y-6">
-                        {data.projects.map((proj) => (
-                            <div key={proj.id} className="space-y-4 p-5 border border-slate-100 dark:border-slate-800 rounded-xl relative bg-slate-50/50 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-colors">
-                                <Button variant="ghost" size="icon" className="absolute top-3 right-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeProject(proj.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pr-8">
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Project Name" value={proj.name} onChange={(e) => updateProject(proj.id, 'name', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Link (Optional)" value={proj.link} onChange={(e) => updateProject(proj.id, 'link', e.target.value)} />
-                                </div>
-                                <Textarea className="bg-white dark:bg-slate-900 min-h-[80px]" placeholder="Description" value={proj.description} onChange={(e) => updateProject(proj.id, 'description', e.target.value)} />
-                            </div>
-                        ))}
-                        <Button onClick={addProject} variant="outline" className="w-full border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-12 rounded-xl">
-                            <Plus className="h-4 w-4" /> Add Project
-                        </Button>
-                    </AccordionContent>
-                </AccordionItem>
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">Showcase your best work and side projects.</p>
+                    </div>
 
-                {/* Certifications */}
-                <AccordionItem value="certifications" className="border-none rounded-xl bg-white dark:bg-slate-900 shadow-sm px-2">
-                    <AccordionTrigger className="hover:no-underline px-4 py-4">
-                        <span className="flex items-center gap-3 text-lg font-semibold text-slate-800 dark:text-slate-100">
-                            <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg text-yellow-600 dark:text-yellow-400">
-                                <Award className="h-5 w-5" />
-                            </div>
+                    <div className="space-y-4">
+                        {data.projects.map((proj, index) => (
+                            <Card key={proj.id} className="border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                <CardHeader className="bg-slate-50 dark:bg-slate-900/50 py-3 px-4 flex flex-row items-center justify-between space-y-0">
+                                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">Project #{index + 1}</CardTitle>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeProject(proj.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </CardHeader>
+                                <CardContent className="p-4 space-y-4 bg-white dark:bg-slate-950">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Project Name</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. E-commerce App" value={proj.name} onChange={(e) => updateProject(proj.id, 'name', e.target.value)} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Link (Optional)</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. github.com/project" value={proj.link} onChange={(e) => updateProject(proj.id, 'link', e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-500 uppercase">Description</label>
+                                        <Textarea className="min-h-[80px] bg-white dark:bg-slate-900" placeholder="What did you build? What technologies did you use?" value={proj.description} onChange={(e) => updateProject(proj.id, 'description', e.target.value)} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+
+                        <Button onClick={addProject} variant="outline" className="w-full border-dashed border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-14 rounded-xl text-slate-500">
+                            <Plus className="h-5 w-5" /> Add Project
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Certifications */}
+            {activeSection === 'certifications' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <Award className="h-6 w-6 text-yellow-600" />
                             Certifications
-                        </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4 space-y-6">
-                        {data.certifications.map((cert) => (
-                            <div key={cert.id} className="space-y-4 p-5 border border-slate-100 dark:border-slate-800 rounded-xl relative bg-slate-50/50 dark:bg-slate-950/50 hover:border-slate-200 dark:hover:border-slate-700 transition-colors">
-                                <Button variant="ghost" size="icon" className="absolute top-3 right-3 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeCertification(cert.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pr-8">
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Certification Name" value={cert.name} onChange={(e) => updateCertification(cert.id, 'name', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Issuer" value={cert.issuer} onChange={(e) => updateCertification(cert.id, 'issuer', e.target.value)} />
-                                    <Input className="bg-white dark:bg-slate-900" placeholder="Year" value={cert.year} onChange={(e) => updateCertification(cert.id, 'year', e.target.value)} />
-                                </div>
-                            </div>
-                        ))}
-                        <Button onClick={addCertification} variant="outline" className="w-full border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-12 rounded-xl">
-                            <Plus className="h-4 w-4" /> Add Certification
-                        </Button>
-                    </AccordionContent>
-                </AccordionItem>
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">Add any relevant certifications or awards.</p>
+                    </div>
 
-                {/* Skills */}
-                <AccordionItem value="skills" className="border-none rounded-xl bg-white dark:bg-slate-900 shadow-sm px-2">
-                    <AccordionTrigger className="hover:no-underline px-4 py-4">
-                        <span className="flex items-center gap-3 text-lg font-semibold text-slate-800 dark:text-slate-100">
-                            <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-gray-600 dark:text-gray-400">
-                                <Wrench className="h-5 w-5" />
-                            </div>
+                    <div className="space-y-4">
+                        {data.certifications.map((cert, index) => (
+                            <Card key={cert.id} className="border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                                <CardHeader className="bg-slate-50 dark:bg-slate-900/50 py-3 px-4 flex flex-row items-center justify-between space-y-0">
+                                    <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">Certification #{index + 1}</CardTitle>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={() => removeCertification(cert.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </CardHeader>
+                                <CardContent className="p-4 space-y-4 bg-white dark:bg-slate-950">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-slate-500 uppercase">Name</label>
+                                        <Input className="bg-white dark:bg-slate-900" placeholder="e.g. AWS Certified Solutions Architect" value={cert.name} onChange={(e) => updateCertification(cert.id, 'name', e.target.value)} />
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Issuer</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. Amazon Web Services" value={cert.issuer} onChange={(e) => updateCertification(cert.id, 'issuer', e.target.value)} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-medium text-slate-500 uppercase">Year</label>
+                                            <Input className="bg-white dark:bg-slate-900" placeholder="e.g. 2023" value={cert.year} onChange={(e) => updateCertification(cert.id, 'year', e.target.value)} />
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+
+                        <Button onClick={addCertification} variant="outline" className="w-full border-dashed border-2 border-slate-300 dark:border-slate-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 gap-2 h-14 rounded-xl text-slate-500">
+                            <Plus className="h-5 w-5" /> Add Certification
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Skills */}
+            {activeSection === 'skills' && (
+                <div className="space-y-6 animate-fade-in">
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <Wrench className="h-6 w-6 text-gray-600" />
                             Skills
-                        </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4">
+                        </h2>
+                        <p className="text-slate-500 dark:text-slate-400">List your technical and soft skills.</p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Skills List</label>
                         <Textarea
-                            placeholder="List your skills (e.g., JavaScript, React, Project Management...)"
+                            placeholder="e.g. JavaScript, React, Node.js, Project Management, Communication..."
                             value={data.skills}
                             onChange={(e) => setData({ ...data, skills: e.target.value })}
-                            className="min-h-[120px] bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500"
+                            className="min-h-[200px] bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus-visible:ring-blue-500 text-base"
                         />
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+                        <p className="text-xs text-slate-500">Tip: Separate skills with commas or new lines.</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

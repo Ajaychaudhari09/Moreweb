@@ -16,6 +16,7 @@ const allTools = [
   { id: "resume-maker", name: "Resume Maker", description: "Create ATS-friendly professional resumes in minutes.", icon: "📄", href: "/resume-maker", category: "Career" },
 
   // Productivity
+  { id: "date-time-calculator", name: "Date & Time Calculator", description: "Calculate duration, add days, and find your exact age.", icon: "📅", href: "/date-time-calculator", category: "Productivity" },
   { id: "text-editor", name: "Text Editor", description: "Smart writing editor with export options.", icon: "✍️", href: "/text-editor", category: "Productivity" },
 
   // PDF Tools (Separated)
@@ -66,6 +67,11 @@ const breadcrumbLd = {
       </div>
 
       <ToolsPageClient client:load allTools={allTools} />
+
+      {/* AD CONTAINER - Bottom of Tools Page */}
+      <div class="w-full flex justify-center mt-12">
+        <div id="container-08f243939922b6d9aa749c7eb572ab12"></div>
+      </div>
     </div>
   </main>
 </Layout>

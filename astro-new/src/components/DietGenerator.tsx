@@ -271,7 +271,7 @@ export default function DietGenerator() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
             <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-10">
                 <div className="max-w-4xl mx-auto px-4 py-5">
                     <h1 className="text-3xl font-extrabold tracking-tight">Diet Generator</h1>

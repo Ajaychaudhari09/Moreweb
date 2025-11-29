@@ -8,4 +8,64 @@ const description = "Separate one page or a whole set for easy conversion into i
 
 <Layout title={title} description={description}>
   <SplitPDF client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>Extract Pages from Your PDF</h2>
+      <p>
+        Have a large PDF document but only need a few specific pages? Our <strong>Split PDF Tool</strong> lets you extract pages instantly. Whether you need to separate a single invoice from a batch or pull out a specific chapter, we've got you covered.
+      </p>
+
+      <h2>How to Split a PDF</h2>
+      <ol>
+        <li><strong>Upload:</strong> Select the PDF file you want to split.</li>
+        <li><strong>Select Pages:</strong> Choose the specific page numbers or ranges (e.g., 1-5, 8, 10) you want to extract.</li>
+        <li><strong>Split:</strong> Click the "Split PDF" button.</li>
+        <li><strong>Download:</strong> Get your new PDF containing only the selected pages.</li>
+      </ol>
+
+      <h2>Why Use Our PDF Splitter?</h2>
+      <div class="grid sm:grid-cols-3 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-green-700 mb-2">Precise Extraction</h3>
+          <p class="text-sm text-gray-600">Extract exactly what you need—single pages, ranges, or a mix of both.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-green-700 mb-2">No Quality Loss</h3>
+          <p class="text-sm text-gray-600">The extracted pages retain their original formatting, resolution, and quality.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-green-700 mb-2">Instant & Free</h3>
+          <p class="text-sm text-gray-600">No waiting, no watermarks, and no hidden fees. Just upload and split.</p>
+        </div>
+      </div>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Can I extract pages from multiple files at once?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Currently, the tool processes one file at a time to ensure accuracy. You can upload a new file immediately after finishing the first one.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Will the original file be affected?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            No. Your original file remains untouched on your device. We create a new PDF file containing only the pages you selected.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

@@ -8,4 +8,61 @@ const description = "Reduce file size while optimizing for maximal PDF quality. 
 
 <Layout title={title} description={description}>
   <CompressPDF client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>Why Compress PDF Files?</h2>
+      <p>
+        Large PDF files can be a hassle. They take longer to upload, clutter your inbox, and may even be rejected by email servers or job application portals. Our <strong>PDF Compressor</strong> solves this by reducing the file size without compromising readability.
+      </p>
+
+      <h2>How It Works</h2>
+      <p>
+        We use advanced compression algorithms to remove unnecessary metadata and optimize images within the PDF. This results in a significantly smaller file size while maintaining the visual quality of your document.
+      </p>
+
+      <h2>Benefits of Using Our Tool</h2>
+      <div class="grid sm:grid-cols-3 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-red-700 mb-2">Fast & Free</h3>
+          <p class="text-sm text-gray-600">Compress documents in seconds without paying a cent or creating an account.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-red-700 mb-2">Secure</h3>
+          <p class="text-sm text-gray-600">Your files are processed locally in your browser (where supported) or securely on our servers and deleted automatically.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-red-700 mb-2">High Quality</h3>
+          <p class="text-sm text-gray-600">We balance size reduction with quality, ensuring your text remains sharp and images clear.</p>
+        </div>
+      </div>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>How much can I reduce the file size?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            It depends on the content. Text-heavy PDFs compress less than image-heavy ones. You can often see reductions of 50% to 90%.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Is it safe to upload sensitive documents?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes. We prioritize privacy. Files are processed securely and are not stored permanently on our servers.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

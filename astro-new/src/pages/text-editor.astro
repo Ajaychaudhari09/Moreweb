@@ -8,4 +8,76 @@ const description = "Free online text editor. Write, format, and export document
 
 <Layout title={title} description={description}>
   <TextEditor client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>Why Use a Distraction-Free Text Editor?</h2>
+      <p>
+        In a world of constant notifications, focus is a superpower. Our <strong>Online Text Editor</strong> provides a clean, minimalist interface that helps you get into the "flow state." Whether you're drafting a blog post, taking quick notes, or writing code snippets, simplicity is key.
+      </p>
+
+      <h2>Key Features</h2>
+      <div class="grid sm:grid-cols-3 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Auto-Save</h3>
+          <p class="text-sm text-gray-600">Never lose your work. Your text is automatically saved to your browser's local storage as you type.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Export Options</h3>
+          <p class="text-sm text-gray-600">Download your work instantly as a <strong>PDF</strong> for sharing or a <strong>TXT</strong> file for safekeeping.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-gray-800 mb-2">Privacy First</h3>
+          <p class="text-sm text-gray-600">Your text never leaves your browser. We don't store or read your data on our servers.</p>
+        </div>
+      </div>
+
+      <h2>Best Use Cases</h2>
+      <ul>
+        <li><strong>Drafting Emails:</strong> Write important emails without the risk of accidentally hitting "Send" too early.</li>
+        <li><strong>Journaling:</strong> A private space to clear your mind without clutter.</li>
+        <li><strong>Code Snippets:</strong> Quickly format and clean up code before pasting it into your IDE.</li>
+        <li><strong>Meeting Notes:</strong> Capture thoughts rapidly without worrying about formatting.</li>
+      </ul>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Is my writing private?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes, 100%. Everything you type stays in your browser. We do not have a database, so we cannot see, store, or share your text.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Will I lose my text if I close the tab?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            No. We use LocalStorage to save your text automatically. When you reopen the page, your text will be right where you left it (unless you clear your browser cache).
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Does it support Markdown?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Currently, it is a rich text editor. You can use keyboard shortcuts like Ctrl+B for bold and Ctrl+I for italics, but it does not render Markdown syntax live.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

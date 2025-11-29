@@ -8,4 +8,63 @@ const description = "Convert JPG images to PDF in seconds. Easily adjust orienta
 
 <Layout title={title} description={description}>
   <JpgToPdf client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>Convert Images to PDF Instantly</h2>
+      <p>
+        Need to turn a photo into a document? Our <strong>JPG to PDF Converter</strong> makes it simple. Whether it's a scanned receipt, an ID card, or a collection of photos, you can combine them into a single, professional PDF file in seconds.
+      </p>
+
+      <h2>Why Convert JPG to PDF?</h2>
+      <ul>
+        <li><strong>Professionalism:</strong> Sending a PDF looks more professional than attaching multiple image files.</li>
+        <li><strong>Compatibility:</strong> PDFs can be opened on any device without formatting issues.</li>
+        <li><strong>Organization:</strong> Combine multiple related images (like pages of a contract) into one file.</li>
+      </ul>
+
+      <h2>Features</h2>
+      <div class="grid sm:grid-cols-3 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-orange-700 mb-2">Drag & Drop</h3>
+          <p class="text-sm text-gray-600">Simply drag your images onto the page to start. We support JPG, PNG, and other common formats.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-orange-700 mb-2">Custom Layouts</h3>
+          <p class="text-sm text-gray-600">Choose between portrait or landscape orientation and adjust margins to fit your needs.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-orange-700 mb-2">No Limits</h3>
+          <p class="text-sm text-gray-600">Convert as many images as you want. There are no daily limits or hidden paywalls.</p>
+        </div>
+      </div>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Can I convert multiple images at once?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes! You can upload multiple images, and our tool will merge them into a single multi-page PDF document.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Does it support PNG files?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Yes, we support JPG, JPEG, PNG, and even BMP formats.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

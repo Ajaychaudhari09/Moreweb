@@ -100,40 +100,45 @@
 }
 
 /* ---------------- Tables ---------------- */
+/* Wrap tables in a div if possible, but since this is markdown, we style the table to scroll */
 .article-content table {
+    display: block;
     width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
     margin: 2rem 0;
     border: 1px solid #e5e7eb;
     border-radius: 0.5rem;
+    white-space: nowrap;
+    /* Prevents awkward wrapping in tight columns */
 }
 
 .article-content th {
     background-color: #f3f4f6;
     /* slate-100 */
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     font-weight: 600;
     text-align: left;
+    border-bottom: 2px solid #e5e7eb;
 }
 
 .article-content td {
     border-top: 1px solid #e5e7eb;
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
+    min-width: 120px;
+    /* Ensures columns don't get too squashed */
 }
 
-/* ---------------- Images ---------------- */
-.article-content img {
+/* ---------------- Images & Media ---------------- */
+.article-content img,
+.article-content video,
+.article-content iframe {
     margin: 2rem auto;
     border-radius: 0.75rem;
     display: block;
-    cursor: zoom-in;
     max-width: 100%;
-}
-
-/* ---------------- Horizontal Rule ---------------- */
-.article-content hr {
-    margin: 3rem 0;
-    border-top: 1px solid #e5e7eb;
+    height: auto;
 }
 
 /* ---------------- Links ---------------- */

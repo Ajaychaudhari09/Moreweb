@@ -25,9 +25,19 @@ const initialData: ResumeData = {
     skills: ""
 };
 
+const SECTIONS = [
+    { id: 'personal', label: 'Personal' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'education', label: 'Education' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'certifications', label: 'Certifications' },
+    { id: 'skills', label: 'Skills' }
+] as const;
+
 export default function ResumeBuilder() {
     const [data, setData] = useState<ResumeData>(initialData);
     const [theme, setTheme] = useState<Theme>("modern");
+    const [activeSection, setActiveSection] = useState<typeof SECTIONS[number]['id']>('personal');
     const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
     const printRef = useRef<HTMLDivElement>(null);
 
@@ -108,8 +118,42 @@ export default function ResumeBuilder() {
             <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
                 {/* Editor Panel */}
                 <div className="w-full lg:w-[45%] border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden flex flex-col z-0">
-                    <div className="flex-1 overflow-hidden relative">
-                        <ResumeEditor data={data} setData={setData} />
+                    <div className="flex-1 overflow-hidden relative flex flex-col">
+                        <ResumeEditor data={data} setData={setData} activeSection={activeSection} />
+
+                        {/* Navigation Footer */}
+                        <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex justify-between items-center">
+                            <Button
+                                variant="outline"
+                                onClick={() => {
+                                    const currentIndex = SECTIONS.findIndex(s => s.id === activeSection);
+                                    if (currentIndex > 0) setActiveSection(SECTIONS[currentIndex - 1].id);
+                                }}
+                                disabled={activeSection === 'personal'}
+                            >
+                                Back
+                            </Button>
+
+                            <div className="flex gap-1">
+                                {SECTIONS.map((s) => (
+                                    <div
+                                        key={s.id}
+                                        className={`h-2 w-2 rounded-full transition-colors ${activeSection === s.id ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
+                                    />
+                                ))}
+                            </div>
+
+                            <Button
+                                onClick={() => {
+                                    const currentIndex = SECTIONS.findIndex(s => s.id === activeSection);
+                                    if (currentIndex < SECTIONS.length - 1) setActiveSection(SECTIONS[currentIndex + 1].id);
+                                }}
+                                disabled={activeSection === 'skills'}
+                                className="bg-blue-600 hover:bg-blue-700 text-white"
+                            >
+                                Next
+                            </Button>
+                        </div>
                     </div>
                 </div>
 

@@ -33,8 +33,11 @@ export default function BlogCard({ post, layout = "grid" }: ExtendedBlogCardProp
       {post.image ? (
         <div className={`relative block overflow-hidden card-thumb ${isList ? "w-1/3 aspect-video" : "aspect-video"}`}>
           <img
-            src={post.image}
+            src={post.image.includes('images.unsplash.com') ? `${post.image}?w=600&q=80&auto=format&fit=crop` : post.image}
             alt={post.title}
+            width="600"
+            height="338"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
           />

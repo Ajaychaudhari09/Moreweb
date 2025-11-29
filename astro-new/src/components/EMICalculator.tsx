@@ -285,13 +285,7 @@ export default function EMICalculator() {
                 </div>
             </header>
 
-            {/* Sticky mobile actions */}
-            <div className="md:hidden fixed bottom-0 inset-x-0 z-20 bg-white/90 backdrop-blur border-t px-4 py-2 flex gap-3">
-                <Button className="flex-1" onClick={calculate}>Calculate</Button>
-                <Button className="flex-1" variant="outline" onClick={reset}>Reset</Button>
-            </div>
-
-            <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8 pb-24 md:pb-8 space-y-8">
+            <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8 space-y-8">
                 {/* Inputs */}
                 <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
                     <h2 className="text-lg sm:text-xl font-semibold mb-4">Enter Loan Details</h2>
@@ -361,8 +355,10 @@ export default function EMICalculator() {
                             <Button variant="outline" onClick={() => { setPstr('3000000'); setRstr('8.25'); setYstr('20'); }}>
                                 Home Loan
                             </Button>
-                            <Button className="ml-auto hidden md:inline-flex" onClick={calculate}>Calculate</Button>
-                            <Button variant="outline" className="hidden md:inline-flex" onClick={reset}>Reset</Button>
+                            <div className="w-full sm:w-auto flex gap-2 sm:ml-auto pt-4 sm:pt-0">
+                                <Button className="flex-1 sm:flex-none" onClick={calculate}>Calculate</Button>
+                                <Button variant="outline" className="flex-1 sm:flex-none" onClick={reset}>Reset</Button>
+                            </div>
                         </div>
                     </div>
 

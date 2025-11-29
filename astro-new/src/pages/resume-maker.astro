@@ -8,4 +8,82 @@ const description = "Create a professional, ATS-optimized resume in minutes with
 
 <Layout title={title} description={description}>
   <ResumeMaker client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>Why Use an Online Resume Maker?</h2>
+      <p>
+        A professional resume is your ticket to an interview. Our <strong>Resume Maker</strong> helps you build a clean, structured, and <strong>ATS-friendly</strong> resume in minutes. Instead of struggling with Word formatting, you can focus on writing impactful content while we handle the design.
+      </p>
+
+      <h2>What is an ATS-Friendly Resume?</h2>
+      <p>
+        <strong>ATS (Applicant Tracking Systems)</strong> are software used by employers to scan and rank resumes before a human ever reads them. To pass the ATS, your resume needs:
+      </p>
+      <ul>
+        <li><strong>Clean Formatting:</strong> No complex columns, graphics, or tables that confuse the parser.</li>
+        <li><strong>Standard Headings:</strong> Use standard terms like "Experience," "Education," and "Skills."</li>
+        <li><strong>Keywords:</strong> Include relevant skills and terms found in the job description.</li>
+      </ul>
+
+      <h2>Tips for Writing a Winning Resume</h2>
+      <div class="grid sm:grid-cols-2 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Use Action Verbs</h3>
+          <p class="text-sm text-gray-600">Start bullet points with strong verbs like "Led," "Developed," "Increased," or "Optimized" instead of "Responsible for."</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Quantify Results</h3>
+          <p class="text-sm text-gray-600">Numbers speak louder than words. Instead of "Improved sales," say "Increased sales by 20% in Q3."</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Tailor Content</h3>
+          <p class="text-sm text-gray-600">Customize your summary and skills section for each job application to match the specific requirements.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-indigo-700 mb-2">Keep it Concise</h3>
+          <p class="text-sm text-gray-600">Aim for 1 page if you have less than 10 years of experience. Recruiters spend only seconds scanning each resume.</p>
+        </div>
+      </div>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Should I include a photo on my resume?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            In the US, UK, and Canada, it is generally recommended <strong>not</strong> to include a photo to avoid bias. However, in some European and Asian countries, it may be expected.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>How do I handle employment gaps?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            Be honest. You can list the gap with a brief explanation like "Professional Development," "Caregiving," or "Travel." Focus on any skills learned during that time.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Which file format is best?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            <strong>PDF</strong> is the best format as it preserves formatting across all devices. Only use Word (.docx) if the employer explicitly requests it.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>

@@ -13,7 +13,7 @@ interface Props {
 
 const { 
   title, 
-  description = "MoreFusion - Free Online Productivity Tools & Resources",
+  description = "MoreFusion offers free online productivity tools including BMI Calculator, EMI Calculator, Resume Maker, and more. Boost your efficiency with our simple, fast, and privacy-focused utilities and tech guides.",
   image = "/android-chrome-192x192.png"
 } = Astro.props;
 ---
@@ -24,10 +24,34 @@ const {
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <ClientRouter />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MEASUREMENT_ID');
+    </script>
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -40,10 +64,13 @@ const {
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={image} />
+
+    <!-- Ads -->
+    <script async="async" data-cfasync="false" src="//pl28064811.effectivegatecpm.com/08f243939922b6d9aa749c7eb572ab12/invoke.js"></script>
   </head>
-  <body class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
+  <body class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden">
     <Header client:load pathname={Astro.url.pathname} />
-    <main class="flex-1 w-full animate-fade-in">
+    <main class="flex-1 w-full animate-fade-in container-responsive py-8">
       <slot />
     </main>
     <Footer />

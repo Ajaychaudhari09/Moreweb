@@ -8,4 +8,78 @@ const description = "Estimate your daily calorie needs for weight maintenance, l
 
 <Layout title={title} description={description}>
   <CalorieCalculator client:load />
+
+  <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
+    <article class="prose prose-slate lg:prose-lg mx-auto">
+      <h2>How Does the Calorie Calculator Work?</h2>
+      <p>
+        Our calculator uses the <strong>Mifflin-St Jeor equation</strong>, widely considered one of the most accurate formulas for estimating calorie needs. It calculates your <strong>Basal Metabolic Rate (BMR)</strong>—the calories your body burns at rest—and multiplies it by an activity factor to find your <strong>Total Daily Energy Expenditure (TDEE)</strong>.
+      </p>
+
+      <h2>Understanding BMR vs. TDEE</h2>
+      <div class="grid sm:grid-cols-2 gap-6 my-8 not-prose">
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-orange-600 mb-2">BMR (Basal Metabolic Rate)</h3>
+          <p class="text-sm text-gray-600">The energy required for essential functions like breathing, circulation, and cell production while you are completely at rest.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl border shadow-sm">
+          <h3 class="text-lg font-bold text-orange-600 mb-2">TDEE (Total Daily Energy Expenditure)</h3>
+          <p class="text-sm text-gray-600">Your BMR plus the calories burned through daily movement, exercise, and the digestion of food.</p>
+        </div>
+      </div>
+
+      <h2>Calorie Goals Explained</h2>
+      <ul>
+        <li><strong>Maintenance:</strong> Eating at your TDEE. Your weight remains stable.</li>
+        <li><strong>Deficit (Weight Loss):</strong> Eating 300-500 calories <em>below</em> your TDEE. This typically results in 0.5kg - 1kg of weight loss per week.</li>
+        <li><strong>Surplus (Weight Gain):</strong> Eating 300-500 calories <em>above</em> your TDEE. Essential for building significant muscle mass.</li>
+      </ul>
+
+      <h2>Tips for Accurate Tracking</h2>
+      <ol>
+        <li><strong>Use a Food Scale:</strong> Measuring cups can be inaccurate. Weighing food in grams is the gold standard.</li>
+        <li><strong>Track Everything:</strong> Don't forget cooking oils, sauces, and liquid calories (drinks), which add up quickly.</li>
+        <li><strong>Be Consistent:</strong> Tracking for one day won't tell you much. Look at weekly averages to gauge progress.</li>
+      </ol>
+
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="not-prose space-y-4">
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Is 1200 calories enough?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            For most adults, 1200 calories is too low and can lead to nutrient deficiencies and metabolic adaptation. It's usually better to aim for a moderate deficit.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Does meal timing matter?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            For weight loss, total daily calories matter more than when you eat them. However, eating protein throughout the day helps maintain muscle mass.
+          </div>
+        </details>
+
+        <details class="group bg-white border rounded-lg p-4 cursor-pointer">
+          <summary class="font-semibold list-none flex justify-between items-center">
+            <span>Why am I not losing weight in a deficit?</span>
+            <span class="transition group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </span>
+          </summary>
+          <div class="mt-2 text-gray-600">
+            You might be underestimating your intake (hidden calories) or overestimating your activity level. Water retention and stress can also mask fat loss on the scale.
+          </div>
+        </details>
+      </div>
+    </article>
+  </section>
 </Layout>
