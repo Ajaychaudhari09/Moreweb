@@ -189,7 +189,7 @@ export default function ExerciseGenerator() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
             <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-10">
                 <div className="max-w-4xl mx-auto px-4 py-5">
                     <h1 className="text-3xl font-extrabold tracking-tight">Exercise Generator</h1>
@@ -288,7 +288,7 @@ export default function ExerciseGenerator() {
                             <h3 className="font-medium text-blue-600 mb-2">Main Workout</h3>
                             <div className="space-y-3">
                                 {workout.exercises.map((ex, i) => (
-                                    <div key={`e${i}`} className="p-3 rounded border bg-gradient-to-br from-slate-50 to-white">
+                                    <div key={`e${i}`} className="p-3 rounded border bg-linear-to-br from-slate-50 to-white">
                                         <div className="flex items-start justify-between">
                                             <h4 className="font-semibold">{ex.name}</h4>
                                             <span className="text-sm text-blue-600">{ex.reps}</span>
