@@ -58,6 +58,7 @@ export interface BlogPost {
   /** Optional fields for future features */
   updatedAt?: string; // ISO
   series?: string;
+  _astroEntry?: any;
 }
 
 /**

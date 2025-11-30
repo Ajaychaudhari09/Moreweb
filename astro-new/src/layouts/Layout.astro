@@ -45,9 +45,9 @@ const {
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"></script>
-    <script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(...args) { window.dataLayer.push(args); }
       gtag('js', new Date());
 
       gtag('config', 'G-MEASUREMENT_ID');

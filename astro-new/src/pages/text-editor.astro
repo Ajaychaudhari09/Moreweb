@@ -1,13 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import TextEditor from "../components/TextEditor";
+import TextEditorComponent from "../components/TextEditor";
 
 const title = "Online Text Editor | Write, Edit & Export to PDF";
 const description = "Free online text editor. Write, format, and export documents to PDF or TXT. Simple, distraction-free writing environment.";
 ---
 
 <Layout title={title} description={description}>
-  <TextEditor client:load />
+  <TextEditorComponent client:load />
 
   <section class="max-w-4xl mx-auto px-4 py-12 space-y-12 text-gray-700">
     <article class="prose prose-slate lg:prose-lg mx-auto">
