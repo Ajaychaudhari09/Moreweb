@@ -1,11 +1,7 @@
 // src/components/Footer.tsx
 import {
   Github,
-  Linkedin,
-  Instagram,
-  Facebook,
-  Youtube,
-  Twitter
+  Mail
 } from "lucide-react";
 
 export default function Footer() {
@@ -25,52 +21,18 @@ export default function Footer() {
           {/* Social Icons */}
           <div className="flex items-center gap-4 mt-4">
             <a
-              href="https://x.com/morefusion"
+              href="https://github.com/morefusion"
               target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X (Twitter)"
-            >
-              <Twitter className="w-5 h-5 text-slate-400 hover:text-white" />
-            </a>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               aria-label="GitHub"
             >
               <Github className="w-5 h-5 text-slate-400 hover:text-white" />
             </a>
             <a
-              href="https://linkedin.com/company/morefusion"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn"
+              href="mailto:newsletter@morefusion.in"
+              aria-label="Email"
             >
-              <Linkedin className="w-5 h-5 text-slate-400 hover:text-white" />
-            </a>
-            <a
-              href="https://instagram.com/morefusion"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-            >
-              <Instagram className="w-5 h-5 text-slate-400 hover:text-white" />
-            </a>
-            <a
-              href="https://facebook.com/morefusion"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-            >
-              <Facebook className="w-5 h-5 text-slate-400 hover:text-white" />
-            </a>
-            <a
-              href="https://youtube.com/@morefusion"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube"
-            >
-              <Youtube className="w-5 h-5 text-slate-400 hover:text-white" />
+              <Mail className="w-5 h-5 text-slate-400 hover:text-white" />
             </a>
           </div>
         </div>

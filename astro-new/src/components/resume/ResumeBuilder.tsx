@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Download, Printer, RotateCcw, FileDown, FileText, AlertTriangle } from 'lucide-react';
-import { jsPDF } from "jspdf";
 
 const initialData: ResumeData = {
     personalInfo: {
@@ -54,27 +53,32 @@ export default function ResumeBuilder() {
         window.print();
     };
 
-    const generatePDF = () => {
+    const generatePDF = async () => {
         const element = document.getElementById('resume-preview');
         if (!element) return;
 
-        const doc = new jsPDF({
-            format: 'a4',
-            unit: 'pt',
-            orientation: 'portrait'
-        });
+        try {
+            const { jsPDF } = await import("jspdf");
+            const doc = new jsPDF({
+                format: 'a4',
+                unit: 'pt',
+                orientation: 'portrait'
+            });
 
-        doc.html(element, {
-            callback: function (pdf) {
-                pdf.save("resume.pdf");
-            },
-            x: 0,
-            y: 0,
-            width: 595.28, // A4 width in points
-            windowWidth: element.scrollWidth, // Ensure content fits
-            autoPaging: 'text',
-            margin: [0, 0, 0, 0]
-        });
+            doc.html(element, {
+                callback: function (pdf) {
+                    pdf.save("resume.pdf");
+                },
+                x: 0,
+                y: 0,
+                width: 595.28, // A4 width in points
+                windowWidth: element.scrollWidth, // Ensure content fits
+                autoPaging: 'text',
+                margin: [0, 0, 0, 0]
+            });
+        } catch (error) {
+            console.error("Failed to load jsPDF", error);
+        }
     };
 
     return (

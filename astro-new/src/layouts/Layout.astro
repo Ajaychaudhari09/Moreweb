@@ -9,13 +9,17 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  updatedDate?: Date | string;
 }
 
 const { 
   title, 
-  description = "MoreFusion offers free online productivity tools including BMI Calculator, EMI Calculator, Resume Maker, and more. Boost your efficiency with our simple, fast, and privacy-focused utilities and tech guides.",
-  image = "/android-chrome-192x192.png"
+  description = "MoreFusion offers free online productivity tools including BMI Calculator, EMI Calculator, and Resume Maker. Boost efficiency with our simple, fast utilities.",
+  image = "/android-chrome-192x192.png",
+  updatedDate
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -24,6 +28,10 @@ const {
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="en" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,9 +63,11 @@ const {
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
+    {updatedDate && <meta property="og:updated_time" content={new Date(updatedDate).toISOString()} />}
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />

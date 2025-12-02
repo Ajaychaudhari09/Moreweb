@@ -1,5 +1,5 @@
 
-import { Scale, Calculator, Dumbbell, CreditCard, FileText, Edit, Calendar, Utensils, Sparkles, ArrowRight } from 'lucide-react';
+import { Scale, Calculator, Dumbbell, CreditCard, FileText, Edit, Calendar, Utensils, ArrowRight } from 'lucide-react';
 import type { Tool } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

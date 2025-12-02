@@ -73,7 +73,7 @@ const breadcrumbLd = {
 };
 ---
 
-<Layout title={`${post.title} | MoreFusion`} description={post.excerpt} image={post.image}>
+<Layout title={`${post.title} | MoreFusion`} description={post.excerpt} image={post.image} updatedDate={post.date}>
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
 

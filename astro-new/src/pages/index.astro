@@ -53,6 +53,9 @@ const orgLd = {
   name: "MoreFusion",
   url: "https://morefusion.in",
   logo: "https://morefusion.in/android-chrome-512x512.png",
+  sameAs: [
+    "https://github.com/morefusion"
+  ]
 };
 
 const faqLd = {
@@ -141,7 +144,7 @@ const faqLd = {
 
         <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {featuredTools.map((tool, i) => (
-            <div class="animate-slide-up" style={{ animationDelay: `${i * 0.08}s` }}>
+            <div class="animate-slide-up">
               <ToolCard tool={tool} />
             </div>
           ))}
@@ -253,7 +256,7 @@ const faqLd = {
             ) : (
               <div class="grid gap-6 md:grid-cols-2">
                 {recentPosts.map((post, i) => (
-                  <div class="animate-slide-up" style={{ animationDelay: `${i * 0.08}s` }}>
+                  <div class="animate-slide-up">
                     <BlogCard post={post} />
                   </div>
                 ))}

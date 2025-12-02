@@ -106,7 +106,7 @@ export default function TextEditor() {
 
                     {/* Controls */}
                     <div className="lg:col-span-1">
-                        <Card className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                        <Card className="animate-slide-up delay-100">
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Type className="h-5 w-5" />

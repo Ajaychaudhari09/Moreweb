@@ -1,6 +1,9 @@
 # Netlify Redirects
 # Syntax: /old-path /new-path [status]
 
+# Force HTTPS
+http://morefusion.in/* https://morefusion.in/:splat 301!
+
 # Block access to admin/editor routes
 /editor/*  /404  404
 /admin/*   /404  404

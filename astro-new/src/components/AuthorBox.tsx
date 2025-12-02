@@ -34,7 +34,7 @@ export default function AuthorBox({
             <a
               href="https://twitter.com/"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="text-blue-600 hover:underline text-sm"
             >
               Twitter
