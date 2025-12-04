@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://morefusion.in/sitemap-index.xml

@@ -16,6 +16,14 @@
         "src/*"
       ]
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2020"
+    ],
+    "strict": true,
+    "skipLibCheck": true
   }
 }

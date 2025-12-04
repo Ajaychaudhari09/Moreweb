@@ -4,6 +4,7 @@ import Layout from "../../../layouts/Layout.astro";
 import "@/styles/blog.css";
 import AuthorBox from "../../../components/AuthorBox";
 import TOC from "../../../components/TOC";
+import MobileTOC from "../../../components/MobileTOC";
 import ZoomProvider from "../../../components/ZoomProvider";
 import ReadingProgress from "../../../components/ReadingProgress";
 import SocialShareButtons from "../../../components/SocialShareButtons";
@@ -81,63 +82,60 @@ const breadcrumbLd = {
     <ReadingProgress client:load />
     <ZoomProvider client:load />
 
-    <div class="container mx-auto px-4 py-12 max-w-6xl">
-      {/* Post Hero */}
-      {/* Post Hero */}
-      <div class={`relative mb-8 min-h-[300px] md:min-h-[450px] flex items-end overflow-hidden rounded-2xl ${post.category === 'AI' ? 'bg-indigo-900' : 'bg-gray-900'}`}>
-        {post.image && (
-          <img 
-            src={post.image.includes('images.unsplash.com') ? `${post.image}?w=1200&q=80&auto=format&fit=crop` : post.image} 
-            alt={post.title} 
-            width="1200"
-            height="675"
-            decoding="async"
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
-          />
-        )}
-        
-        {/* Gradient Overlay - Stronger at bottom for text readability */}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent/10 pointer-events-none" />
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      {/* Breadcrumbs */}
+      <nav class="flex items-center text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap">
+        <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/blog" class="hover:text-gray-900 transition-colors">Blog</a>
+        <span class="mx-2">/</span>
+        <a href={`/blog?category=${post.category}`} class="hover:text-gray-900 transition-colors capitalize">{post.category}</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900 font-medium truncate max-w-[200px]">{post.title}</span>
+      </nav>
 
-        {/* Content Container */}
-        <div class="relative z-10 w-full p-5 sm:p-8 md:p-12 text-white">
-          {/* Category Tag */}
-          <a href={`/blog?category=${post.category}`} class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-colors mb-4">
-            {post.category}
-          </a>
-
-          {/* Title - text-balance for better wrapping, smaller mobile font */}
-          <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight text-balance drop-shadow-sm mb-4">
-            {post.title}
-          </h1>
-
-          {/* Meta Data */}
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:text-base text-gray-200 font-medium">
-            <span class="flex items-center gap-2">
-              <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold uppercase">
-                {post.author.charAt(0)}
-              </div>
-              {post.author}
-            </span>
-            <span class="hidden sm:inline text-white/40">•</span>
-            <span>{new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-            {post.readTime && (
-              <>
-                <span class="hidden sm:inline text-white/40">•</span>
-                <span class="flex items-center gap-1">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                  {post.readTime} min read
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Layout: Content + TOC */}
-      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
-        {/* Main Article */}
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
         <article class="min-w-0">
+          {/* Header Section (Healthline Style) */}
+          <header class="mb-8">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 mb-4 text-balance">
+              {post.title}
+            </h1>
+            
+            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
+              <div class="flex items-center gap-2">
+                <span class="font-medium text-gray-900">By {post.author}</span>
+              </div>
+              <span class="text-gray-300">|</span>
+              <time datetime={post.date}>
+                Updated on {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </time>
+              {post.readTime && (
+                <>
+                  <span class="text-gray-300">|</span>
+                  <span>{post.readTime} min read</span>
+                </>
+              )}
+            </div>
+          </header>
+
+          {/* Featured Image */}
+          {post.image && (
+            <div class="mb-10 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+              <img 
+                src={post.image.includes('images.unsplash.com') ? `${post.image}?w=1200&q=80&auto=format&fit=crop` : post.image} 
+                alt={post.title} 
+                width="1200"
+                height="675"
+                decoding="async"
+                class="w-full h-full object-cover" 
+              />
+            </div>
+          )}
+
+          {/* Mobile TOC */}
+          <MobileTOC client:load />
+
           <div class="article-content prose prose-lg dark:prose-invert max-w-none">
             <Content />
             
@@ -145,11 +143,6 @@ const breadcrumbLd = {
             <div class="mt-8">
                <AdsterraAd client:visible />
             </div>
-          </div>
-
-          {/* Author Box */}
-          <div class="mt-10">
-            <AuthorBox author={post.author} client:visible />
           </div>
 
           {/* Prev / Next */}

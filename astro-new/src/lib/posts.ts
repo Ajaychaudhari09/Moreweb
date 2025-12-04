@@ -58,10 +58,6 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   const localEntries = await getCollection('blog');
   const localPosts = localEntries.map(mapAstroEntryToBlogPost);
 
-  // Strapi posts are now synced to local content via scripts/sync-strapi.js
-  // We no longer fetch them at runtime to allow offline development.
-  // const strapiPosts = await fetchStrapiPosts(); 
-
   const allPosts = [...localPosts];
 
   return allPosts.sort((a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1));
