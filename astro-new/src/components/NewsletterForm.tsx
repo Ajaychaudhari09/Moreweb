@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 
-interface NewsletterFormProps {
-  theme?: "light" | "dark";
-}
+
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState("");

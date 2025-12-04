@@ -1,8 +1,9 @@
 ---
-import { render } from 'astro:content';
+import { render } from "astro:content";
+import { Image } from "astro:assets";
 import Layout from "../../../layouts/Layout.astro";
 import "@/styles/blog.css";
-import AuthorBox from "../../../components/AuthorBox";
+
 import TOC from "../../../components/TOC";
 import MobileTOC from "../../../components/MobileTOC";
 import ZoomProvider from "../../../components/ZoomProvider";
@@ -20,6 +21,11 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+if (!post._astroEntry) {
+  throw new Error(
+    `Post ${post.slug} (id: ${post.id}) is missing the required _astroEntry field.`,
+  );
+}
 const { Content } = await render(post._astroEntry);
 const { prev, next } = await getPrevNext(post.category, post.slug);
 
@@ -30,7 +36,9 @@ const jsonLd = {
   "@type": "Article",
   headline: post.title,
   description: post.excerpt,
-  image: post.image || `https://morefusion.in/api/og?title=${encodeURIComponent(post.title)}`,
+  image:
+    post.image ||
+    `https://morefusion.in/api/og?title=${encodeURIComponent(post.title)}`,
   datePublished: post.date,
   dateModified: post.date,
   author: {
@@ -74,9 +82,22 @@ const breadcrumbLd = {
 };
 ---
 
-<Layout title={`${post.title} | MoreFusion`} description={post.excerpt} image={post.image} updatedDate={post.date}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+<Layout
+  title={`${post.title} | MoreFusion`}
+  description={post.excerpt}
+  image={post.image}
+  updatedDate={post.date}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbLd)}
+  />
 
   <main class="bg-white dark:bg-gray-950">
     <ReadingProgress client:load />
@@ -84,94 +105,125 @@ const breadcrumbLd = {
 
     <div class="container mx-auto px-4 py-8 max-w-6xl">
       {/* Breadcrumbs */}
-      <nav class="flex items-center text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap">
+      <nav
+        class="flex items-center text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap"
+      >
         <a href="/" class="hover:text-gray-900 transition-colors">Home</a>
         <span class="mx-2">/</span>
         <a href="/blog" class="hover:text-gray-900 transition-colors">Blog</a>
         <span class="mx-2">/</span>
-        <a href={`/blog?category=${post.category}`} class="hover:text-gray-900 transition-colors capitalize">{post.category}</a>
+        <a
+          href={`/blog?category=${post.category}`}
+          class="hover:text-gray-900 transition-colors capitalize"
+          >{post.category}</a
+        >
         <span class="mx-2">/</span>
-        <span class="text-gray-900 font-medium truncate max-w-[200px]">{post.title}</span>
+        <span class="text-gray-900 font-medium truncate max-w-[200px]"
+          >{post.title}</span
+        >
       </nav>
 
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
         <article class="min-w-0">
           {/* Header Section (Healthline Style) */}
           <header class="mb-8">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 mb-4 text-balance">
+            <h1
+              class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-gray-900 mb-4 text-balance"
+            >
               {post.title}
             </h1>
-            
-            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6">
+
+            <div
+              class="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-6"
+            >
               <div class="flex items-center gap-2">
                 <span class="font-medium text-gray-900">By {post.author}</span>
               </div>
               <span class="text-gray-300">|</span>
               <time datetime={post.date}>
-                Updated on {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                Updated on {
+                  new Date(post.date).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                }
               </time>
-              {post.readTime && (
-                <>
-                  <span class="text-gray-300">|</span>
-                  <span>{post.readTime} min read</span>
-                </>
-              )}
+              {
+                post.readTime && (
+                  <>
+                    <span class="text-gray-300">|</span>
+                    <span>{post.readTime} min read</span>
+                  </>
+                )
+              }
             </div>
           </header>
 
           {/* Featured Image */}
-          {post.image && (
-            <div class="mb-10 rounded-xl overflow-hidden bg-gray-100 aspect-video">
-              <img 
-                src={post.image.includes('images.unsplash.com') ? `${post.image}?w=1200&q=80&auto=format&fit=crop` : post.image} 
-                alt={post.title} 
-                width="1200"
-                height="675"
-                decoding="async"
-                class="w-full h-full object-cover" 
-              />
-            </div>
-          )}
+          {
+            post.image && (
+              <div class="mb-10 rounded-xl overflow-hidden bg-gray-100 aspect-video">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  width={1200}
+                  height={675}
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            )
+          }
 
           {/* Mobile TOC */}
           <MobileTOC client:load />
 
-          <div class="article-content prose prose-lg dark:prose-invert max-w-none">
+          <div
+            class="article-content prose prose-lg dark:prose-invert max-w-none"
+          >
             <Content />
-            
-            {/* Inline Ad - Injected via React Portal/DOM manipulation or placed here */}
+
+            {
+              /* Inline Ad - Injected via React Portal/DOM manipulation or placed here */
+            }
             <div class="mt-8">
-               <AdsterraAd client:visible />
+              <AdsterraAd client:visible />
             </div>
           </div>
 
           {/* Prev / Next */}
-          {(prev || next) && (
-            <nav class="mt-12 grid gap-4 border-t pt-6 md:grid-cols-2">
-              {prev && (
-                <a
-                  href={`/blog/${prev.category}/${prev.slug}`}
-                  class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
-                >
-                  <div class="text-xs text-gray-500">Previous</div>
-                  <div class="font-semibold">{prev.title}</div>
-                </a>
-              )}
-              {next && (
-                <a
-                  href={`/blog/${next.category}/${next.slug}`}
-                  class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 md:text-right"
-                >
-                  <div class="text-xs text-gray-500">Next</div>
-                  <div class="font-semibold">{next.title}</div>
-                </a>
-              )}
-            </nav>
-          )}
+          {
+            (prev || next) && (
+              <nav class="mt-12 grid gap-4 border-t pt-6 md:grid-cols-2">
+                {prev && (
+                  <a
+                    href={`/blog/${prev.category}/${prev.slug}`}
+                    class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    <div class="text-xs text-gray-500">Previous</div>
+                    <div class="font-semibold">{prev.title}</div>
+                  </a>
+                )}
+                {next && (
+                  <a
+                    href={`/blog/${next.category}/${next.slug}`}
+                    class="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 md:text-right"
+                  >
+                    <div class="text-xs text-gray-500">Next</div>
+                    <div class="font-semibold">{next.title}</div>
+                  </a>
+                )}
+              </nav>
+            )
+          }
 
           {/* Share + Back */}
           <footer class="mt-12">
-            <SocialShareButtons title={post.title} url={canonicalURL} client:visible />
+            <SocialShareButtons
+              title={post.title}
+              url={canonicalURL}
+              client:visible
+            />
             <div class="text-center mt-10">
               <a
                 href="/blog"

@@ -15,7 +15,8 @@ export async function getStaticPaths() {
 const { category } = Astro.props;
 const posts = await getPostsByCategory(category);
 
-const categoryLabel = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
+const categoryLabel =
+  category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 const title = `${categoryLabel} Articles | MoreFusion`;
 const description = `Explore blog posts under the ${categoryLabel} category on MoreFusion.`;
 
@@ -30,16 +31,23 @@ const jsonLd = {
 ---
 
 <Layout title={title} description={description}>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
 
   <main class="min-h-screen bg-white dark:bg-gray-950">
     <section class="container mx-auto px-4 py-12 max-w-6xl">
       <header class="mb-8">
-        <h1 class="text-4xl md:text-5xl font-extrabold capitalize tracking-tight">
+        <h1
+          class="text-4xl md:text-5xl font-extrabold capitalize tracking-tight"
+        >
           {categoryLabel}
         </h1>
         <p class="text-gray-600 dark:text-gray-400 mt-2 text-lg max-w-2xl">
-          Explore curated articles related to {categoryLabel} from the MoreFusion blog.
+          Explore curated articles related to {categoryLabel} from the MoreFusion
+          blog.
         </p>
       </header>
 
@@ -47,9 +55,7 @@ const jsonLd = {
         aria-label={`${categoryLabel} articles`}
         class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {posts.map((p) => (
-          <BlogCard key={p.id} post={p} client:visible />
-        ))}
+        {posts.map((p) => <BlogCard post={p} client:visible />)}
       </section>
     </section>
   </main>

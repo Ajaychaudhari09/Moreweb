@@ -3,7 +3,7 @@
 import PDFToolLayout from "./PDFToolLayout";
 import { Image as ImageIcon } from "lucide-react";
 import { PDFDocument } from "pdf-lib";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 
 export default function JpgToPdf() {
     const handleConvert = async (files: File[]) => {

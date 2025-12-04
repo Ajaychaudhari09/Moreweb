@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CaretDown, CaretUp, List } from "@phosphor-icons/react";
+import { ChevronDown, ChevronUp, List } from "lucide-react";
 
 type Item = {
     id: string;
@@ -41,7 +41,7 @@ export default function MobileTOC() {
                     <List size={20} />
                     Table of Contents
                 </span>
-                {isOpen ? <CaretUp size={16} /> : <CaretDown size={16} />}
+                {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
             {isOpen && (

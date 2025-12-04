@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import { useState } from 'react';
 import { ResumeEditor } from './ResumeEditor';
 import { ResumePreview } from './ResumePreview';
 import type { ResumeData, Theme } from './types';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Download, Printer, RotateCcw, FileDown, FileText, AlertTriangle } from 'lucide-react';
+import { Printer, RotateCcw, FileDown, FileText, AlertTriangle } from 'lucide-react';
 
 const initialData: ResumeData = {
     personalInfo: {
@@ -38,7 +38,7 @@ export default function ResumeBuilder() {
     const [theme, setTheme] = useState<Theme>("modern");
     const [activeSection, setActiveSection] = useState<typeof SECTIONS[number]['id']>('personal');
     const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
-    const printRef = useRef<HTMLDivElement>(null);
+
 
     const clearForm = () => {
         setIsClearDialogOpen(true);

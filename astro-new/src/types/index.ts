@@ -1,4 +1,4 @@
-// src/types.ts
+import type { CollectionEntry } from 'astro:content';
 
 /**
  * -----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ export interface BlogPost {
   /** Optional fields for future features */
   updatedAt?: string; // ISO
   series?: string;
-  _astroEntry?: any;
+  _astroEntry?: CollectionEntry<'blog'>;
 }
 
 /**

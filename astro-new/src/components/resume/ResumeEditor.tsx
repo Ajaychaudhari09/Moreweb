@@ -2,7 +2,7 @@ import type { ResumeData, PersonalInfo, Experience, Education, Project, Certific
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2, User, Briefcase, GraduationCap, FolderGit2, Award, Wrench } from "lucide-react";
 
 export type EditorSection = 'personal' | 'experience' | 'education' | 'projects' | 'certifications' | 'skills';
@@ -22,7 +22,7 @@ export function ResumeEditor({ data, setData, activeSection }: ResumeEditorProps
     // Experience Handlers
     const addExperience = () => {
         const newExp: Experience = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).slice(2, 11),
             company: "",
             position: "",
             duration: "",
@@ -45,7 +45,7 @@ export function ResumeEditor({ data, setData, activeSection }: ResumeEditorProps
     // Education Handlers
     const addEducation = () => {
         const newEdu: Education = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).slice(2, 11),
             school: "",
             degree: "",
             year: ""
@@ -67,7 +67,7 @@ export function ResumeEditor({ data, setData, activeSection }: ResumeEditorProps
     // Project Handlers
     const addProject = () => {
         const newProj: Project = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).slice(2, 11),
             name: "",
             description: "",
             link: ""
@@ -89,7 +89,7 @@ export function ResumeEditor({ data, setData, activeSection }: ResumeEditorProps
     // Certification Handlers
     const addCertification = () => {
         const newCert: Certification = {
-            id: Math.random().toString(36).substr(2, 9),
+            id: Math.random().toString(36).slice(2, 11),
             name: "",
             issuer: "",
             year: ""

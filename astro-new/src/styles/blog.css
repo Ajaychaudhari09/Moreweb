@@ -6,8 +6,10 @@
 /* Wrapper applied in PostPage.tsx → <div class="article-content"> */
 .article-content {
     line-height: 1.8;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Classic clean sans-serif */
-    color: #2d3748; /* Soft dark gray for better readability */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    /* Classic clean sans-serif */
+    color: #2d3748;
+    /* Soft dark gray for better readability */
 }
 
 /* Dark mode adjustment */
@@ -17,11 +19,13 @@
 
 /* ---------------- Headings ---------------- */
 .article-content h1 {
-    display: none; /* H1 is handled in the Hero section now */
+    display: none;
+    /* H1 is handled in the Hero section now */
 }
 
 .article-content h2 {
-    font-size: 1.875rem; /* 30px */
+    font-size: 1.875rem;
+    /* 30px */
     font-weight: 800;
     margin-top: 3.5rem;
     margin-bottom: 1.25rem;
@@ -35,7 +39,8 @@
 }
 
 .article-content h3 {
-    font-size: 1.5rem; /* 24px */
+    font-size: 1.5rem;
+    /* 24px */
     font-weight: 700;
     margin-top: 2.5rem;
     margin-bottom: 1rem;
@@ -49,7 +54,8 @@
 /* ---------------- Paragraphs ---------------- */
 .article-content p {
     margin-bottom: 1.75rem;
-    font-size: 1.125rem; /* 18px - Standard readable size */
+    font-size: 1.125rem;
+    /* 18px - Standard readable size */
     line-height: 1.8;
     color: #2d3748;
 }
@@ -73,17 +79,21 @@
 }
 
 .article-content ul li::marker {
-    color: #2563eb; /* Blue bullets */
+    color: #2563eb;
+    /* Blue bullets */
 }
 
 /* ---------------- Blockquote / Takeaway Box ---------------- */
 .article-content blockquote {
     margin: 2.5rem 0;
     padding: 1.5rem 2rem;
-    background-color: #f7fafc; /* Very light gray */
-    border-left: 4px solid #2563eb; /* Blue accent */
+    background-color: #f7fafc;
+    /* Very light gray */
+    border-left: 4px solid #2563eb;
+    /* Blue accent */
     border-radius: 0.5rem;
-    font-style: normal; /* Not italic for modern look */
+    font-style: normal;
+    /* Not italic for modern look */
     font-size: 1.125rem;
     color: #2d3748;
 }
@@ -96,7 +106,8 @@
 /* ---------------- Inline Code ---------------- */
 .article-content code {
     background-color: #edf2f7;
-    color: #c53030; /* Reddish for code */
+    color: #c53030;
+    /* Reddish for code */
     padding: 0.2rem 0.4rem;
     border-radius: 0.25rem;
     font-size: 0.9em;
@@ -201,4 +212,38 @@
 .prose h3 {
     scroll-margin-top: 96px;
     /* adjust if your header height differs */
+}
+
+/* ---------------- Mobile Responsiveness ---------------- */
+@media (max-width: 768px) {
+    .article-content h2 {
+        font-size: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .article-content h3 {
+        font-size: 1.25rem;
+        margin-top: 2rem;
+    }
+
+    .article-content p {
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .article-content blockquote {
+        margin: 2rem 0;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .article-content ul,
+    .article-content ol {
+        padding-left: 1.25rem;
+    }
+
+    .article-content li {
+        font-size: 1rem;
+    }
 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { HamburgerMenuIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -42,8 +43,7 @@ export default function Header({ pathname = "/" }: HeaderProps) {
               </a>
             );
           })}
-
-
+          <ThemeToggle />
         </div>
 
         {/* Mobile Menu */}

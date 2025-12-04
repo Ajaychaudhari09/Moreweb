@@ -1,10 +1,14 @@
-@import "tailwindcss";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @layer base {
+
+
     :root {
         /* Brand palette: Indigo (primary) + Pinkish (accent) */
-        --brand-indigo-50: #eef2ff;
-        --brand-indigo-100: #e0e7ff;
+        --brand-indigo-50: #0b41f3;
+        --brand-indigo-100: #375ddb;
         --brand-indigo-500: #6366f1;
         /* indigo-500 */
         --brand-indigo-600: #4f46e5;

@@ -1,14 +1,7 @@
 // src/components/BlogCard.tsx
 import type { BlogCardProps } from "@/types";
 
-const categoryColors: Record<string, string> = {
-  AI: "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-300",
-  coding: "text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300",
-  drama: "text-pink-600 bg-pink-50 dark:bg-pink-900/30 dark:text-pink-300",
-  film: "text-purple-600 bg-purple-50 dark:bg-purple-900/30 dark:text-purple-300",
-  general: "text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-300",
-  shopping: "text-teal-600 bg-teal-50 dark:bg-teal-900/30 dark:text-teal-300",
-};
+
 
 const tagClassMap: Record<string, string> = {
   AI: "tag--indigo",

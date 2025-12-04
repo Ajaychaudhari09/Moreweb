@@ -10,10 +10,12 @@ import { normalizeCategory } from './utils';
  ✅ READ SINGLE POST (Adapter)
 ---------------------------------------------------------- */
 
+import type { CollectionEntry } from 'astro:content';
+
 /* ---------------------------------------------------------
  ✅ READ SINGLE POST (Adapter)
 ---------------------------------------------------------- */
-function mapAstroEntryToBlogPost(entry: any): BlogPost {
+function mapAstroEntryToBlogPost(entry: CollectionEntry<'blog'>): BlogPost {
   const { data, body, slug: originalSlug } = entry;
 
   // Extract category from folder path if not in frontmatter
@@ -37,7 +39,7 @@ function mapAstroEntryToBlogPost(entry: any): BlogPost {
     slug: slug, // We want just the last part for the URL usually, or keep full if that's how it was
     title: data.title,
     excerpt: data.excerpt ?? "",
-    date: data.date ?? data.published_date ?? new Date().toISOString(),
+    date: (data.date ?? data.published_date ?? new Date()).toString(),
     author: data.author,
     category: category as BlogCategory,
     tags: data.tags,
@@ -46,7 +48,7 @@ function mapAstroEntryToBlogPost(entry: any): BlogPost {
     readTime,
     // Attach the original entry for rendering later
     _astroEntry: entry
-  } as BlogPost & { _astroEntry: any };
+  };
 }
 
 /* ---------------------------------------------------------

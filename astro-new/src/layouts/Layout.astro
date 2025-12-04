@@ -3,7 +3,7 @@ import "@/styles/global.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -12,11 +12,11 @@ interface Props {
   updatedDate?: Date | string;
 }
 
-const { 
-  title, 
+const {
+  title,
   description = "MoreFusion offers free online productivity tools including BMI Calculator, EMI Calculator, and Resume Maker. Boost efficiency with our simple, fast utilities.",
   image = "/android-chrome-192x192.png",
-  updatedDate
+  updatedDate,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -29,22 +29,55 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <meta name="theme-color" content="#4f46e5" />
+    <script is:inline>
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+      if (theme === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+      window.localStorage.setItem("theme", theme);
+    </script>
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="en" href={canonicalURL} />
     <link rel="alternate" hreflang="x-default" href={canonicalURL} />
-    
+
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="preload"
+      as="style"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this['media']='all'"
+    />
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
     </noscript>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
@@ -52,13 +85,19 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <ClientRouter />
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"></script>
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"
+    ></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(...args) { window.dataLayer.push(args); }
-      gtag('js', new Date());
+      function gtag(...args) {
+        window.dataLayer.push(args);
+      }
+      gtag("js", new Date());
 
-      gtag('config', 'G-MEASUREMENT_ID');
+      gtag("config", "G-MEASUREMENT_ID");
     </script>
 
     <!-- Open Graph / Facebook -->
@@ -67,7 +106,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
-    {updatedDate && <meta property="og:updated_time" content={new Date(updatedDate).toISOString()} />}
+    {
+      updatedDate && (
+        <meta
+          property="og:updated_time"
+          content={new Date(updatedDate).toISOString()}
+        />
+      )
+    }
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -76,9 +122,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="twitter:image" content={image} />
 
     <!-- Ads -->
-    <script async="async" data-cfasync="false" src="//pl28064811.effectivegatecpm.com/08f243939922b6d9aa749c7eb572ab12/invoke.js"></script>
+    <script
+      is:inline
+      async="async"
+      data-cfasync="false"
+      src="//pl28064811.effectivegatecpm.com/08f243939922b6d9aa749c7eb572ab12/invoke.js"
+    ></script>
   </head>
-  <body class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden">
+  <body
+    class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden"
+  >
     <Header client:load pathname={Astro.url.pathname} />
     <main class="flex-1 w-full animate-fade-in container-responsive py-8">
       <slot />

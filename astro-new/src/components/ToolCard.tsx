@@ -1,8 +1,7 @@
 
 import { Scale, Calculator, Dumbbell, CreditCard, FileText, Edit, Calendar, Utensils, ArrowRight } from 'lucide-react';
 import type { Tool } from '@/types';
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface ToolCardProps {
@@ -38,11 +37,11 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <Card className="group relative h-full overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 dark:hover:shadow-blue-900/20 rounded-2xl">
-      <div className={`absolute inset-0 bg-linear-to-br ${gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
 
       <CardHeader className="relative pt-8 pb-4">
         <div className="flex items-center justify-between mb-4">
-          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-linear-to-br ${gradient} shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300`}>
+          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${gradient} shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300`}>
             <Icon className="h-7 w-7 text-white" />
           </div>
           <Badge variant="secondary" className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium px-2.5 py-0.5 rounded-full text-xs group-hover:bg-blue-50 group-hover:text-blue-600 dark:group-hover:bg-blue-900/30 dark:group-hover:text-blue-400 transition-colors">

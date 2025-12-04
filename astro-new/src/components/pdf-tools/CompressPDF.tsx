@@ -3,7 +3,7 @@
 import PDFToolLayout from "./PDFToolLayout";
 import { Minimize2 } from "lucide-react";
 import { PDFDocument } from "pdf-lib";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 
 export default function CompressPDF() {
     const handleCompress = async (files: File[]) => {
