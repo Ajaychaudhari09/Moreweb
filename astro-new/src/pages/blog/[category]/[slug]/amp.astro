@@ -1,0 +1,51 @@
+---
+import { render } from "astro:content";
+import AmpLayout from "../../../../layouts/AmpLayout.astro";
+import { getAllPosts } from "../../../../lib/posts";
+
+export async function getStaticPaths() {
+    const posts = await getAllPosts();
+    return posts.map((post) => ({
+        params: { category: post.category, slug: post.slug },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+if (!post._astroEntry) {
+    throw new Error(`Post ${post.slug} is missing _astroEntry.`);
+}
+const { Content } = await render(post._astroEntry);
+const canonicalURL = new URL(`/blog/${post.category}/${post.slug}`, Astro.site);
+---
+
+<AmpLayout
+    title={post.title}
+    description={post.excerpt}
+    canonicalURL={canonicalURL}
+>
+    <article>
+        <h1>{post.title}</h1>
+        <div class="meta">
+            By {post.author} | {new Date(post.date).toLocaleDateString()}
+        </div>
+
+        {
+            post.image && (
+                <div style="margin-bottom: 2rem;">
+                    <amp-img
+                        src={post.image}
+                        width="800"
+                        height="450"
+                        layout="responsive"
+                        alt={post.title}
+                    />
+                </div>
+            )
+        }
+
+        <div class="prose">
+            <Content />
+        </div>
+    </article>
+</AmpLayout>

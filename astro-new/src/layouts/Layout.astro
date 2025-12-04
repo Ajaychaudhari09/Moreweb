@@ -50,6 +50,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       window.localStorage.setItem("theme", theme);
     </script>
     <link rel="canonical" href={canonicalURL} />
+    <link rel="amphtml" href={`${canonicalURL}/amp`} />
     <link rel="alternate" hreflang="en" href={canonicalURL} />
     <link rel="alternate" hreflang="x-default" href={canonicalURL} />
 

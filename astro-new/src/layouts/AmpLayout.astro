@@ -1,0 +1,153 @@
+---
+interface Props {
+    title: string;
+    description?: string;
+    canonicalURL: URL;
+}
+
+const { title, description, canonicalURL } = Astro.props;
+---
+
+<!doctype html>
+<html ⚡ lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width,minimum-scale=1,initial-scale=1"
+        />
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalURL} />
+        <title>{title}</title>
+        <style amp-boilerplate>
+            body {
+                -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+                -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+                -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+                animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            }
+            @-webkit-keyframes -amp-start {
+                from {
+                    visibility: hidden;
+                }
+                to {
+                    visibility: visible;
+                }
+            }
+            @-moz-keyframes -amp-start {
+                from {
+                    visibility: hidden;
+                }
+                to {
+                    visibility: visible;
+                }
+            }
+            @-ms-keyframes -amp-start {
+                from {
+                    visibility: hidden;
+                }
+                to {
+                    visibility: visible;
+                }
+            }
+            @-o-keyframes -amp-start {
+                from {
+                    visibility: hidden;
+                }
+                to {
+                    visibility: visible;
+                }
+            }
+            @keyframes -amp-start {
+                from {
+                    visibility: hidden;
+                }
+                to {
+                    visibility: visible;
+                }
+            }
+        </style><noscript
+            ><style amp-boilerplate>
+                body {
+                    -webkit-animation: none;
+                    -moz-animation: none;
+                    -ms-animation: none;
+                    animation: none;
+                }
+            </style></noscript
+        >
+        <script async src="https://cdn.ampproject.org/v0.js"></script>
+        <style amp-custom>
+            /* Minimal CSS for AMP */
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    Roboto, Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                padding: 0;
+                margin: 0;
+            }
+            header {
+                background: #fff;
+                border-bottom: 1px solid #eee;
+                padding: 1rem;
+                text-align: center;
+            }
+            main {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+            .meta {
+                color: #666;
+                font-size: 0.9rem;
+                margin-bottom: 2rem;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            a {
+                color: #0070f3;
+                text-decoration: none;
+            }
+            footer {
+                margin-top: 3rem;
+                padding: 2rem;
+                background: #f9f9f9;
+                text-align: center;
+                font-size: 0.9rem;
+                color: #666;
+            }
+            .prose p {
+                margin-bottom: 1.5rem;
+            }
+            .prose h2 {
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <a
+                href="/"
+                style="font-weight: bold; font-size: 1.2rem; color: #000;"
+                >MoreFusion</a
+            >
+        </header>
+        <main>
+            <slot />
+        </main>
+        <footer>
+            <p>
+                &copy; {new Date().getFullYear()} MoreFusion. All rights reserved.
+            </p>
+            <p><a href={canonicalURL.href}>View Original Version</a></p>
+        </footer>
+    </body>
+</html>
