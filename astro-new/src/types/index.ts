@@ -12,7 +12,7 @@ import type { CollectionEntry } from 'astro:content';
  * -----------------------------------------------------------------------------
  */
 
-export type BlogCategory = "AI" | "coding" | "drama" | "film" | "general" | "shopping";
+export type BlogCategory = "AI" | "coding" | "drama" | "film" | "general" | "shopping" | "health" | "news";
 
 /**
  * Frontmatter shape accepted from MD/MDX files (and Strapi).

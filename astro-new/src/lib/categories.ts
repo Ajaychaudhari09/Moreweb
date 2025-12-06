@@ -2,5 +2,5 @@
 import type { BlogCategory } from '@/types';
 
 export const CATEGORIES: BlogCategory[] = [
-  'AI', 'coding', 'drama', 'film', 'general', 'shopping',
+  'AI', 'coding', 'drama', 'film', 'general', 'shopping', 'health', 'news',
 ];

@@ -10,6 +10,8 @@ const tagClassMap: Record<string, string> = {
   film: "tag--purple",
   general: "tag--emerald",
   shopping: "tag--pink",
+  health: "tag--emerald",
+  news: "tag--blue",
 };
 
 interface ExtendedBlogCardProps extends BlogCardProps {

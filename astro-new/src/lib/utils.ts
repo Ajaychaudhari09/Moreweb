@@ -38,6 +38,8 @@ export function normalizeCategory(cat: string | undefined): BlogCategory | null 
     film: "film",
     general: "general",
     shopping: "shopping",
+    health: "health",
+    news: "news",
   };
 
   return MAP[lc] ?? null;

@@ -5,6 +5,7 @@ excerpt: "Discover the newest AI tools of 2025 that actually make content creati
 category: "AI"
 published_date: "2025-11-11T19:15:00.000Z"
 tags: ["AI Tools","Image Generation","Video Creation","AI 2025","Content Creators"]
+image: "/images/blog/ai-tools-2025.jpg"
 author: "MoreFusion Team"
 ---
 

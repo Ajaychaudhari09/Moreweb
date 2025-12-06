@@ -26,14 +26,18 @@ export default defineConfig({
     tailwind()
   ],
   image: {
-    service: passthroughImageService(),
     domains: ["images.unsplash.com"],
+    service: passthroughImageService()
   },
 
   markdown: {
     rehypePlugins: [
       rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: 'wrap' }]
+      [rehypeAutolinkHeadings, {
+        behavior: 'append',
+        properties: { className: ['anchor-link'] },
+        content: { type: 'text', value: '#' }
+      }]
     ]
   }
 });

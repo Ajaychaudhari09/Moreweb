@@ -133,7 +133,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <body
     class="bg-background text-foreground antialiased min-h-screen flex flex-col font-sans selection:bg-primary/20 selection:text-primary overflow-x-hidden"
   >
-    <Header client:load pathname={Astro.url.pathname} />
+    <Header client:idle pathname={Astro.url.pathname} />
     <main class="flex-1 w-full animate-fade-in container-responsive py-8">
       <slot />
     </main>
