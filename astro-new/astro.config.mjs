@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, passthroughImageService } from 'astro/config';
+import { defineConfig } from 'astro/config';
 
 import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
@@ -27,17 +27,11 @@ export default defineConfig({
   ],
   image: {
     domains: ["images.unsplash.com"],
-    service: passthroughImageService()
   },
 
   markdown: {
     rehypePlugins: [
       rehypeSlug,
-      [rehypeAutolinkHeadings, {
-        behavior: 'append',
-        properties: { className: ['anchor-link'] },
-        content: { type: 'text', value: '#' }
-      }]
     ]
   }
 });

@@ -10,6 +10,7 @@ interface Props {
   description?: string;
   image?: string;
   updatedDate?: Date | string;
+  ampUrl?: string;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
   description = "MoreFusion offers free online productivity tools including BMI Calculator, EMI Calculator, and Resume Maker. Boost efficiency with our simple, fast utilities.",
   image = "/android-chrome-192x192.png",
   updatedDate,
+  ampUrl,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -50,7 +52,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       window.localStorage.setItem("theme", theme);
     </script>
     <link rel="canonical" href={canonicalURL} />
-    <link rel="amphtml" href={`${canonicalURL}/amp`} />
+    {ampUrl && <link rel="amphtml" href={new URL(ampUrl, Astro.site)} />}
     <link rel="alternate" hreflang="en" href={canonicalURL} />
     <link rel="alternate" hreflang="x-default" href={canonicalURL} />
 
