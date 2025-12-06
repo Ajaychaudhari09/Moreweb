@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Grid, List } from "lucide-react";
-import BlogCard from "@/components/BlogCard";
+import BlogCard from "@/components/BlogCardReact";
 import type { BlogPost } from "@/types";
 
 interface BlogClientProps {

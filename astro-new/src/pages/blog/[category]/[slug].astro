@@ -30,6 +30,7 @@ const { Content } = await render(post._astroEntry);
 const { prev, next } = await getPrevNext(post.category, post.slug);
 
 const canonicalURL = `https://morefusion.in/blog/${post.category}/${post.slug}`;
+const seoImage = typeof post.image === "string" ? post.image : post.image?.src;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -37,7 +38,7 @@ const jsonLd = {
   headline: post.title,
   description: post.excerpt,
   image:
-    post.image ||
+    seoImage ||
     `https://morefusion.in/api/og?title=${encodeURIComponent(post.title)}`,
   datePublished: post.date,
   dateModified: post.date,
@@ -85,7 +86,7 @@ const breadcrumbLd = {
 <Layout
   title={`${post.title} | MoreFusion`}
   description={post.excerpt}
-  image={post.image}
+  image={seoImage}
   updatedDate={post.date}
   ampUrl={`/amp/blog/${post.category}/${post.slug}`}
 >
@@ -165,15 +166,25 @@ const breadcrumbLd = {
           {
             post.image && (
               <div class="mb-10 rounded-xl overflow-hidden bg-gray-100 aspect-video">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  width={1200}
-                  height={675}
-                  loading="eager"
-                  fetchpriority="high"
-                  class="w-full h-full object-cover"
-                />
+                {typeof post.image === "string" ? (
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    width={1200}
+                    height={675}
+                    loading="eager"
+                    fetchpriority="high"
+                    class="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    loading="eager"
+                    fetchpriority="high"
+                    class="w-full h-full object-cover"
+                  />
+                )}
               </div>
             )
           }
@@ -222,11 +233,7 @@ const breadcrumbLd = {
 
           {/* Share + Back */}
           <footer class="mt-12">
-            <SocialShareButtons
-              title={post.title}
-              url={canonicalURL}
-              client:visible
-            />
+            <SocialShareButtons title={post.title} url={canonicalURL} />
             <div class="text-center mt-10">
               <a
                 href="/blog"

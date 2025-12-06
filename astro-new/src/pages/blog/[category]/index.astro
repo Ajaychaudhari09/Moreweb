@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import BlogCard from "../../../components/BlogCard";
+import BlogCard from "../../../components/BlogCard.astro";
 import { getAllPosts, getPostsByCategory } from "../../../lib/posts";
 
 export async function getStaticPaths() {
@@ -55,7 +55,7 @@ const jsonLd = {
         aria-label={`${categoryLabel} articles`}
         class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {posts.map((p) => <BlogCard post={p} client:visible />)}
+        {posts.map((p) => <BlogCard post={p} />)}
       </section>
     </section>
   </main>

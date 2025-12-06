@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 
 /**
  * -----------------------------------------------------------------------------
@@ -52,7 +53,7 @@ export interface BlogPost {
   author: string;
   category: BlogCategory;
   tags: string[];
-  image?: string; // cover image url
+  image?: string | ImageMetadata; // cover image url or object
   content: string; // raw MD/MDX source (string)
   readTime: number; // minutes
   /** Optional fields for future features */

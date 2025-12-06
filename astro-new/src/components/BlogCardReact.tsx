@@ -22,13 +22,21 @@ export default function BlogCard({ post, layout = "grid" }: ExtendedBlogCardProp
   const href = `/blog/${post.category}/${post.slug}`;
   const isList = layout === "list";
 
+  // Helper to get image source
+  const imageSrc = typeof post.image === 'string' ? post.image : post.image?.src;
+  const isUnsplash = typeof post.image === 'string' && post.image.includes('images.unsplash.com');
+
   return (
     <article className={`card group flex ${isList ? "flex-row gap-6" : "flex-col"} overflow-hidden relative h-full`}>
       {/* Thumbnail (CLS-safe) */}
-      {post.image ? (
+      {imageSrc ? (
         <div className={`relative block overflow-hidden card-thumb ${isList ? "w-1/3 aspect-video" : "aspect-video"}`}>
           <img
-            src={post.image.includes('images.unsplash.com') ? `${post.image}?w=600&q=80&auto=format&fit=crop` : post.image}
+            src={isUnsplash ? `${imageSrc}?w=600&h=338&q=80&auto=format&fit=crop` : imageSrc}
+            srcSet={isUnsplash
+              ? `${imageSrc}?w=400&h=225&q=80&auto=format&fit=crop 400w, ${imageSrc}?w=600&h=338&q=80&auto=format&fit=crop 600w, ${imageSrc}?w=800&h=450&q=80&auto=format&fit=crop 800w`
+              : undefined}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt={post.title}
             width="600"
             height="338"

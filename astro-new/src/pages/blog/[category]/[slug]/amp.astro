@@ -34,9 +34,24 @@ const canonicalURL = new URL(`/blog/${post.category}/${post.slug}`, Astro.site);
             post.image && (
                 <div style="margin-bottom: 2rem;">
                     <amp-img
-                        src={post.image}
-                        width="800"
-                        height="450"
+                        src={
+                            typeof post.image === "string" &&
+                            post.image.includes("images.unsplash.com")
+                                ? `${post.image}?w=800&h=450&q=80&auto=format&fit=crop`
+                                : typeof post.image === "string"
+                                  ? post.image
+                                  : post.image.src
+                        }
+                        width={
+                            typeof post.image === "string"
+                                ? "800"
+                                : post.image.width
+                        }
+                        height={
+                            typeof post.image === "string"
+                                ? "450"
+                                : post.image.height
+                        }
                         layout="responsive"
                         alt={post.title}
                     />

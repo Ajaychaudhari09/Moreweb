@@ -4,7 +4,7 @@ import { ArrowRight, Mail, BadgeDollarSign } from "lucide-react";
 import NewsletterForm from "../components/NewsletterForm";
 import SocialShareButtons from "../components/SocialShareButtons";
 import ToolCard from "../components/ToolCard";
-import BlogCard from "../components/BlogCard";
+import BlogCard from "../components/BlogCard.astro";
 import { getLatestPosts } from "../lib/posts";
 import type { BlogPost } from "../types";
 
@@ -453,7 +453,6 @@ const faqLd = {
             <SocialShareButtons
               title="MoreFusion — Free AI Tools & Calculators"
               url="https://morefusion.in"
-              client:visible
             />
           </div>
         </div>

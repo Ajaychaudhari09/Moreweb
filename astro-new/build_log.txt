@@ -1,0 +1,27 @@
+
+> astro-new@0.0.1 build
+> astro build
+
+[2m22:13:47[22m [34m[content][39m Syncing content
+[2m22:13:47[22m [34m[content][39m Synced content
+[2m22:13:47[22m [34m[types][39m Generated [2m1.08s[22m
+[2m22:13:47[22m [34m[build][39m output: [34m"static"[39m
+[2m22:13:47[22m [34m[build][39m mode: [34m"static"[39m
+[2m22:13:47[22m [34m[build][39m directory: [34mC:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\Moreweb\astro-new\dist\[39m
+[2m22:13:47[22m [34m[build][39m Collecting build info...
+[2m22:13:47[22m [34m[build][39m [32mΓ£ô Completed in 1.37s.[39m
+[2m22:13:47[22m [34m[build][39m Building static entrypoints...
+22:13:53 [ERROR] [vite] Γ£ù Build failed in 5.99s
+[ImageNotFound] [commonjs--resolver] Could not find requested image `../../../assets/blog/coding.jpg`. Does it exist?
+  Hint:
+    This is often caused by a typo in the image path. Please make sure the file exists, and is spelled correctly.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/image-not-found/
+  Location:
+    C:\Users\AJAY CHAUDHARI\OneDrive\Downloads\most\Moreweb\astro-new\node_modules\.pnpm\astro@5.16.4_@types+node@20_bccaad20a60f9e7d3c60d76f91bc73c4\node_modules\astro\dist\content\vite-plugin-content-assets.js:31:17
+  Stack trace:
+    at Object.resolveId (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/Moreweb/astro-new/node_modules/.pnpm/astro@5.16.4_@types+node@20_bccaad20a60f9e7d3c60d76f91bc73c4/node_modules/astro/dist/content/vite-plugin-content-assets.js:31:17)
+    at async resolveId (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/Moreweb/astro-new/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:20809:26)
+    at async Object.resolveId (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/Moreweb/astro-new/node_modules/.pnpm/vite@6.4.1_@types+node@20.1_fc865889e075084269a8d89ae2e95d7a/node_modules/vite/dist/node/chunks/dep-D4NMHUTW.js:2835:10)
+    at async resolveId (file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/Moreweb/astro-new/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:20809:26)
+    at async file:///C:/Users/AJAY%20CHAUDHARI/OneDrive/Downloads/most/Moreweb/astro-new/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21550:50
