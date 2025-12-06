@@ -89,11 +89,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <!-- Google Analytics -->
     <script
-      is:inline
+      type="text/partytown"
       async
       src="https://www.googletagmanager.com/gtag/js?id=G-MEASUREMENT_ID"
     ></script>
-    <script is:inline>
+    <script type="text/partytown">
       window.dataLayer = window.dataLayer || [];
       function gtag(...args) {
         window.dataLayer.push(args);

@@ -2,9 +2,8 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+
 @layer base {
-
-
     :root {
         /* Brand palette: Indigo (primary) + Pinkish (accent) */
         --brand-indigo-50: #0b41f3;
@@ -453,13 +452,52 @@
 }
 
 .tag--indigo {
-    background: var(--brand-indigo-50);
-    color: var(--brand-indigo-600);
+    background: #e0e7ff;
+    /* indigo-100 */
+    color: #3730a3;
+    /* indigo-800 */
 }
 
 .tag--pink {
-    background: #fff0f6;
-    color: var(--brand-pink-500);
+    background: #fce7f3;
+    /* pink-100 */
+    color: #9d174d;
+    /* pink-800 */
+}
+
+.tag--blue {
+    background: #dbeafe;
+    /* blue-100 */
+    color: #1e40af;
+    /* blue-800 */
+}
+
+.tag--emerald {
+    background: #d1fae5;
+    /* emerald-100 */
+    color: #065f46;
+    /* emerald-800 */
+}
+
+.tag--purple {
+    background: #f3e8ff;
+    /* purple-100 */
+    color: #6b21a8;
+    /* purple-800 */
+}
+
+.tag--health {
+    background: #d1fae5;
+    /* emerald-100 */
+    color: #065f46;
+    /* emerald-800 */
+}
+
+.tag--news {
+    background: #e0f2fe;
+    /* sky-100 */
+    color: #0369a1;
+    /* sky-800 */
 }
 
 /* Buttons inside cards */

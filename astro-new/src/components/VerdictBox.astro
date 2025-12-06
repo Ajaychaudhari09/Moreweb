@@ -1,0 +1,90 @@
+---
+interface Props {
+    verdict: string;
+    pros: string[];
+    cons: string[];
+}
+
+const { verdict, pros, cons } = Astro.props;
+---
+
+<div
+    class="verdict-box my-10 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm"
+>
+    <div
+        class="bg-slate-100 dark:bg-slate-800 p-4 border-b border-slate-200 dark:border-slate-700 text-center"
+    >
+        <h3
+            class="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider"
+        >
+            Verdict: {verdict}
+        </h3>
+    </div>
+
+    <div
+        class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-700"
+    >
+        <div class="p-6 bg-emerald-50/50 dark:bg-emerald-950/10">
+            <h4
+                class="font-bold text-emerald-700 dark:text-emerald-400 mb-4 flex items-center gap-2"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><polyline points="20 6 9 17 4 12"></polyline></svg
+                >
+                The Good
+            </h4>
+            <ul class="space-y-2">
+                {
+                    pros.map((pro) => (
+                        <li class="text-slate-700 dark:text-slate-300 text-sm flex items-start gap-2">
+                            <span class="text-emerald-500 font-bold">+</span>{" "}
+                            {pro}
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+
+        <div class="p-6 bg-rose-50/50 dark:bg-rose-950/10">
+            <h4
+                class="font-bold text-rose-700 dark:text-rose-400 mb-4 flex items-center gap-2"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    ><line x1="18" y1="6" x2="6" y2="18"></line><line
+                        x1="6"
+                        y1="6"
+                        x2="18"
+                        y2="18"></line></svg
+                >
+                The Bad
+            </h4>
+            <ul class="space-y-2">
+                {
+                    cons.map((con) => (
+                        <li class="text-slate-700 dark:text-slate-300 text-sm flex items-start gap-2">
+                            <span class="text-rose-500 font-bold">-</span> {con}
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </div>
+</div>

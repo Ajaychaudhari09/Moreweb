@@ -7,6 +7,7 @@ import tailwind from '@astrojs/tailwind';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import sitemap from '@astrojs/sitemap';
+import partytown from '@astrojs/partytown';
 
 // https://astro.build/config
 export default defineConfig({
@@ -23,7 +24,12 @@ export default defineConfig({
       priority: 0.7,
       lastmod: new Date(),
     }),
-    tailwind()
+    tailwind(),
+    partytown({
+      config: {
+        forward: ["dataLayer.push"],
+      },
+    }),
   ],
   image: {
     domains: ["images.unsplash.com"],
@@ -32,6 +38,11 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [
       rehypeSlug,
+      [rehypeAutolinkHeadings, {
+        behavior: 'append',
+        properties: { className: ['heading-anchor'] },
+        content: { type: 'text', value: '' }
+      }]
     ]
   }
 });

@@ -29,7 +29,7 @@ function round2(n: number): number {
  */
 export function normalizeCategory(cat: string | undefined): BlogCategory | null {
   if (!cat) return null;
-  const lc = cat.toLowerCase();
+  const lc = cat.trim().toLowerCase();
 
   const MAP: Record<string, BlogCategory> = {
     ai: "AI",
