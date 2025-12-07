@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
-    "check": "astro check"
+    "check": "astro check",
+    "audit": "node scripts/lighthouse-local.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
@@ -80,7 +81,9 @@
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "autoprefixer": "^10.4.14",
+    "chrome-launcher": "^1.2.1",
     "eslint": "^8.57.0",
+    "lighthouse": "^13.0.1",
     "pagefind": "^1.0.4",
     "postcss": "^8.4.27",
     "prettier": "^3.3.0",

@@ -16,9 +16,10 @@ const tagClassMap: Record<string, string> = {
 
 interface ExtendedBlogCardProps extends BlogCardProps {
   layout?: "grid" | "list";
+  priority?: boolean;
 }
 
-export default function BlogCard({ post, layout = "grid" }: ExtendedBlogCardProps) {
+export default function BlogCard({ post, layout = "grid", priority = false }: ExtendedBlogCardProps) {
   const href = `/blog/${post.category}/${post.slug}`;
   const isList = layout === "list";
 
@@ -42,7 +43,7 @@ export default function BlogCard({ post, layout = "grid" }: ExtendedBlogCardProp
             height="338"
             decoding="async"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            loading="lazy"
+            loading={priority ? "eager" : "lazy"}
           />
         </div>
       ) : null}

@@ -68,6 +68,19 @@ export default function AdsterraAd({
       }
 
       setInjected(true);
+
+      // 4️⃣ Fix Accessibility: Add title to injected iframe
+      const observer = new MutationObserver((mutations, obs) => {
+        const iframe = adSlot.querySelector("iframe");
+        if (iframe && !iframe.hasAttribute("title")) {
+          iframe.setAttribute("title", "Third Party Advertisement");
+          iframe.setAttribute("aria-label", "Third Party Advertisement");
+          obs.disconnect(); // Stop watching once found
+        }
+      });
+
+      observer.observe(adSlot, { childList: true, subtree: true });
+
     } catch (err) {
       console.error("Adsterra injection failed:", err);
     }

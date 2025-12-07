@@ -13,6 +13,7 @@ import partytown from '@astrojs/partytown';
 export default defineConfig({
   site: 'https://morefusion.in',
   trailingSlash: 'never',
+  prefetch: true,
   build: {
     format: 'file'
   },
@@ -27,6 +28,7 @@ export default defineConfig({
     tailwind(),
     partytown({
       config: {
+        debug: false,
         forward: ["dataLayer.push"],
       },
     }),
@@ -44,5 +46,14 @@ export default defineConfig({
         content: { type: 'text', value: '' }
       }]
     ]
+  },
+  vite: {
+    resolve: {
+      dedupe: ['react', 'react-dom']
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
+      exclude: ['@resvg/resvg-js']
+    }
   }
 });

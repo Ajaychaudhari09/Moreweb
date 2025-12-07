@@ -120,8 +120,8 @@ export default function BlogClient({ initialPosts, categories }: BlogClientProps
                             : "space-y-6"
                     }
                 >
-                    {paginatedPosts.map((post) => (
-                        <BlogCard key={post.slug} post={post} layout={viewMode} />
+                    {paginatedPosts.map((post, index) => (
+                        <BlogCard key={post.slug} post={post} layout={viewMode} priority={index < 2} />
                     ))}
                 </div>
             ) : (
