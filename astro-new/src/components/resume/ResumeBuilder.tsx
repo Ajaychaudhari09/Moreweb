@@ -87,13 +87,13 @@ export default function ResumeBuilder() {
             <div className="flex flex-col sm:flex-row justify-between items-center px-6 py-4 border-b bg-white dark:bg-slate-900 shadow-sm z-10 gap-4">
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                     <div className="flex items-center gap-2 mr-4">
-                        <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                        <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
                             <FileText className="h-5 w-5" />
                         </div>
                         <span className="font-bold text-lg hidden md:inline-block">Resume Builder</span>
                     </div>
                     <Select value={theme} onValueChange={(v: Theme) => setTheme(v)}>
-                        <SelectTrigger className="w-[180px] border-slate-200 dark:border-slate-800 focus:ring-blue-500">
+                        <SelectTrigger className="w-[180px] border-slate-200 dark:border-slate-800 focus:ring-indigo-500">
                             <SelectValue placeholder="Select Theme" />
                         </SelectTrigger>
                         <SelectContent>
@@ -112,7 +112,7 @@ export default function ResumeBuilder() {
                     <Button variant="outline" size="sm" onClick={handlePrint} className="border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800">
                         <Printer className="h-4 w-4 mr-2" /> Print
                     </Button>
-                    <Button size="sm" onClick={generatePDF} className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-0.5">
+                    <Button size="sm" onClick={generatePDF} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-600/20 transition-all hover:-translate-y-0.5">
                         <FileDown className="h-4 w-4 mr-2" /> Download PDF
                     </Button>
                 </div>
@@ -142,7 +142,7 @@ export default function ResumeBuilder() {
                                 {SECTIONS.map((s) => (
                                     <div
                                         key={s.id}
-                                        className={`h-2 w-2 rounded-full transition-colors ${activeSection === s.id ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
+                                        className={`h-2 w-2 rounded-full transition-colors ${activeSection === s.id ? 'bg-indigo-600' : 'bg-slate-200 dark:bg-slate-700'}`}
                                     />
                                 ))}
                             </div>
@@ -153,7 +153,7 @@ export default function ResumeBuilder() {
                                     if (currentIndex < SECTIONS.length - 1) setActiveSection(SECTIONS[currentIndex + 1].id);
                                 }}
                                 disabled={activeSection === 'skills'}
-                                className="bg-blue-600 hover:bg-blue-700 text-white"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white"
                             >
                                 Next
                             </Button>

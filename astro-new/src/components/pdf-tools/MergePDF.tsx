@@ -50,19 +50,19 @@ export default function MergePDF() {
                     <h2 className="text-3xl font-bold mt-12 mb-6 text-slate-900 dark:text-slate-100">Why use our PDF Merger?</h2>
                     <div className="grid md:grid-cols-2 gap-8 mb-12">
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">100% Free & Secure</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">100% Free & Secure</h3>
                             <p className="text-slate-600 dark:text-slate-400">We don't store your files. All processing happens in your browser, ensuring your data remains private.</p>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">Fast & Easy</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">Fast & Easy</h3>
                             <p className="text-slate-600 dark:text-slate-400">Merge your documents in seconds with our intuitive drag-and-drop interface.</p>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">No Installation Required</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">No Installation Required</h3>
                             <p className="text-slate-600 dark:text-slate-400">Works on any device (Windows, Mac, Linux, Mobile) directly in your browser.</p>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">High Quality</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">High Quality</h3>
                             <p className="text-slate-600 dark:text-slate-400">We preserve the quality of your original documents during the merging process.</p>
                         </div>
                     </div>

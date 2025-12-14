@@ -273,7 +273,7 @@ export default function EMICalculator() {
     const yslider = ystr === '' ? 1 : years;
 
     return (
-        <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
             <header className="bg-white/80 backdrop-blur border-b sticky top-0 z-20">
                 <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
                     <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -378,7 +378,7 @@ export default function EMICalculator() {
                                 { label: 'Total Interest', value: totalInt, color: 'from-sky-500 to-blue-500' },
                                 { label: 'Total Payment', value: totalPay, color: 'from-fuchsia-500 to-purple-500' },
                             ].map((d, i) => (
-                                <div key={i} className={`p-3 sm:p-4 rounded-lg bg-linear-to-br ${d.color} text-white shadow`}>
+                                <div key={i} className={`p-3 sm:p-4 rounded-lg bg-gradient-to-br ${d.color} text-white shadow`}>
                                     <div className="text-xl sm:text-2xl font-extrabold">{formatINR(d.value)}</div>
                                     <div className="text-sm opacity-90">{d.label}</div>
                                 </div>
@@ -390,7 +390,7 @@ export default function EMICalculator() {
                             <h3 className="text-base sm:text-lg font-semibold mb-2">Quick Scenarios</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 {scenarios.map((s) => (
-                                    <div key={s.delta} className="rounded-lg border p-3 bg-linear-to-br from-slate-50 to-white">
+                                    <div key={s.delta} className="rounded-lg border p-3 bg-gradient-to-br from-slate-50 to-white">
                                         <div className="text-xs text-gray-500">
                                             {s.delta === 0 ? 'Base' : (s.delta > 0 ? `+${s.delta}%` : `${s.delta}%`)} rate
                                         </div>

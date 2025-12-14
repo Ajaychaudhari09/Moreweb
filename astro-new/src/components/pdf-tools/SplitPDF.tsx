@@ -97,11 +97,11 @@ export default function SplitPDF() {
                     <h2 className="text-3xl font-bold mt-12 mb-6 text-slate-900 dark:text-slate-100">Why use our PDF Splitter?</h2>
                     <div className="grid md:grid-cols-2 gap-8 mb-12">
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">Precise Extraction</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">Precise Extraction</h3>
                             <p className="text-slate-600 dark:text-slate-400">Select exactly the pages you need, whether it's a single page or multiple ranges.</p>
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <h3 className="text-xl font-semibold mb-3 text-blue-600 dark:text-blue-400">Secure & Private</h3>
+                            <h3 className="text-xl font-semibold mb-3 text-indigo-600 dark:text-indigo-400">Secure & Private</h3>
                             <p className="text-slate-600 dark:text-slate-400">Your documents are processed locally. No one else sees your files.</p>
                         </div>
                     </div>

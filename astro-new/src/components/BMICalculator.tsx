@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Scale } from 'lucide-react';
 
 interface BMIResult {
     bmi: number;
@@ -333,75 +334,48 @@ export default function BMICalculator() {
     return (
         <main className="min-h-screen bg-slate-50 text-slate-800">
             {/* Top banner + hero (Synthesia-style) */}
-            <header className="mx-auto max-w-6xl px-4 pt-10 pb-6">
-                {/* Mini-nav / brand stripe */}
-                <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 via-indigo-500 to-purple-500 text-sm font-bold shadow-lg shadow-blue-500/40">
-                            BMI
-                        </div>
-                        <div>
-                            <p className="text-sm font-semibold tracking-tight">
-                                Health Metrics Studio
-                            </p>
-                            <p className="text-xs text-slate-500">
-                                Instant body composition snapshot. No account. No signup.
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                        <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1">
-                            Clinically used BMI thresholds
-                        </span>
-                        <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1">
-                            We do not store your numbers
-                        </span>
-                    </div>
-                </div>
+            <header className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-800 pt-16 pb-24 text-white">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
-                {/* Hero copy */}
-                <div className="pt-8 md:flex md:items-end md:justify-between">
-                    <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/40 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-100">
-                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                            Smart BMI calculator • Includes ideal range & insights
+                <div className="relative mx-auto max-w-6xl px-4">
+                    <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 shadow-xl backdrop-blur-xl ring-1 ring-white/20">
+                        <Scale className="h-8 w-8 text-indigo-200" />
+                    </div>
+                    <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+                        Calculate your BMI and turn it into a practical health plan.
+                    </h1>
+                    <p className="mt-3 max-w-2xl text-lg text-indigo-100 md:text-xl">
+                        Switch between metric and US units, get your BMI, see a
+                        healthy weight range, and read tailored guidance for your
+                        category — all in one place.
+                    </p>
+                    <div className="mt-5 grid gap-4 text-xs sm:grid-cols-3">
+                        <div className="rounded-xl bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur-sm">
+                            <p className="text-[11px] uppercase tracking-wide text-indigo-200">
+                                Typical time
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-white">
+                                Under 30 seconds
+                            </p>
                         </div>
-                        <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
-                            Calculate your BMI and turn it into a practical health plan.
-                        </h1>
-                        <p className="mt-3 max-w-2xl text-sm text-slate-600 md:text-base">
-                            Switch between metric and US units, get your BMI, see a
-                            healthy weight range, and read tailored guidance for your
-                            category — all in one place.
-                        </p>
-                        <div className="mt-5 grid gap-4 text-xs sm:grid-cols-3">
-                            <div className="rounded-xl border border-slate-200 bg-white p-3">
-                                <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                                    Typical time
-                                </p>
-                                <p className="mt-1 text-sm font-semibold">
-                                    Under 30 seconds
-                                </p>
-                            </div>
-                            <div className="rounded-xl border border-slate-200 bg-white p-3">
-                                <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                                    Recommended for
-                                </p>
-                                <p className="mt-1 text-sm font-semibold">
-                                    Adults aged 18–65
-                                </p>
-                            </div>
-                            <div className="rounded-xl border border-slate-200 bg-white p-3">
-                                <p className="text-[11px] uppercase tracking-wide text-slate-500">
-                                    Outputs
-                                </p>
-                                <p className="mt-1 text-sm font-semibold">
-                                    BMI, range, ideal weight, BMI Prime & Ponderal Index
-                                </p>
-                            </div>
+                        <div className="rounded-xl bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur-sm">
+                            <p className="text-[11px] uppercase tracking-wide text-indigo-200">
+                                Recommended for
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-white">
+                                Adults aged 18–65
+                            </p>
+                        </div>
+                        <div className="rounded-xl bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur-sm">
+                            <p className="text-[11px] uppercase tracking-wide text-indigo-200">
+                                Outputs
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-white">
+                                BMI, range, ideal weight, BMI Prime & Ponderal Index
+                            </p>
                         </div>
                     </div>
-
                 </div>
             </header>
 
@@ -410,7 +384,7 @@ export default function BMICalculator() {
                 <div className="grid gap-8 lg:grid-cols-2">
                     {/* Left: Tool */}
                     <div className="relative rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8">
-                        <div className="absolute inset-x-12 -top-10 -z-10 h-20 rounded-[40px] bg-blue-500/30 blur-3xl" />
+                        <div className="absolute inset-x-12 -top-10 -z-10 h-20 rounded-[40px] bg-slate-200/50 blur-3xl" />
 
                         <h2 className="text-xl font-semibold text-slate-900">
                             Enter your details
@@ -981,6 +955,6 @@ export default function BMICalculator() {
                     personalised medical advice, diagnosis, or treatment.
                 </p>
             </footer>
-        </main>
+        </main >
     );
 }

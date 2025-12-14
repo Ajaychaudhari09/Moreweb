@@ -3,14 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-// Utility function (inline to avoid extra file dependency if possible, or we can create lib/utils.ts)
-// For now, I'll inline the logic or assume we can copy lib/utils.ts later.
-// Let's inline the calculation logic here to be self-contained or create a utils file.
-// The original code imported calculateCalories from '@/lib/utils'.
-// I should probably check if I migrated lib/utils.ts. I did not.
-// I will implement the calculation logic inside the component for simplicity and self-containment,
-// or I should create the utils file. Given the complexity, inlining or a local helper is fine.
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type Gender = 'male' | 'female';
 type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'veryActive';
@@ -18,17 +11,17 @@ type Goal = 'maintain' | 'mildWeightLoss' | 'weightLoss' | 'extremeWeightLoss' |
 
 interface CalorieResult {
     bmr: number;
+    tdee: number;
     goals: Record<Goal, number>;
     macros: {
         protein: { min: number; max: number };
         fat: { min: number; max: number };
         carbs: { min: number; max: number };
     };
-    sedentary: number;
-    light: number;
-    moderate: number;
-    active: number;
-    veryActive: number;
+    zigzag: {
+        day: string;
+        calories: number;
+    }[];
 }
 
 const activityMultipliers: Record<ActivityLevel, number> = {
@@ -50,22 +43,37 @@ const goalAdjustments: Record<Goal, number> = {
 };
 
 const activityDescriptions = {
-    sedentary: 'Desk job, little to no exercise',
-    light: '1-3 days/week light exercise or sports',
-    moderate: '3-5 days/week moderate exercise',
-    active: '6-7 days/week hard exercise',
-    veryActive: 'Very hard exercise, physical job, or 2x/day training'
+    sedentary: 'Sedentary: little or no exercise',
+    light: 'Light: exercise 1-3 times/week',
+    moderate: 'Moderate: exercise 4-5 times/week',
+    active: 'Active: daily exercise or intense exercise 3-4 times/week',
+    veryActive: 'Very Active: intense exercise 6-7 times/week'
 };
 
 const goalDescriptions = {
-    maintain: 'Maintain current weight',
-    mildWeightLoss: 'Lose 0.25kg (0.5lb) per week',
-    weightLoss: 'Lose 0.5kg (1lb) per week',
-    extremeWeightLoss: 'Lose 1kg (2lb) per week',
-    mildWeightGain: 'Gain 0.25kg (0.5lb) per week',
-    weightGain: 'Gain 0.5kg (1lb) per week',
-    extremeWeightGain: 'Gain 1kg (2lb) per week'
+    maintain: 'Maintain weight',
+    mildWeightLoss: 'Mild weight loss (0.25 kg/week)',
+    weightLoss: 'Weight loss (0.5 kg/week)',
+    extremeWeightLoss: 'Extreme weight loss (1 kg/week)',
+    mildWeightGain: 'Mild weight gain (0.25 kg/week)',
+    weightGain: 'Weight gain (0.5 kg/week)',
+    extremeWeightGain: 'Extreme weight gain (1 kg/week)'
 };
+
+function calculateZigzag(tdee: number): { day: string; calories: number }[] {
+    // Zigzag around maintenance (or target)
+    // Scheme: High days = +15%, Low days = Compensate.
+    const high = Math.round(tdee * 1.15);
+    // 7 * tdee = 2 * high + 5 * low
+    // 5 * low = 7 * tdee - 2 * high
+    const low = Math.round((tdee * 7 - high * 2) / 5);
+
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days.map(d => ({
+        day: d,
+        calories: (d === 'Sunday' || d === 'Saturday') ? high : low
+    }));
+}
 
 function calculateCalories(
     age: number,
@@ -83,19 +91,18 @@ function calculateCalories(
         bmr -= 161;
     }
 
-    const tdee = bmr * activityMultipliers[activityLevel];
-    const targetCalories = Math.round(tdee + goalAdjustments[goal]);
+    const tdee = Math.round(bmr * activityMultipliers[activityLevel]);
 
-    // Macro ranges (Protein 20-30%, Fat 20-30%, Carbs 40-60%)
-    const proteinMin = Math.round((targetCalories * 0.2) / 4);
-    const proteinMax = Math.round((targetCalories * 0.3) / 4);
-    const fatMin = Math.round((targetCalories * 0.2) / 9);
-    const fatMax = Math.round((targetCalories * 0.3) / 9);
-    const carbsMin = Math.round((targetCalories * 0.4) / 4);
-    const carbsMax = Math.round((targetCalories * 0.6) / 4);
+    // Macro ranges (Protein 20-30%, Fat 20-30%, Carbs 40-60%) for TDEE
+    const proteinMin = Math.round((tdee * 0.2) / 4);
+    const proteinMax = Math.round((tdee * 0.3) / 4);
+    const fatMin = Math.round((tdee * 0.2) / 9);
+    const fatMax = Math.round((tdee * 0.3) / 9);
+    const carbsMin = Math.round((tdee * 0.4) / 4);
+    const carbsMax = Math.round((tdee * 0.6) / 4);
 
     const goals: Record<Goal, number> = {
-        maintain: Math.round(tdee),
+        maintain: tdee,
         mildWeightLoss: Math.round(tdee - 250),
         weightLoss: Math.round(tdee - 500),
         extremeWeightLoss: Math.round(tdee - 1000),
@@ -104,30 +111,29 @@ function calculateCalories(
         extremeWeightGain: Math.round(tdee + 1000),
     };
 
+    const zigzag = calculateZigzag(tdee);
+
     return {
         bmr: Math.round(bmr),
+        tdee,
         goals,
         macros: {
             protein: { min: proteinMin, max: proteinMax },
             fat: { min: fatMin, max: fatMax },
             carbs: { min: carbsMin, max: carbsMax },
         },
-        sedentary: Math.round(bmr * 1.2),
-        light: Math.round(bmr * 1.375),
-        moderate: Math.round(bmr * 1.55),
-        active: Math.round(bmr * 1.725),
-        veryActive: Math.round(bmr * 1.9),
+        zigzag
     };
 }
 
 export default function CalorieCalculator() {
-    const [age, setAge] = useState<string>('');
-    const [weight, setWeight] = useState<string>('');
-    const [height, setHeight] = useState<string>('');
+    const [age, setAge] = useState<string>('25');
+    const [weight, setWeight] = useState<string>('70');
+    const [height, setHeight] = useState<string>('175');
     const [gender, setGender] = useState<Gender>('male');
-    const [activityLevel, setActivityLevel] = useState<ActivityLevel>('sedentary');
-    const [goal, setGoal] = useState<Goal>('maintain');
+    const [activityLevel, setActivityLevel] = useState<ActivityLevel>('moderate');
     const [result, setResult] = useState<CalorieResult | null>(null);
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const validateInputs = (): boolean => {
@@ -146,11 +152,19 @@ export default function CalorieCalculator() {
 
     const handleCalculate = () => {
         if (!validateInputs()) return;
-        const ageNum = Number.parseFloat(age);
-        const weightNum = Number.parseFloat(weight);
-        const heightNum = Number.parseFloat(height);
-        const calorieResult = calculateCalories(ageNum, weightNum, heightNum, gender, activityLevel, goal);
-        setResult(calorieResult);
+        setLoading(true);
+
+        // Simulating calculation delay for better UX
+        setTimeout(() => {
+            const ageNum = Number.parseFloat(age);
+            const weightNum = Number.parseFloat(weight);
+            const heightNum = Number.parseFloat(height);
+            // Default goal 'maintain' passed but object returns all
+            const calorieResult = calculateCalories(ageNum, weightNum, heightNum, gender, activityLevel, 'maintain');
+
+            setResult(calorieResult);
+            setLoading(false);
+        }, 600);
     };
 
     const reset = () => {
@@ -159,340 +173,315 @@ export default function CalorieCalculator() {
         setHeight('');
         setGender('male');
         setActivityLevel('sedentary');
-        setGoal('maintain');
         setResult(null);
         setErrors({});
     };
 
-    const targetCalories = result?.goals[goal] || 0;
-
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-linear-to-b from-gray-50 to-white font-sans">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200">
-                <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-                        Daily Calorie Calculator
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-xs">
+                <div className="max-w-4xl mx-auto px-4 py-5 sm:px-6">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+                        Calorie Calculator
                     </h1>
-                    <p className="mt-3 text-lg text-gray-600">
-                        Calculate your daily calorie needs using the Mifflin-St Jeor equation with personalized activity and goal settings.
+                    <p className="mt-1 text-sm text-gray-500">
+                        Scientific estimation of your daily calorie needs for weight loss, maintenance, or gain.
                     </p>
                 </div>
             </header>
 
-            {/* Main Content */}
-            <main className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <main className="max-w-4xl mx-auto px-4 py-8 sm:px-6 space-y-8">
 
-                {/* Calculator Section */}
-                <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-                    <h2 className="text-xl font-semibold text-gray-900 mb-1">Enter Your Details</h2>
-                    <p className="text-sm text-gray-600 mb-6">All fields are required for accurate calculations</p>
+                {/* Calculator Form */}
+                <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden md:p-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-6">
+                            <h2 className="text-lg font-semibold text-gray-900 border-b pb-2">Your Stats</h2>
 
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleCalculate();
-                        }}
-                        className="space-y-6"
-                    >
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="age">
-                                    Age (years)
-                                </label>
-                                <Input
-                                    id="age"
-                                    type="number"
-                                    min={1}
-                                    max={120}
-                                    value={age}
-                                    onChange={(e) => setAge(e.target.value)}
-                                    placeholder="e.g. 28"
-                                    className={errors.age ? 'border-red-300' : ''}
-                                    required
-                                />
-                                {errors.age && <p className="mt-1 text-xs text-red-600">{errors.age}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="weight">
-                                    Weight (kg)
-                                </label>
-                                <Input
-                                    id="weight"
-                                    type="number"
-                                    inputMode="decimal"
-                                    min={1}
-                                    max={1000}
-                                    step="0.1"
-                                    value={weight}
-                                    onChange={(e) => setWeight(e.target.value)}
-                                    placeholder="e.g. 70.5"
-                                    className={errors.weight ? 'border-red-300' : ''}
-                                    required
-                                />
-                                {errors.weight && <p className="mt-1 text-xs text-red-600">{errors.weight}</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="height">
-                                    Height (cm)
-                                </label>
-                                <Input
-                                    id="height"
-                                    type="number"
-                                    min={1}
-                                    max={300}
-                                    value={height}
-                                    onChange={(e) => setHeight(e.target.value)}
-                                    placeholder="e.g. 175"
-                                    className={errors.height ? 'border-red-300' : ''}
-                                    required
-                                />
-                                {errors.height && <p className="mt-1 text-xs text-red-600">{errors.height}</p>}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <fieldset className="border border-gray-200 rounded-md p-4">
-                                <legend className="text-sm font-medium text-gray-700 px-2">Gender</legend>
-                                <div className="mt-2 space-y-2">
-                                    <label className="flex items-center">
-                                        <input
-                                            type="radio"
-                                            name="gender"
-                                            value="male"
-                                            checked={gender === 'male'}
-                                            onChange={() => setGender('male')}
-                                            className="h-4 w-4 text-blue-600"
+                            <div className="grid grid-cols-3 gap-3">
+                                <div className="col-span-1">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            value={age}
+                                            onChange={(e) => setAge(e.target.value)}
+                                            placeholder="25"
+                                            className={`pr-8 ${errors.age ? 'border-red-300' : ''}`}
                                         />
-                                        <span className="ml-2 text-sm text-gray-700">Male</span>
-                                    </label>
-                                    <label className="flex items-center">
-                                        <input
-                                            type="radio"
-                                            name="gender"
-                                            value="female"
-                                            checked={gender === 'female'}
-                                            onChange={() => setGender('female')}
-                                            className="h-4 w-4 text-blue-600"
-                                        />
-                                        <span className="ml-2 text-sm text-gray-700">Female</span>
-                                    </label>
+                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">yr</span>
+                                    </div>
                                 </div>
-                            </fieldset>
+                                <div className="col-span-2">
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                    <div className="flex bg-gray-100 p-1 rounded-md">
+                                        {(['male', 'female'] as const).map((g) => (
+                                            <button
+                                                key={g}
+                                                onClick={() => setGender(g)}
+                                                className={`flex-1 text-sm py-1.5 rounded-sm capitalize transition-all ${gender === g ? 'bg-white text-blue-600 shadow-xs font-medium' : 'text-gray-500 hover:text-gray-700'
+                                                    }`}
+                                            >
+                                                {g}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Height</label>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            value={height}
+                                            onChange={(e) => setHeight(e.target.value)}
+                                            placeholder="175"
+                                            className={`pr-8 ${errors.height ? 'border-red-300' : ''}`}
+                                        />
+                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+                                    <div className="relative">
+                                        <Input
+                                            type="number"
+                                            value={weight}
+                                            onChange={(e) => setWeight(e.target.value)}
+                                            placeholder="70"
+                                            className={`pr-8 ${errors.weight ? 'border-red-300' : ''}`}
+                                        />
+                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">kg</span>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="activity">
-                                    Activity Level
-                                </label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Activity</label>
                                 <select
-                                    id="activity"
+                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                     value={activityLevel}
                                     onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
-                                    className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                                 >
-                                    {Object.entries(activityDescriptions).map(([key, description]) => (
-                                        <option key={key} value={key}>
-                                            {key.charAt(0).toUpperCase() + key.slice(1)} - {description}
-                                        </option>
+                                    {Object.entries(activityDescriptions).map(([val, label]) => (
+                                        <option key={val} value={val}>{label}</option>
                                     ))}
                                 </select>
                             </div>
+
+                            <div className="pt-2 flex gap-3">
+                                <Button onClick={handleCalculate} className="flex-1 bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
+                                    {loading ? 'Calculating...' : 'Calculate'}
+                                </Button>
+                                <Button variant="outline" onClick={reset}>Clear</Button>
+                            </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="goal">
-                                Goal
-                            </label>
-                            <select
-                                id="goal"
-                                value={goal}
-                                onChange={(e) => setGoal(e.target.value as Goal)}
-                                className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                            >
-                                {Object.entries(goalDescriptions).map(([key, description]) => (
-                                    <option key={key} value={key}>
-                                        {description}
-                                    </option>
-                                ))}
-                            </select>
+                        {/* Interactive Info Panel / Decorator */}
+                        <div className="bg-slate-50 rounded-lg p-6 border border-slate-100 text-sm text-slate-600 flex flex-col justify-center">
+                            <h3 className="font-semibold text-slate-800 mb-2">Did you know?</h3>
+                            <p className="mb-4">
+                                The <strong>Mifflin-St Jeor</strong> equation is considered one of the most accurate BMR formulas for healthy individuals.
+                            </p>
+                            <p>
+                                Your BMR (Basal Metabolic Rate) is essentially the number of calories your body burns if you stayed in bed all day. Activity multipliers are then applied to find your TDEE (Total Daily Energy Expenditure).
+                            </p>
                         </div>
-
-                        <div className="flex gap-3">
-                            <Button type="submit" className="flex-1 sm:flex-none sm:px-8">
-                                Calculate Calories
-                            </Button>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={reset}
-                                className="flex-1 sm:flex-none sm:px-8"
-                            >
-                                Reset
-                            </Button>
-                        </div>
-                    </form>
+                    </div>
                 </section>
 
                 {/* Results Section */}
-                {result && (
-                    <section className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-                        <h2 className="text-xl font-semibold text-gray-900 mb-6">Your Results</h2>
+                {result && !loading && (
+                    <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
 
-                        {/* Main Result */}
-                        <div className="text-center mb-6 p-4 bg-green-50 rounded-lg">
-                            <div className="text-4xl font-bold text-green-600">{targetCalories}</div>
-                            <div className="text-lg font-medium text-gray-900 mt-1">Daily Calories</div>
-                            <div className="text-sm text-gray-600">{goalDescriptions[goal]}</div>
+                        {/* Primary Result Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-white rounded-xl shadow-sm border p-6 flex flex-col items-center justify-center text-center">
+                                <span className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-1">Maintain Weight</span>
+                                <span className="text-4xl font-extrabold text-gray-900">{result.tdee.toLocaleString()}</span>
+                                <span className="text-sm text-gray-500 mt-1">Calories / day</span>
+                                <div className="mt-4 text-xs bg-gray-100 text-gray-600 py-1 px-3 rounded-full">
+                                    Base Requirement (100% TDEE)
+                                </div>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border p-6 space-y-4">
+                                <div className="flex justify-between items-center border-b pb-3">
+                                    <div>
+                                        <div className="font-semibold text-gray-900">Mild Weight Loss</div>
+                                        <div className="text-xs text-gray-500">0.25 kg/week</div>
+                                    </div>
+                                    <div className="text-xl font-bold text-green-600">{result.goals.mildWeightLoss}</div>
+                                </div>
+                                <div className="flex justify-between items-center border-b pb-3">
+                                    <div>
+                                        <div className="font-semibold text-gray-900">Weight Loss</div>
+                                        <div className="text-xs text-gray-500">0.5 kg/week</div>
+                                    </div>
+                                    <div className="text-xl font-bold text-green-600">{result.goals.weightLoss}</div>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <div className="font-semibold text-gray-900">Extreme Weight Loss</div>
+                                        <div className="text-xs text-gray-500">1 kg/week</div>
+                                    </div>
+                                    <div className="text-xl font-bold text-green-600">{result.goals.extremeWeightLoss}</div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            {/* BMR and Activity Levels */}
-                            <div>
-                                <h3 className="font-medium text-gray-900 mb-3">Calorie Breakdown</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-blue-50 rounded-md">
-                                        <div>
-                                            <div className="font-medium text-gray-900">BMR</div>
-                                            <div className="text-xs text-gray-600">Calories at rest</div>
-                                        </div>
-                                        <div className="text-lg font-semibold text-blue-600">{result.bmr}</div>
-                                    </div>
-
-                                    {[
-                                        { key: 'sedentary' as const, label: 'Sedentary', value: result.sedentary },
-                                        { key: 'light' as const, label: 'Light Activity', value: result.light },
-                                        { key: 'moderate' as const, label: 'Moderate Activity', value: result.moderate },
-                                        { key: 'active' as const, label: 'Active', value: result.active },
-                                        { key: 'veryActive' as const, label: 'Very Active', value: result.veryActive }
-                                    ].map(({ key, label, value }) => (
-                                        <div
-                                            key={key}
-                                            className={`flex justify-between items-center p-2 rounded-md text-sm ${key === activityLevel ? 'bg-green-100 font-medium' : 'bg-gray-50'
-                                                }`}
-                                        >
-                                            <span>{label}</span>
-                                            <span>{value}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                        {/* Guidance Section */}
+                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-6">
+                            <h3 className="text-lg font-bold text-blue-900 mb-3">Nutrition Guidance</h3>
+                            <div className="prose prose-sm text-blue-800 max-w-none">
+                                <p>
+                                    To <strong>maintain your current weight</strong>, you should consume approximately <strong>{result.tdee.toLocaleString()} calories</strong> per day.
+                                </p>
+                                <ul className="mt-2 space-y-1 list-disc list-inside">
+                                    <li>
+                                        To <strong>lose weight</strong> (0.5 kg/week), you need a calorie deficit of ~500 kcal per day. You should target <strong>{result.goals.weightLoss.toLocaleString()} calories</strong> daily.
+                                    </li>
+                                    <li>
+                                        To <strong>gain weight</strong> (0.5 kg/week), you need a calorie surplus of ~500 kcal per day. You should target <strong>{result.goals.weightGain.toLocaleString()} calories</strong> daily.
+                                    </li>
+                                </ul>
+                                <p className="mt-4 text-xs text-blue-600">
+                                    * These values are estimates. Everyone's metabolism is different. Monitor your weight weekly and adjust your intake by ±100-200 calories if not seeing desired results.
+                                </p>
                             </div>
+                        </div>
 
-                            {/* Macronutrients */}
-                            <div>
-                                <h3 className="font-medium text-gray-900 mb-3">Daily Macronutrients</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center p-3 bg-red-50 rounded-md">
-                                        <div>
-                                            <div className="font-medium text-red-800">Protein</div>
-                                            <div className="text-xs text-red-600">{result.macros.protein.min}-{result.macros.protein.max}g</div>
-                                        </div>
-                                        <div className="text-lg font-semibold text-red-600">
-                                            {Math.round((result.macros.protein.min + result.macros.protein.max) / 2)}g
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-between items-center p-3 bg-yellow-50 rounded-md">
-                                        <div>
-                                            <div className="font-medium text-yellow-800">Fat</div>
-                                            <div className="text-xs text-yellow-600">{result.macros.fat.min}-{result.macros.fat.max}g</div>
-                                        </div>
-                                        <div className="text-lg font-semibold text-yellow-600">
-                                            {Math.round((result.macros.fat.min + result.macros.fat.max) / 2)}g
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-between items-center p-3 bg-blue-50 rounded-md">
-                                        <div>
-                                            <div className="font-medium text-blue-800">Carbs</div>
-                                            <div className="text-xs text-blue-600">{result.macros.carbs.min}-{result.macros.carbs.max}g</div>
-                                        </div>
-                                        <div className="text-lg font-semibold text-blue-600">
-                                            {Math.round((result.macros.carbs.min + result.macros.carbs.max) / 2)}g
-                                        </div>
-                                    </div>
+                        {/* Detailed Tabs */}
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                            <Tabs defaultValue="table" className="w-full">
+                                <div className="border-b px-6 pt-4">
+                                    <TabsList className="grid w-full max-w-md grid-cols-3">
+                                        <TabsTrigger value="table">All Goals</TabsTrigger>
+                                        <TabsTrigger value="zigzag">Zigzag Cycle</TabsTrigger>
+                                        <TabsTrigger value="macros">Macronutrients</TabsTrigger>
+                                    </TabsList>
                                 </div>
-                            </div>
+
+                                <TabsContent value="table" className="p-6">
+                                    <h3 className="text-lg font-semibold mb-4">Weight Control Table</h3>
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-sm text-left">
+                                            <thead className="bg-gray-50 text-gray-700">
+                                                <tr>
+                                                    <th className="px-4 py-3 rounded-tl-lg">Goal</th>
+                                                    <th className="px-4 py-3">Weight Change</th>
+                                                    <th className="px-4 py-3 rounded-tr-lg text-right">Calories</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-100">
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Extreme Weight Loss</td>
+                                                    <td className="px-4 py-3 text-gray-500">-1 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-red-600">{result.goals.extremeWeightLoss}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Weight Loss</td>
+                                                    <td className="px-4 py-3 text-gray-500">-0.5 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-orange-600">{result.goals.weightLoss}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Mild Weight Loss</td>
+                                                    <td className="px-4 py-3 text-gray-500">-0.25 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-yellow-600">{result.goals.mildWeightLoss}</td>
+                                                </tr>
+                                                <tr className="bg-green-50/50">
+                                                    <td className="px-4 py-3 font-medium text-green-900">Maintain Weight</td>
+                                                    <td className="px-4 py-3 text-green-700">-</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-green-700">{result.goals.maintain}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Mild Weight Gain</td>
+                                                    <td className="px-4 py-3 text-gray-500">+0.25 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-slate-600">{result.goals.mildWeightGain}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Weight Gain</td>
+                                                    <td className="px-4 py-3 text-gray-500">+0.5 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-slate-600">{result.goals.weightGain}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="px-4 py-3 font-medium">Extreme Weight Gain</td>
+                                                    <td className="px-4 py-3 text-gray-500">+1 kg/week</td>
+                                                    <td className="px-4 py-3 text-right font-mono font-bold text-slate-600">{result.goals.extremeWeightGain}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </TabsContent>
+
+                                <TabsContent value="zigzag" className="p-6">
+                                    <div className="flex flex-col sm:flex-row sm:items-start gap-6">
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-semibold mb-2">Zigzag Calorie Cycling</h3>
+                                            <p className="text-sm text-gray-600 mb-4">
+                                                Zigzag calorie cycling (or "calorie shifting") involves changing your daily calorie intake throughout the week. This approach can help prevent metabolic slowdown and plateaus.
+                                            </p>
+                                            <div className="border rounded-lg overflow-hidden">
+                                                <table className="w-full text-sm">
+                                                    <thead className="bg-gray-50 text-gray-700 border-b">
+                                                        <tr>
+                                                            <th className="px-4 py-2 text-left">Day</th>
+                                                            <th className="px-4 py-2 text-right">Calories</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y">
+                                                        {result.zigzag.map((z, i) => (
+                                                            <tr key={i} className={z.calories > result.tdee ? 'bg-orange-50' : 'bg-white'}>
+                                                                <td className="px-4 py-2 font-medium">{z.day}</td>
+                                                                <td className="px-4 py-2 text-right font-mono">{z.calories}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div className="w-full sm:w-64 bg-yellow-50 p-4 rounded-lg border border-yellow-100 text-sm">
+                                            <h4 className="font-semibold text-yellow-800 mb-2">How it works</h4>
+                                            <p className="text-yellow-700 mb-2">
+                                                This schedule alternates <strong>High Calorie</strong> days (Weekends) with <strong>Lower Calorie</strong> days (Weekdays).
+                                            </p>
+                                            <p className="text-yellow-700">
+                                                The weekly total average equals your maintenance calories, preventing weight gain while keeping metabolism active.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </TabsContent>
+
+                                <TabsContent value="macros" className="p-6">
+                                    <h3 className="text-lg font-semibold mb-4">Balanced Macronutrients</h3>
+                                    <p className="text-sm text-gray-600 mb-6">
+                                        Suggested breakdown for a balanced diet based on your maintenance calories.
+                                    </p>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div className="p-4 rounded-lg bg-blue-50 border border-blue-100 text-center">
+                                            <div className="text-blue-600 font-bold mb-1">Carbohydrates</div>
+                                            <div className="text-2xl font-bold text-gray-900">{Math.round((result.macros.carbs.min + result.macros.carbs.max) / 2)}g</div>
+                                            <div className="text-xs text-gray-500 mt-1">45-65% of energy</div>
+                                        </div>
+                                        <div className="p-4 rounded-lg bg-green-50 border border-green-100 text-center">
+                                            <div className="text-green-600 font-bold mb-1">Protein</div>
+                                            <div className="text-2xl font-bold text-gray-900">{Math.round((result.macros.protein.min + result.macros.protein.max) / 2)}g</div>
+                                            <div className="text-xs text-gray-500 mt-1">10-35% of energy</div>
+                                        </div>
+                                        <div className="p-4 rounded-lg bg-yellow-50 border border-yellow-100 text-center">
+                                            <div className="text-yellow-600 font-bold mb-1">Fats</div>
+                                            <div className="text-2xl font-bold text-gray-900">{Math.round((result.macros.fat.min + result.macros.fat.max) / 2)}g</div>
+                                            <div className="text-xs text-gray-500 mt-1">20-35% of energy</div>
+                                        </div>
+                                    </div>
+                                </TabsContent>
+                            </Tabs>
                         </div>
                     </section>
                 )}
-
-                {/* Educational Content */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">How It Works</h3>
-                        <p className="text-gray-700 text-sm mb-4">
-                            This calculator uses the Mifflin-St Jeor equation, the most accurate method for estimating BMR in healthy adults.
-                        </p>
-                        <h4 className="font-medium text-gray-900 mb-2">The Formula</h4>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                            <li><strong>Men:</strong> BMR = 10 × weight + 6.25 × height - 5 × age + 5</li>
-                            <li><strong>Women:</strong> BMR = 10 × weight + 6.25 × height - 5 × age - 161</li>
-                        </ul>
-                        <p className="text-xs text-gray-600 mt-3">
-                            Total daily calories = BMR × activity factor + goal adjustment
-                        </p>
-                    </article>
-
-                    <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Macronutrient Ranges</h3>
-                        <div className="space-y-3">
-                            <div className="border-l-4 border-red-400 pl-3">
-                                <div className="font-medium text-gray-900 text-sm">Protein: 20-30%</div>
-                                <div className="text-xs text-gray-600">Muscle maintenance, satiety</div>
-                            </div>
-                            <div className="border-l-4 border-yellow-400 pl-3">
-                                <div className="font-medium text-gray-900 text-sm">Fat: 20-30%</div>
-                                <div className="text-xs text-gray-600">Hormone production, absorption</div>
-                            </div>
-                            <div className="border-l-4 border-blue-400 pl-3">
-                                <div className="font-medium text-gray-900 text-sm">Carbs: 40-60%</div>
-                                <div className="text-xs text-gray-600">Primary energy source</div>
-                            </div>
-                        </div>
-                    </article>
-                </section>
-
-                {/* Tips Section */}
-                <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Weight Loss</h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
-                            <li>• Create 500-750 calorie daily deficit</li>
-                            <li>• Prioritize protein intake</li>
-                            <li>• Include strength training</li>
-                            <li>• Stay hydrated</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-                        <h4 className="font-medium text-gray-900 mb-2">Weight Gain</h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
-                            <li>• Add 300-500 calories daily</li>
-                            <li>• Choose nutrient-dense foods</li>
-                            <li>• Eat frequently</li>
-                            <li>• Include resistance training</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:col-span-2 lg:col-span-1">
-                        <h4 className="font-medium text-gray-900 mb-2">Important Notes</h4>
-                        <ul className="text-xs text-gray-700 space-y-1">
-                            <li>• Results are estimates</li>
-                            <li>• Individual variation ±15%</li>
-                            <li>• Adjust based on progress</li>
-                            <li>• Consult professionals</li>
-                        </ul>
-                    </div>
-                </section>
             </main>
-
-            {/* Footer */}
-            <footer className="bg-white border-t border-gray-200">
-                <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                </div>
-            </footer>
         </div>
     );
 }

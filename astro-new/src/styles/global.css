@@ -6,8 +6,8 @@
 @layer base {
     :root {
         /* Brand palette: Indigo (primary) + Pinkish (accent) */
-        --brand-indigo-50: #0b41f3;
-        --brand-indigo-100: #375ddb;
+        --brand-indigo-50: #eef2ff;
+        --brand-indigo-100: #e0e7ff;
         --brand-indigo-500: #6366f1;
         /* indigo-500 */
         --brand-indigo-600: #4f46e5;
@@ -22,16 +22,20 @@
         --foreground: 222 47% 11%;
         --primary: 249 60% 55%;
         /* approximate for indigo (#6366f1) */
-        --primary-foreground: 0 0% 100%;
-        --secondary: 330 85% 58%;
-        /* pinkish */
-        --secondary-foreground: 0 0% 100%;
-        --accent: 330 85% 58%;
-        --accent-foreground: 0 0% 100%;
-        --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
 
-        /* Backwards-compatible variables used in some components */
+        /* Added during fix, keeping for safety but resetting values might be needed if they conflict? 
+           Actually, restoring primary HSL is key. */
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 249 60% 55%;
+        /* Match primary */
+        --radius: 0.5rem;
+
+        /* ... existing HSL vars ... */
         --color-primary: #4f46e5;
         --color-accent: #ec4899;
         --color-background: #f8fafc;
@@ -40,6 +44,8 @@
         --color-text-primary: #0f172a;
         --color-text-secondary: #64748b;
     }
+
+    /* .dark block removed to revert to original state (or kept minimal if needed, but 'old ui' implies no custom dark mode overrides I added) */
 
     body {
         font-family: 'Inter', sans-serif;
@@ -72,11 +78,16 @@
     }
 
     .text-primary {
-        color: #3b82f6;
+        color: #18181b;
     }
 
     .bg-primary {
         background-color: var(--color-primary);
+        color: #ffffff;
+    }
+
+    .text-primary-foreground {
+        color: #ffffff !important;
     }
 
     /* Header utilities */
@@ -187,15 +198,17 @@
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, var(--color-accent) 0%, #8b5cf6 50%, var(--color-primary) 100%);
+    /* Monochrome: just slightly softer black or kept solid */
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 /* Brand buttons (component-level) */
 .btn-primary {
-    background: linear-gradient(90deg, var(--brand-indigo-600), #6366f1);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
     color: white;
     font-weight: 600;
     padding: 0.6rem 1rem;
@@ -204,7 +217,7 @@
     align-items: center;
     gap: 0.5rem;
     transition: transform .18s ease, box-shadow .18s ease;
-    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.12);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
