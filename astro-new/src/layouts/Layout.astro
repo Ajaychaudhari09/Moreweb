@@ -1,6 +1,6 @@
 ---
 import "@/styles/global.css";
-import "@fontsource/inter";
+import "@fontsource-variable/inter";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -32,6 +32,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <meta name="theme-color" content="#4f46e5" />
+
+    <!-- Preconnect to critical domains -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://pl28064811.effectivegatecpm.com" />
+
     <script is:inline>
       const theme = (() => {
         if (
@@ -121,5 +126,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+
+    <!-- Global Accessibility Patch for 3rd Party Iframes (Ads) -->
+    <script is:inline>
+      const observer = new MutationObserver(() => {
+        document.querySelectorAll("iframe:not([title])").forEach((iframe) => {
+          iframe.setAttribute("title", "Third Party Advertisement");
+          iframe.setAttribute("aria-label", "Third Party Advertisement");
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    </script>
   </body>
 </html>

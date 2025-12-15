@@ -118,6 +118,9 @@ export default function BMICalculator() {
     const [shareMessage, setShareMessage] = useState<string>('');
     const [pdfMessage, setPdfMessage] = useState<string>('');
 
+    const [step, setStep] = useState<1 | 2>(1);
+    const [loading, setLoading] = useState(false);
+
     const calcMarkerLeft = useMemo(() => {
         if (!result) return 0;
         // Scale 10–40 for visualization; clamp within.
@@ -165,40 +168,47 @@ export default function BMICalculator() {
             return;
         }
 
-        const bmiRaw = weightKg / (heightMeters * heightMeters);
-        const bmi = Math.round(bmiRaw * 10) / 10;
+        setLoading(true);
 
-        let category: BMIResult['category'] = 'Underweight';
-        if (bmi < 18.5) category = 'Underweight';
-        else if (bmi < 25) category = 'Normal';
-        else if (bmi < 30) category = 'Overweight';
-        else category = 'Obese';
+        // Simulate calculation delay for better UX
+        setTimeout(() => {
+            const bmiRaw = weightKg / (heightMeters * heightMeters);
+            const bmi = Math.round(bmiRaw * 10) / 10;
 
-        const healthyRange = '18.5 - 25';
+            let category: BMIResult['category'] = 'Underweight';
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
 
-        const idealWeightMin =
-            unit === 'us'
-                ? Math.round(18.5 * heightMeters * heightMeters * 2.20462 * 10) / 10
-                : Math.round(18.5 * heightMeters * heightMeters * 10) / 10;
+            const healthyRange = '18.5 - 25';
 
-        const idealWeightMax =
-            unit === 'us'
-                ? Math.round(25 * heightMeters * heightMeters * 2.20462 * 10) / 10
-                : Math.round(25 * heightMeters * heightMeters * 10) / 10;
+            const idealWeightMin =
+                unit === 'us'
+                    ? Math.round(18.5 * heightMeters * heightMeters * 2.20462 * 10) / 10
+                    : Math.round(18.5 * heightMeters * heightMeters * 10) / 10;
 
-        const bmiPrime = Math.round((bmiRaw / 25) * 100) / 100;
-        const ponderalIndex =
-            Math.round((weightKg / heightMeters ** 3) * 10) / 10;
+            const idealWeightMax =
+                unit === 'us'
+                    ? Math.round(25 * heightMeters * heightMeters * 2.20462 * 10) / 10
+                    : Math.round(25 * heightMeters * heightMeters * 10) / 10;
 
-        setResult({
-            bmi,
-            category,
-            healthyRange,
-            idealWeightMin,
-            idealWeightMax,
-            bmiPrime,
-            ponderalIndex,
-        });
+            const bmiPrime = Math.round((bmiRaw / 25) * 100) / 100;
+            const ponderalIndex =
+                Math.round((weightKg / heightMeters ** 3) * 10) / 10;
+
+            setResult({
+                bmi,
+                category,
+                healthyRange,
+                idealWeightMin,
+                idealWeightMax,
+                bmiPrime,
+                ponderalIndex,
+            });
+            setLoading(false);
+            setStep(2);
+        }, 800);
     };
 
     const reset = () => {
@@ -336,7 +346,7 @@ export default function BMICalculator() {
             {/* Top banner + hero (Synthesia-style) */}
             <header className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-800 pt-16 pb-24 text-white">
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+                <div className="absolute inset-0 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
                 <div className="relative mx-auto max-w-6xl px-4">
                     <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 shadow-xl backdrop-blur-xl ring-1 ring-white/20">
@@ -380,10 +390,9 @@ export default function BMICalculator() {
             </header>
 
             {/* Tool + Results */}
-            <section className="mx-auto max-w-6xl px-4 pb-14 pt-4">
-                <div className="grid gap-8 lg:grid-cols-2">
-                    {/* Left: Tool */}
-                    <div className="relative rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8">
+            <section className="mx-auto max-w-4xl px-4 pb-14 pt-4">
+                {step === 1 && (
+                    <div className="relative rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8 animate-in slide-in-from-bottom-4 duration-500">
                         <div className="absolute inset-x-12 -top-10 -z-10 h-20 rounded-[40px] bg-slate-200/50 blur-3xl" />
 
                         <h2 className="text-xl font-semibold text-slate-900">
@@ -602,8 +611,13 @@ export default function BMICalculator() {
                             )}
 
                             <div className="flex flex-wrap items-center gap-3">
-                                <Button type="submit" className="px-6 text-sm font-semibold">
-                                    Calculate
+                                <Button type="submit" className="px-6 text-sm font-semibold" disabled={loading}>
+                                    {loading ? (
+                                        <div className="flex items-center gap-2">
+                                            <span className="h-4 w-4 border-2 border-white/50 border-t-white rounded-full animate-spin"></span>
+                                            Calculating...
+                                        </div>
+                                    ) : 'Calculate'}
                                 </Button>
                                 <Button
                                     type="button"
@@ -685,15 +699,17 @@ export default function BMICalculator() {
                             </div>
                         </div>
                     </div>
+                )}
 
-                    {/* Right: Results + Summary + Export */}
-                    <div className="rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8">
-                        <h2 className="text-xl font-semibold text-slate-900">Results</h2>
-                        <p className="mt-1 text-xs text-slate-500">
-                            Figures update after you run a calculation. Values are
-                            estimates, intended for planning and discussion with a
-                            professional.
-                        </p>
+                {step === 2 && result && (
+                    <div className="rounded-2xl border border-slate-200 bg-white/60 p-6 shadow-xl shadow-slate-200/80 backdrop-blur-md md:p-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-900">Your Results</h2>
+                                <p className="text-sm text-slate-500">Based on your provided metrics.</p>
+                            </div>
+                            <Button variant="outline" onClick={() => setStep(1)}>Recalculate</Button>
+                        </div>
 
                         <hr className="my-6 border-slate-200" />
 
@@ -864,7 +880,7 @@ export default function BMICalculator() {
                             </div>
                         )}
                     </div>
-                </div>
+                )}
             </section>
 
             {/* Content Sections */}
@@ -955,6 +971,6 @@ export default function BMICalculator() {
                     personalised medical advice, diagnosis, or treatment.
                 </p>
             </footer>
-        </main >
+        </main>
     );
 }

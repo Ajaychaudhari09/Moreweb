@@ -153,6 +153,9 @@ export default function EMICalculator() {
     const [res, setRes] = useState<EMIResult | null>(null);
     const [sched, setSched] = useState<AmortizationRow[]>([]);
 
+    const [loading, setLoading] = useState(false);
+    const [step, setStep] = useState<1 | 2>(1);
+
     // Shareable link parsing
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -181,54 +184,63 @@ export default function EMICalculator() {
     };
 
     const calculate = () => {
-        const calc = calculateEMI(P, r, years);
-        if (!calc) return;
-        setRes(calc);
+        setLoading(true);
+        setTimeout(() => {
+            const calc = calculateEMI(P, r, years);
+            if (!calc) {
+                setLoading(false);
+                return;
+            }
+            setRes(calc);
 
-        const nMonths = years * 12;
-        const mRate = r / 12 / 100;
+            const nMonths = years * 12;
+            const mRate = r / 12 / 100;
 
-        let bal = round2(P);
-        const rows: AmortizationRow[] = [];
+            let bal = round2(P);
+            const rows: AmortizationRow[] = [];
 
-        // Start schedule from current month
-        const now = new Date();
-        const startYear = now.getFullYear();
-        const startMonth = now.getMonth();
+            // Start schedule from current month
+            const now = new Date();
+            const startYear = now.getFullYear();
+            const startMonth = now.getMonth();
 
-        for (let m = 1; m <= nMonths; m++) {
-            const isLast = m === nMonths;
+            for (let m = 1; m <= nMonths; m++) {
+                const isLast = m === nMonths;
 
-            const interest = round2(bal * mRate);
-            let principal = round2(calc.monthlyEMI - interest);
-            let emiToUse = round2(calc.monthlyEMI);
+                const interest = round2(bal * mRate);
+                let principal = round2(calc.monthlyEMI - interest);
+                let emiToUse = round2(calc.monthlyEMI);
 
-            // Adjust last payment to clear balance exactly
-            if (isLast) {
-                principal = round2(bal);
-                emiToUse = round2(principal + interest);
+                // Adjust last payment to clear balance exactly
+                if (isLast) {
+                    principal = round2(bal);
+                    emiToUse = round2(principal + interest);
+                }
+
+                bal = round2(Math.max(0, bal - principal));
+
+                const idx = m - 1;
+                const date = new Date(startYear, startMonth + idx, 1);
+                const calYear = date.getFullYear();
+                const fy = fyLabelFromDate(date);
+
+                rows.push({
+                    month: m,
+                    emi: emiToUse,
+                    principal,
+                    interest,
+                    balance: bal,
+                    calendarYear: calYear,
+                    financialYear: fy,
+                    monthName: monthShortName(date.getMonth()),
+                });
             }
 
-            bal = round2(Math.max(0, bal - principal));
-
-            const idx = m - 1;
-            const date = new Date(startYear, startMonth + idx, 1);
-            const calYear = date.getFullYear();
-            const fy = fyLabelFromDate(date);
-
-            rows.push({
-                month: m,
-                emi: emiToUse,
-                principal,
-                interest,
-                balance: bal,
-                calendarYear: calYear,
-                financialYear: fy,
-                monthName: monthShortName(date.getMonth()),
-            });
-        }
-
-        setSched(rows);
+            setSched(rows);
+            setSched(rows);
+            setLoading(false);
+            setStep(2);
+        }, 800);
     };
 
     const downloadCSV = () => {
@@ -287,90 +299,102 @@ export default function EMICalculator() {
 
             <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8 space-y-8">
                 {/* Inputs */}
-                <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6">
-                    <h2 className="text-lg sm:text-xl font-semibold mb-4">Enter Loan Details</h2>
-                    <div className="grid sm:grid-cols-2 gap-6">
-                        {/* Principal */}
-                        <div>
-                            <IntegerField
-                                id="loan-amount"
-                                label="Loan Amount (₹)"
-                                value={Pstr}
-                                setValue={setPstr}
-                                min={50000}
-                                max={10000000}
-                                placeholder="e.g. 1000000"
-                                describedBy="loan-amount-desc"
-                            />
-                            <div className="mt-3 flex items-center gap-4">
-                                <Slider value={[Pslider]} onValueChange={(v) => setPstr(String(v[0]))} min={50000} max={10000000} step={5000} className="flex-1" />
-                                <span className="text-sm text-gray-600 hidden sm:inline">{Pstr === '' ? '—' : formatINR(P)}</span>
+                {step === 1 && (
+                    <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 animate-in slide-in-from-bottom-4 duration-500">
+                        <h2 className="text-lg sm:text-xl font-semibold mb-4">Enter Loan Details</h2>
+                        <div className="grid sm:grid-cols-2 gap-6">
+                            {/* Principal */}
+                            <div>
+                                <IntegerField
+                                    id="loan-amount"
+                                    label="Loan Amount (₹)"
+                                    value={Pstr}
+                                    setValue={setPstr}
+                                    min={50000}
+                                    max={10000000}
+                                    placeholder="e.g. 1000000"
+                                    describedBy="loan-amount-desc"
+                                />
+                                <div className="mt-3 flex items-center gap-4">
+                                    <Slider value={[Pslider]} onValueChange={(v) => setPstr(String(v[0]))} min={50000} max={10000000} step={5000} className="flex-1" />
+                                    <span className="text-sm text-gray-600 hidden sm:inline">{Pstr === '' ? '—' : formatINR(P)}</span>
+                                </div>
+                            </div>
+
+                            {/* Rate */}
+                            <div>
+                                <DecimalField
+                                    id="interest-rate"
+                                    label="Interest Rate (% p.a.)"
+                                    value={rstr}
+                                    setValue={setRstr}
+                                    min={1}
+                                    max={30}
+                                    placeholder="e.g. 8.5"
+                                    describedBy="rate-desc"
+                                />
+                                <div className="mt-3 flex items-center gap-4">
+                                    <Slider value={[rslider]} onValueChange={(v) => setRstr(String(v[0]))} min={1} max={30} step={0.1} className="flex-1" />
+                                    <span className="text-sm text-gray-600 hidden sm:inline">{rstr === '' ? '—' : `${r.toFixed(2)}%`}</span>
+                                </div>
+                            </div>
+
+                            {/* Tenure */}
+                            <div>
+                                <IntegerField
+                                    id="tenure-years"
+                                    label="Tenure (Years)"
+                                    value={ystr}
+                                    setValue={setYstr}
+                                    min={1}
+                                    max={30}
+                                    placeholder="e.g. 10"
+                                    describedBy="tenure-desc"
+                                />
+                                <div className="mt-3 flex items-center gap-4">
+                                    <Slider value={[yslider]} onValueChange={(v) => setYstr(String(v[0]))} min={1} max={30} step={1} className="flex-1" />
+                                    <span className="text-sm text-gray-600 hidden sm:inline">{ystr === '' ? '—' : `${years} yr`}</span>
+                                </div>
+                            </div>
+
+                            {/* Presets */}
+                            <div className="flex flex-wrap gap-2 items-end">
+                                <Button variant="outline" onClick={() => { setPstr('500000'); setRstr('10.5'); setYstr('5'); }}>
+                                    Personal Loan
+                                </Button>
+                                <Button variant="outline" onClick={() => { setPstr('800000'); setRstr('9'); setYstr('5'); }}>
+                                    Car Loan
+                                </Button>
+                                <Button variant="outline" onClick={() => { setPstr('3000000'); setRstr('8.25'); setYstr('20'); }}>
+                                    Home Loan
+                                </Button>
+                                <div className="w-full sm:w-auto flex gap-2 sm:ml-auto pt-4 sm:pt-0">
+                                    <Button className="flex-1 sm:flex-none" onClick={calculate} disabled={loading}>
+                                        {loading ? (
+                                            <div className="flex items-center gap-2">
+                                                <span className="h-4 w-4 border-2 border-white/50 border-t-white rounded-full animate-spin"></span>
+                                                Calculating...
+                                            </div>
+                                        ) : 'Calculate'}
+                                    </Button>
+                                    <Button variant="outline" className="flex-1 sm:flex-none" onClick={reset}>Reset</Button>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Rate */}
-                        <div>
-                            <DecimalField
-                                id="interest-rate"
-                                label="Interest Rate (% p.a.)"
-                                value={rstr}
-                                setValue={setRstr}
-                                min={1}
-                                max={30}
-                                placeholder="e.g. 8.5"
-                                describedBy="rate-desc"
-                            />
-                            <div className="mt-3 flex items-center gap-4">
-                                <Slider value={[rslider]} onValueChange={(v) => setRstr(String(v[0]))} min={1} max={30} step={0.1} className="flex-1" />
-                                <span className="text-sm text-gray-600 hidden sm:inline">{rstr === '' ? '—' : `${r.toFixed(2)}%`}</span>
-                            </div>
-                        </div>
-
-                        {/* Tenure */}
-                        <div>
-                            <IntegerField
-                                id="tenure-years"
-                                label="Tenure (Years)"
-                                value={ystr}
-                                setValue={setYstr}
-                                min={1}
-                                max={30}
-                                placeholder="e.g. 10"
-                                describedBy="tenure-desc"
-                            />
-                            <div className="mt-3 flex items-center gap-4">
-                                <Slider value={[yslider]} onValueChange={(v) => setYstr(String(v[0]))} min={1} max={30} step={1} className="flex-1" />
-                                <span className="text-sm text-gray-600 hidden sm:inline">{ystr === '' ? '—' : `${years} yr`}</span>
-                            </div>
-                        </div>
-
-                        {/* Presets */}
-                        <div className="flex flex-wrap gap-2 items-end">
-                            <Button variant="outline" onClick={() => { setPstr('500000'); setRstr('10.5'); setYstr('5'); }}>
-                                Personal Loan
-                            </Button>
-                            <Button variant="outline" onClick={() => { setPstr('800000'); setRstr('9'); setYstr('5'); }}>
-                                Car Loan
-                            </Button>
-                            <Button variant="outline" onClick={() => { setPstr('3000000'); setRstr('8.25'); setYstr('20'); }}>
-                                Home Loan
-                            </Button>
-                            <div className="w-full sm:w-auto flex gap-2 sm:ml-auto pt-4 sm:pt-0">
-                                <Button className="flex-1 sm:flex-none" onClick={calculate}>Calculate</Button>
-                                <Button variant="outline" className="flex-1 sm:flex-none" onClick={reset}>Reset</Button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p id="loan-amount-desc" className="sr-only">Enter principal between ₹50,000 and ₹1,00,00,000.</p>
-                    <p id="rate-desc" className="sr-only">Enter interest rate between 1% and 30% per annum.</p>
-                    <p id="tenure-desc" className="sr-only">Enter tenure between 1 and 30 years.</p>
-                </section>
+                        <p id="loan-amount-desc" className="sr-only">Enter principal between ₹50,000 and ₹1,00,00,000.</p>
+                        <p id="rate-desc" className="sr-only">Enter interest rate between 1% and 30% per annum.</p>
+                        <p id="tenure-desc" className="sr-only">Enter tenure between 1 and 30 years.</p>
+                    </section>
+                )}
 
                 {/* Summary, Scenarios, Chart */}
-                {res && (
-                    <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 space-y-6">
-                        <h2 className="text-lg sm:text-xl font-semibold">EMI Summary</h2>
+                {step === 2 && res && (
+                    <section className="bg-white rounded-xl shadow-sm border p-4 sm:p-6 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-lg sm:text-xl font-semibold">EMI Summary</h2>
+                            <Button variant="outline" onClick={() => setStep(1)}>Recalculate</Button>
+                        </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                             {[

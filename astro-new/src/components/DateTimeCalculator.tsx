@@ -28,6 +28,8 @@ export default function DateTimeCalculator() {
     const [result, setResult] = useState<DateResult | null>(null);
     const [calculatedDate, setCalculatedDate] = useState<string>('');
 
+    const [loading, setLoading] = useState(false);
+
     const modeLabels = {
         duration: 'Calculate Duration',
         add: 'Add/Subtract Days',
@@ -121,15 +123,19 @@ export default function DateTimeCalculator() {
     };
 
     const handleCalculate = () => {
-        if (mode === 'add') {
-            calculateAddSubtract();
-        } else {
-            const calculated = calculateDateResult;
-            if (calculated) {
-                setResult(calculated);
-                setCalculatedDate('');
+        setLoading(true);
+        setTimeout(() => {
+            if (mode === 'add') {
+                calculateAddSubtract();
+            } else {
+                const calculated = calculateDateResult;
+                if (calculated) {
+                    setResult(calculated);
+                    setCalculatedDate('');
+                }
             }
-        }
+            setLoading(false);
+        }, 800);
     };
 
     const reset = () => {
@@ -172,8 +178,8 @@ export default function DateTimeCalculator() {
                                     reset();
                                 }}
                                 className={`px-4 py-3 text-sm font-medium rounded-md border transition-colors ${mode === modeKey
-                                        ? 'bg-blue-600 text-white border-blue-600'
-                                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                    ? 'bg-blue-600 text-white border-blue-600'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                                     }`}
                             >
                                 {modeLabels[modeKey]}
@@ -275,8 +281,13 @@ export default function DateTimeCalculator() {
                         ) : null}
 
                         <div className="flex gap-3">
-                            <Button type="submit" className="flex-1 sm:flex-none sm:px-8">
-                                Calculate
+                            <Button type="submit" className="flex-1 sm:flex-none sm:px-8" disabled={loading}>
+                                {loading ? (
+                                    <div className="flex items-center gap-2">
+                                        <span className="h-4 w-4 border-2 border-white/50 border-t-white rounded-full animate-spin"></span>
+                                        Calculating...
+                                    </div>
+                                ) : 'Calculate'}
                             </Button>
                             <Button
                                 type="button"

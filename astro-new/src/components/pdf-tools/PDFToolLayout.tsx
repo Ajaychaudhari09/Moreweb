@@ -71,6 +71,11 @@ export default function PDFToolLayout({
         if (files.length === 0) return;
         setIsProcessing(true);
         setError(null);
+
+        // Artificial delay for better UX (consistent with other tools)
+        // Also helps ensures the UI has time to paint the loading state before any heavy sync work
+        await new Promise(resolve => setTimeout(resolve, 800));
+
         try {
             await onProcess(files);
         } catch (err) {
@@ -141,7 +146,12 @@ export default function PDFToolLayout({
 
                             <div className="flex justify-center pt-4">
                                 <Button size="lg" onClick={handleProcess} disabled={isProcessing} className="px-8">
-                                    {isProcessing ? "Processing..." : actionLabel}
+                                    {isProcessing ? (
+                                        <>
+                                            <span className="h-4 w-4 border-2 border-white/50 border-t-white rounded-full animate-spin mr-2"></span>
+                                            Processing...
+                                        </>
+                                    ) : actionLabel}
                                 </Button>
                             </div>
                         </div>

@@ -1,13 +1,14 @@
-// src/lib/utils.ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
  * -------------------------------------------------------------
  * ✅ UTILITY: cn()
- * Tailwind className merge helper (simple version)
+ * Tailwind className merge helper (robust version)
  * -------------------------------------------------------------
  */
-export function cn(...inputs: Array<string | undefined | null | false>): string {
-  return inputs.filter(Boolean).join(" ");
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
 
 import type { BlogCategory } from "@/types";

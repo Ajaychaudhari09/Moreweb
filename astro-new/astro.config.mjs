@@ -15,7 +15,8 @@ export default defineConfig({
   trailingSlash: 'never',
   prefetch: true,
   build: {
-    format: 'file'
+    format: 'file',
+    inlineStylesheets: 'always',
   },
   integrations: [
     mdx(),
@@ -41,9 +42,8 @@ export default defineConfig({
     rehypePlugins: [
       rehypeSlug,
       [rehypeAutolinkHeadings, {
-        behavior: 'append',
-        properties: { className: ['heading-anchor'] },
-        content: { type: 'text', value: '' }
+        behavior: 'wrap',
+        properties: { className: ['heading-link'] }
       }]
     ]
   },
@@ -53,7 +53,10 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: ['react', 'react-dom'],
-      exclude: ['@resvg/resvg-js']
+      exclude: ['@resvg/resvg-js', 'html2canvas']
+    },
+    build: {
+      assetsInlineLimit: 65536, // 64kb
     }
   }
 });

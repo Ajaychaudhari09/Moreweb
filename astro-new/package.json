@@ -11,6 +11,11 @@
     "check": "astro check",
     "audit": "node scripts/lighthouse-local.js"
   },
+  "browserslist": [
+    "last 2 major versions",
+    "> 0.2%",
+    "not dead"
+  ],
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/cloudflare": "^12.6.4",
@@ -20,6 +25,7 @@
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/tailwind": "^6.0.2",
+    "@fontsource-variable/inter": "^5.2.8",
     "@fontsource/inter": "^5.2.8",
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -39,6 +45,11 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tabler/icons-react": "^3.35.0",
+    "@tiptap/extension-placeholder": "^3.13.0",
+    "@tiptap/extension-text-align": "^3.13.0",
+    "@tiptap/extension-underline": "^3.13.0",
+    "@tiptap/react": "^3.13.0",
+    "@tiptap/starter-kit": "^3.13.0",
     "astro": "^5.16.3",
     "astro-auto-import": "^0.4.2",
     "astro-tooltips": "^0.6.2",
@@ -49,6 +60,7 @@
     "fuse.js": "^6.6.2",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
+    "html2canvas": "^1.4.1",
     "jspdf": "^3.0.4",
     "katex": "^0.16.21",
     "lucide-react": "^0.555.0",

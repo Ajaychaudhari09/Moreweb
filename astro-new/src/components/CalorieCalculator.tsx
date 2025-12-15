@@ -134,6 +134,7 @@ export default function CalorieCalculator() {
     const [activityLevel, setActivityLevel] = useState<ActivityLevel>('moderate');
     const [result, setResult] = useState<CalorieResult | null>(null);
     const [loading, setLoading] = useState(false);
+    const [step, setStep] = useState<1 | 2>(1);
     const [errors, setErrors] = useState<Record<string, string>>({});
 
     const validateInputs = (): boolean => {
@@ -164,6 +165,7 @@ export default function CalorieCalculator() {
 
             setResult(calorieResult);
             setLoading(false);
+            setStep(2);
         }, 600);
     };
 
@@ -192,110 +194,114 @@ export default function CalorieCalculator() {
             </header>
 
             <main className="max-w-4xl mx-auto px-4 py-8 sm:px-6 space-y-8">
+                {step === 1 && (
+                    <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden md:p-8 animate-in slide-in-from-bottom-4 duration-500">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-6">
+                                <h2 className="text-lg font-semibold text-gray-900 border-b pb-2">Your Stats</h2>
 
-                {/* Calculator Form */}
-                <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 overflow-hidden md:p-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="space-y-6">
-                            <h2 className="text-lg font-semibold text-gray-900 border-b pb-2">Your Stats</h2>
-
-                            <div className="grid grid-cols-3 gap-3">
-                                <div className="col-span-1">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
-                                    <div className="relative">
-                                        <Input
-                                            type="number"
-                                            value={age}
-                                            onChange={(e) => setAge(e.target.value)}
-                                            placeholder="25"
-                                            className={`pr-8 ${errors.age ? 'border-red-300' : ''}`}
-                                        />
-                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">yr</span>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="col-span-1">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                        <div className="relative">
+                                            <Input
+                                                type="number"
+                                                value={age}
+                                                onChange={(e) => setAge(e.target.value)}
+                                                placeholder="25"
+                                                className={`pr-8 ${errors.age ? 'border-red-300' : ''}`}
+                                            />
+                                            <span className="absolute right-3 top-2.5 text-xs text-gray-400">yr</span>
+                                        </div>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                        <div className="flex bg-gray-100 p-1 rounded-md">
+                                            {(['male', 'female'] as const).map((g) => (
+                                                <button
+                                                    key={g}
+                                                    onClick={() => setGender(g)}
+                                                    className={`flex-1 text-sm py-1.5 rounded-sm capitalize transition-all ${gender === g ? 'bg-white text-blue-600 shadow-xs font-medium' : 'text-gray-500 hover:text-gray-700'
+                                                        }`}
+                                                >
+                                                    {g}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Gender</label>
-                                    <div className="flex bg-gray-100 p-1 rounded-md">
-                                        {(['male', 'female'] as const).map((g) => (
-                                            <button
-                                                key={g}
-                                                onClick={() => setGender(g)}
-                                                className={`flex-1 text-sm py-1.5 rounded-sm capitalize transition-all ${gender === g ? 'bg-white text-blue-600 shadow-xs font-medium' : 'text-gray-500 hover:text-gray-700'
-                                                    }`}
-                                            >
-                                                {g}
-                                            </button>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Height</label>
+                                        <div className="relative">
+                                            <Input
+                                                type="number"
+                                                value={height}
+                                                onChange={(e) => setHeight(e.target.value)}
+                                                placeholder="175"
+                                                className={`pr-8 ${errors.height ? 'border-red-300' : ''}`}
+                                            />
+                                            <span className="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Weight</label>
+                                        <div className="relative">
+                                            <Input
+                                                type="number"
+                                                value={weight}
+                                                onChange={(e) => setWeight(e.target.value)}
+                                                placeholder="70"
+                                                className={`pr-8 ${errors.weight ? 'border-red-300' : ''}`}
+                                            />
+                                            <span className="absolute right-3 top-2.5 text-xs text-gray-400">kg</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Activity</label>
+                                    <select
+                                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        value={activityLevel}
+                                        onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
+                                    >
+                                        {Object.entries(activityDescriptions).map(([val, label]) => (
+                                            <option key={val} value={val}>{label}</option>
                                         ))}
-                                    </div>
+                                    </select>
+                                </div>
+
+                                <div className="pt-2 flex gap-3">
+                                    <Button onClick={handleCalculate} className="flex-1 bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
+                                        {loading ? 'Calculating...' : 'Calculate'}
+                                    </Button>
+                                    <Button variant="outline" onClick={reset}>Clear</Button>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Height</label>
-                                    <div className="relative">
-                                        <Input
-                                            type="number"
-                                            value={height}
-                                            onChange={(e) => setHeight(e.target.value)}
-                                            placeholder="175"
-                                            className={`pr-8 ${errors.height ? 'border-red-300' : ''}`}
-                                        />
-                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">cm</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Weight</label>
-                                    <div className="relative">
-                                        <Input
-                                            type="number"
-                                            value={weight}
-                                            onChange={(e) => setWeight(e.target.value)}
-                                            placeholder="70"
-                                            className={`pr-8 ${errors.weight ? 'border-red-300' : ''}`}
-                                        />
-                                        <span className="absolute right-3 top-2.5 text-xs text-gray-400">kg</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Activity</label>
-                                <select
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                    value={activityLevel}
-                                    onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
-                                >
-                                    {Object.entries(activityDescriptions).map(([val, label]) => (
-                                        <option key={val} value={val}>{label}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="pt-2 flex gap-3">
-                                <Button onClick={handleCalculate} className="flex-1 bg-green-600 hover:bg-green-700 text-white" disabled={loading}>
-                                    {loading ? 'Calculating...' : 'Calculate'}
-                                </Button>
-                                <Button variant="outline" onClick={reset}>Clear</Button>
+                            {/* Interactive Info Panel / Decorator */}
+                            <div className="bg-slate-50 rounded-lg p-6 border border-slate-100 text-sm text-slate-600 flex flex-col justify-center">
+                                <h3 className="font-semibold text-slate-800 mb-2">Did you know?</h3>
+                                <p className="mb-4">
+                                    The <strong>Mifflin-St Jeor</strong> equation is considered one of the most accurate BMR formulas for healthy individuals.
+                                </p>
+                                <p>
+                                    Your BMR (Basal Metabolic Rate) is essentially the number of calories your body burns if you stayed in bed all day. Activity multipliers are then applied to find your TDEE (Total Daily Energy Expenditure).
+                                </p>
                             </div>
                         </div>
-
-                        {/* Interactive Info Panel / Decorator */}
-                        <div className="bg-slate-50 rounded-lg p-6 border border-slate-100 text-sm text-slate-600 flex flex-col justify-center">
-                            <h3 className="font-semibold text-slate-800 mb-2">Did you know?</h3>
-                            <p className="mb-4">
-                                The <strong>Mifflin-St Jeor</strong> equation is considered one of the most accurate BMR formulas for healthy individuals.
-                            </p>
-                            <p>
-                                Your BMR (Basal Metabolic Rate) is essentially the number of calories your body burns if you stayed in bed all day. Activity multipliers are then applied to find your TDEE (Total Daily Energy Expenditure).
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                )}
 
                 {/* Results Section */}
-                {result && !loading && (
+                {step === 2 && result && !loading && (
                     <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold text-gray-900">Your Results</h2>
+                            <Button variant="outline" onClick={() => setStep(1)}>Recalculate</Button>
+                        </div>
 
                         {/* Primary Result Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

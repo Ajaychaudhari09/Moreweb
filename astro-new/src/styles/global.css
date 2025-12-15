@@ -48,7 +48,7 @@
     /* .dark block removed to revert to original state (or kept minimal if needed, but 'old ui' implies no custom dark mode overrides I added) */
 
     body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Inter Variable', sans-serif;
         background-color: var(--color-background);
         color: var(--color-text-primary);
         -webkit-font-smoothing: antialiased;
@@ -178,6 +178,48 @@
         /* IE and Edge */
         scrollbar-width: none;
         /* Firefox */
+    }
+
+    /* Linter fix: Explicitly add standard properties for Tailwind utilities */
+    .line-clamp-1 {
+        line-clamp: 1;
+    }
+
+    .line-clamp-2 {
+        line-clamp: 2;
+    }
+
+    .line-clamp-3 {
+        line-clamp: 3;
+    }
+
+    .line-clamp-4 {
+        line-clamp: 4;
+    }
+
+    .line-clamp-5 {
+        line-clamp: 5;
+    }
+
+    .line-clamp-6 {
+        line-clamp: 6;
+    }
+
+    .line-clamp-none {
+        line-clamp: none;
+    }
+
+    .appearance-none {
+        appearance: none;
+    }
+}
+
+@layer base {
+
+    /* Linter fix: Remove vertical-align from block images to avoid "ignored property" warning */
+    img,
+    video {
+        vertical-align: unset;
     }
 }
 
@@ -418,34 +460,7 @@
     }
 }
 
-/* Responsive line-clamp behaviour: clamp on small screens, show full on md+ */
-.card-title,
-.card-desc {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.card-title {
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-}
-
-.card-desc {
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-}
-
-@media (min-width: 768px) {
-
-    .card-title,
-    .card-desc {
-        display: block;
-        -webkit-line-clamp: unset;
-        line-clamp: none;
-        overflow: visible;
-    }
-}
+/* Responsive line-clamp removed to rely on Tailwind utility classes directly in components */
 
 /* Featured image responsive helper */
 .hero-feature-image {
@@ -725,18 +740,7 @@ html {
 }
 
 /* ---------------- Auto-link heading icons ---------------- */
-.article-content h2 .heading-anchor::after,
-.article-content h3 .heading-anchor::after {
-    content: "🔗";
-    margin-left: 8px;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.article-content h2:hover .heading-anchor::after,
-.article-content h3:hover .heading-anchor::after {
-    opacity: 1;
-}
+/* Auto-link heading icons handled in blog.css */
 
 /* Ensure anchored headings don't hide under sticky header */
 .article-content h2,

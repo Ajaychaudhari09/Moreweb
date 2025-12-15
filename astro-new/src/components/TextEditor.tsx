@@ -1,157 +1,269 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import TextAlign from '@tiptap/extension-text-align';
+import Underline from '@tiptap/extension-underline';
+import Placeholder from '@tiptap/extension-placeholder';
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Download, FileText, Type } from "lucide-react";
+import {
+    Bold, Italic, Underline as UnderlineIcon,
+    AlignLeft, AlignCenter, AlignRight, AlignJustify,
+    List, ListOrdered, FileDown, RotateCcw, Type,
+    FileText as FileTextIcon
+} from 'lucide-react';
+import jsPDF from 'jspdf';
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function TextEditor() {
-    const [title, setTitle] = useState<string>("");
-    const [content, setContent] = useState<string>("");
-    const [fontSize, setFontSize] = useState<number>(14);
+    const [isGenerating, setIsGenerating] = useState(false);
 
-    const exportAsPDF = async () => {
-        if (typeof window === 'undefined') return;
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Underline,
+            TextAlign.configure({
+                types: ['heading', 'paragraph'],
+            }),
+            Placeholder.configure({
+                placeholder: 'Start typing your document here...',
+            }),
+        ],
+        editorProps: {
+            attributes: {
+                class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[800px] p-8 bg-white shadow-sm',
+            },
+        },
+        content: `
+            <h1>Untitled Document</h1>
+            <p>Start editing this document...</p>
+        `,
+        immediatelyRender: false,
+    });
 
-        try {
-            const { default: jsPDF } = await import('jspdf');
-            const doc = new jsPDF();
+    if (!editor) {
+        return null;
+    }
 
-            // Add title
-            if (title) {
-                doc.setFontSize(20);
-                doc.text(title, 20, 30);
+    const downloadPDF = async () => {
+        setIsGenerating(true);
+        const element = document.querySelector('.ProseMirror') as HTMLElement;
+        if (!element) {
+            setIsGenerating(false);
+            return;
+        }
+
+        setTimeout(async () => {
+            try {
+                const doc = new jsPDF({
+                    unit: 'pt',
+                    format: 'a4',
+                    orientation: 'portrait'
+                });
+
+                await doc.html(element, {
+                    callback: function (pdf) {
+                        pdf.save('document.pdf');
+                        setIsGenerating(false);
+                    },
+                    x: 40,
+                    y: 40,
+                    width: 515,
+                    windowWidth: 800,
+                    autoPaging: 'text'
+                });
+            } catch (error) {
+                console.error("PDF generation failed:", error);
+                setIsGenerating(false);
             }
+        }, 100);
+    };
 
-            // Add content
-            doc.setFontSize(fontSize);
-            const splitText = doc.splitTextToSize(content, 170);
-            doc.text(splitText, 20, title ? 50 : 30);
+    const downloadTXT = () => {
+        const text = editor.getText();
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'document.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
 
-            // Save the PDF
-            doc.save(`${title || 'document'}.pdf`);
-        } catch (error) {
-            console.error('Error generating PDF:', error);
-            alert('Error generating PDF. Please try again.');
+    const clearContent = () => {
+        if (confirm("Are you sure you want to clear the document?")) {
+            editor.commands.setContent('');
         }
     };
 
-    const exportAsText = () => {
-        const element = document.createElement("a");
-        const file = new Blob([content], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = `${title || 'document'}.txt`;
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-    };
-
-    const clearEditor = () => {
-        setTitle("");
-        setContent("");
-    };
-
-    const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
-    const charCount = content.length;
-
     return (
-        <div className="min-h-screen py-12">
-            <div className="container mx-auto px-4 max-w-4xl">
-                <div className="text-center mb-8 animate-fade-in">
-                    <h1 className="text-4xl font-bold mb-4">Text Editor</h1>
-                    <p className="text-muted-foreground">
-                        A simple, powerful online editor to write and export documents
-                    </p>
-                </div>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8">
+            <div className="container mx-auto px-4">
+                <div className="flex flex-col h-[calc(100vh-8rem)] max-h-[1200px] bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl">
+                    {/* Toolbar */}
+                    <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-2 flex flex-wrap gap-1 items-center sticky top-0 z-10 shadow-sm">
+                        <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 mr-2">
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => editor.chain().focus().undo().run()}
+                                disabled={!editor.can().undo()}
+                                title="Undo (Ctrl+Z)"
+                            >
+                                <RotateCcw className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => editor.chain().focus().redo().run()}
+                                disabled={!editor.can().redo()}
+                                title="Redo (Ctrl+Y)"
+                            >
+                                <RotateCcw className="w-4 h-4 scale-x-[-1]" />
+                            </Button>
+                        </div>
 
-                <div className="grid lg:grid-cols-4 gap-6">
-                    {/* Editor */}
-                    <div className="lg:col-span-3">
-                        <Card className="animate-slide-up">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <FileText className="h-5 w-5" />
-                                    Document Editor
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium mb-2">Document Title</label>
-                                    <Input
-                                        placeholder="Enter document title..."
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                </div>
+                        <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 mr-2">
+                            <Button
+                                variant={editor.isActive('bold') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleBold().run()}
+                                title="Bold (Ctrl+B)"
+                            >
+                                <Bold className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive('italic') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleItalic().run()}
+                                title="Italic (Ctrl+I)"
+                            >
+                                <Italic className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive('underline') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleUnderline().run()}
+                                title="Underline (Ctrl+U)"
+                            >
+                                <UnderlineIcon className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive('strike') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleStrike().run()}
+                                title="Strikethrough"
+                            >
+                                <span className="line-through text-xs font-bold">S</span>
+                            </Button>
+                        </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium mb-2">Content</label>
-                                    <Textarea
-                                        placeholder="Start writing your document here..."
-                                        value={content}
-                                        onChange={(e) => setContent(e.target.value)}
-                                        className="min-h-[400px] resize-none"
-                                        style={{ fontSize: `${fontSize}px` }}
-                                    />
-                                </div>
+                        <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 mr-2">
+                            <Button
+                                variant={editor.isActive('heading', { level: 1 }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                                title="Heading 1"
+                            >
+                                <Type className="w-4 h-4" /> <span className="text-xs ml-1 font-bold">1</span>
+                            </Button>
+                            <Button
+                                variant={editor.isActive('heading', { level: 2 }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                                title="Heading 2"
+                            >
+                                <Type className="w-3 h-3" /> <span className="text-xs ml-1 font-bold">2</span>
+                            </Button>
+                        </div>
 
-                                <div className="flex justify-between items-center text-sm text-muted-foreground">
-                                    <span>Words: {wordCount} | Characters: {charCount}</span>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 mr-2">
+                            <Button
+                                variant={editor.isActive('bulletList') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                                title="Bullet List"
+                            >
+                                <List className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive('orderedList') ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                                title="Ordered List"
+                            >
+                                <ListOrdered className="w-4 h-4" />
+                            </Button>
+                        </div>
+
+                        <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 mr-2">
+                            <Button
+                                variant={editor.isActive({ textAlign: 'left' }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                                title="Align Left"
+                            >
+                                <AlignLeft className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive({ textAlign: 'center' }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                                title="Align Center"
+                            >
+                                <AlignCenter className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive({ textAlign: 'right' }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                                title="Align Right"
+                            >
+                                <AlignRight className="w-4 h-4" />
+                            </Button>
+                            <Button
+                                variant={editor.isActive({ textAlign: 'justify' }) ? "secondary" : "ghost"}
+                                size="sm"
+                                onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                                title="Justify"
+                            >
+                                <AlignJustify className="w-4 h-4" />
+                            </Button>
+                        </div>
+
+                        <div className="flex items-center gap-1 pr-2 mr-auto">
+                            <Button variant="ghost" size="sm" onClick={() => {
+                                const text = editor.getText();
+                                navigator.clipboard.writeText(text);
+                                alert("Copied to clipboard!");
+                            }} title="Copy Content">
+                                <FileTextIcon className="w-4 h-4" />
+                            </Button>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={downloadTXT} title="Download Text">
+                                <span>TXT</span>
+                            </Button>
+                            <Button variant="outline" size="sm" onClick={clearContent} className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                                <RotateCcw className="w-4 h-4 mr-2" />
+                                Clear
+                            </Button>
+                            <Button size="sm" onClick={downloadPDF} disabled={isGenerating} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+                                <FileDown className="w-4 h-4 mr-2" />
+                                {isGenerating ? 'Generating...' : 'Download PDF'}
+                            </Button>
+                        </div>
                     </div>
-
-                    {/* Controls */}
-                    <div className="lg:col-span-1">
-                        <Card className="animate-slide-up delay-100">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Type className="h-5 w-5" />
-                                    Controls
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium mb-2">Font Size</label>
-                                    <Input
-                                        type="number"
-                                        min="8"
-                                        max="24"
-                                        value={fontSize}
-                                        onChange={(e) => setFontSize(parseInt(e.target.value) || 14)}
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Button onClick={exportAsPDF} className="w-full" size="sm">
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Export as PDF
-                                    </Button>
-
-                                    <Button onClick={exportAsText} variant="outline" className="w-full" size="sm">
-                                        <Download className="mr-2 h-4 w-4" />
-                                        Export as TXT
-                                    </Button>
-
-                                    <Button onClick={clearEditor} variant="destructive" className="w-full" size="sm">
-                                        Clear Editor
-                                    </Button>
-                                </div>
-
-                                <div className="pt-4 border-t">
-                                    <h4 className="font-medium mb-2">Quick Stats</h4>
-                                    <div className="space-y-1 text-sm text-muted-foreground">
-                                        <div>Words: {wordCount}</div>
-                                        <div>Characters: {charCount}</div>
-                                        <div>Characters (no spaces): {content.replace(/\s/g, '').length}</div>
-                                        <div>Paragraphs: {content.split('\n\n').filter(p => p.trim()).length}</div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                    {/* Editor Canvas */}
+                    <div className="flex-1 overflow-y-auto bg-slate-100 dark:bg-slate-950 p-8 cursor-text relative" onClick={() => editor.chain().focus().run()}>
+                        <div className="absolute inset-0 pointer-events-none opacity-5 bg-[radial-gradient(#000_1px,transparent_1px)] bg-[size:16px_16px]"></div>
+                        <div className="max-w-[800px] mx-auto bg-white min-h-[1000px] shadow-lg print:shadow-none transition-shadow hover:shadow-xl relative z-10">
+                            <EditorContent editor={editor} className="h-full" />
+                        </div>
                     </div>
                 </div>
             </div>
